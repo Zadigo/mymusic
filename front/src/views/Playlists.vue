@@ -31,10 +31,6 @@ export default {
     ListAlbums
   },
 
-  computed: {
-    ...mapState('userPlaylistModule', ['playlists'])
-  },
-
   data () {
     return {
       displayChoices: [
@@ -44,6 +40,10 @@ export default {
       ],
       componentToShow: 'playlists'
     }
+  },
+
+  computed: {
+    ...mapState('userPlaylistModule', ['playlists'])
   }
 }
 
