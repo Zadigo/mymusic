@@ -12,7 +12,7 @@
             <div class="col-12">
               <div class="d-flex justify-content-between">
                 <h2 class="h4 mb-3">Meilleurs résultats</h2>
-                <router-link :to="{ name: 'home' }" class="text-uppercase font-weight-bold text-muted">
+                <router-link :to="{ name: 'search_more', params: { search: 'songs' } }" class="text-uppercase font-weight-bold text-muted">
                   Voir tout
                 </router-link>
               </div>
@@ -62,7 +62,7 @@
         <b-card id="artists" class="mt-4">
           <div class="row">
             <div class="col-12 text-right">
-              <router-link :to="{ name: 'home' }" class="text-uppercase font-weight-bold text-muted">
+              <router-link :to="{ name: 'search_more', params: { search: 'artists' } }" class="text-uppercase font-weight-bold text-muted">
                 Voir tout
               </router-link>
             </div>
@@ -78,7 +78,7 @@
         <b-card id="albums" class="mt-4">
           <div class="row">
             <div class="col-12 text-right">
-              <router-link :to="{ name: 'home' }" class="text-uppercase font-weight-bold text-muted">
+              <router-link :to="{ name: 'search_more', params: { search: 'albums' } }" class="text-uppercase font-weight-bold text-muted">
                 Voir tout
               </router-link>
             </div>

@@ -41,6 +41,7 @@ export default {
     position: sticky;
     width: 30%;
     padding: 1rem;
+    background-color: #343a40;
     /* background-color: red; */
   }
 
@@ -48,14 +49,14 @@ export default {
     width: 100%;
     overflow-y: scroll;
     /* padding: 1rem; */
-    /* background-color: blue; */
+    background-color: #6c757d;
   }
   
   .right {
     position: sticky;
     width: 30%;
     padding: 1rem;
-    /* background-color: black; */
+    background-color: #343a40;
   }
 
   .center::-webkit-scrollbar {

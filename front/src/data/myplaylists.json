@@ -5,7 +5,7 @@
         "number_of_songs": 245,
         "author": "Julie Benattia",
         "genres": [],
-        "playlistCover": "https://via.placeholder.com/200",
+        "playlist_cover": "https://via.placeholder.com/200",
         "songs": [
             {
                 "artist_id": 1,
