@@ -1,5 +1,6 @@
 var playerModule = {
     namespaced: true,
+
     state: () => ({
         currentSong: null,
         currentAlbum: null,
@@ -14,31 +15,48 @@ var playerModule = {
 
     mutations: {
         setSong(state, payload) {
+            // Sets the current song to be
+            // played
             state.currentSong = payload.song[0]
             if (state.currentPlaylistId == null | state.currentPlaylistId != payload.playlistId) {
                 state.waitingList = payload.playlist
             }
             state.currentPlaylistId = payload.playlistId
         },
+
+        setWaitingList (state, playlist) {
+            // Set the list of songs to play
+            // by the player starting from
+            // the current song
+            state.waitingList = playlist
+        },
+
         play (state) {
             if (!state.isPlaying) {
                 state.isPlaying = true
             }
         },
+
         pause (state) {
             state.isPlaying = false
         },
+        
         nextSong (state) {
             state
         },
-        preeviousSong (state) {
+        
+        previousSong (state) {
             state
         },
+        
         toggleShuffle (state) {
-            state
+            // Toggle reapeat
+            state.repeatActivated = !state.repeatActivated
         },
+        
         toggleRepeat (state) {
-            state
+            // Shuffle music
+            state.shuffleActivated = !state.shuffleActivated
         }
     },
 

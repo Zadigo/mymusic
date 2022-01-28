@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-// var _ = require('lodash')
+var _ = require('lodash')
 
-import songs from '../data/songs.json'
+import albums from '../data/albums.json'
 import artists from '../data/artists.json'
 
 import playerModule from './modules/player'
@@ -13,7 +13,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    songs: songs,
+    albums: albums,
     artists: artists
   },
 
@@ -22,6 +22,30 @@ export default new Vuex.Store({
   
   actions: {
     // a({state, getters, dispatch, rootGetters, rootState, commit}) {}
+  },
+  
+  getters: {
+    getAlbums (state) {
+      // Get all available albums
+      // on the plateform
+      return state.albums
+    },
+
+    getAlbum (state) {
+      return (name) => {
+        return _.find(state.albums, ['name', name])
+      }
+    },
+
+    searchAlbums (state) {
+      // Search albums by name, by genre,
+      // artist name 
+      return (searchValue) => {
+        return _.filter(state.albums, (album) => {
+          return album.album_name.includes(searchValue)
+        })
+      }
+    }
   },
   
   modules: {

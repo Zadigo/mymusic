@@ -6,29 +6,6 @@ import BaseInterface from '../components/BaseInterface.vue'
 Vue.use(VueRouter)
 
 const routes = [
-  // {
-  //   path: '/',
-  //   name: 'home',
-  //   component: () => import(/* webpackChunkName: "home" */ '../views/Home.vue')
-  // },
-  // {
-  //   path: '/playlists',
-  //   component: {
-  //     default: null
-  //   },
-  //   components: [
-  //     {
-  //       path: '',
-  //       name: 'playlists',
-  //       component: () => import(/* webpackChunkName: "playlist" */ '../views/PlaylistDetails.vue')
-  //     },
-  //     {
-  //       path: ':id(\\d+)',
-  //       name: 'playlist',
-  //       component: () => import(/* webpackChunkName: "playlist" */ '../views/PlaylistDetails.vue')
-  //     }
-  //   ]
-  // }
   {
     path: '/',
     component: BaseInterface,
@@ -47,7 +24,12 @@ const routes = [
         path: 'playlists/:id(\\d+)',
         name: 'playlist',
         component: () => import(/* webpackChunkName: "playlist" */ '../views/Playlist.vue')
-      }
+      },
+      {
+        path: 'search',
+        name: 'search',
+        component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue')
+      },
     ]
   }
 ]

@@ -3,14 +3,14 @@
         "albums": [
             {
                 "id": 1,
-                "album_cover": "",
+                "album_cover": "https://via.placeholder.com/80",
                 "genre": null,
                 "name": "Réalisation",
                 "release_date": "1/1/2019"
             },
             {
                 "id": 2,
-                "album_cover": "",
+                "album_cover": "https://via.placeholder.com/80",
                 "genre": null,
                 "name": "Passion",
                 "release_date": "1/1/2021"
@@ -20,7 +20,7 @@
         "date_of_birth": "1/1/1988",
         "fullname": null,
         "genre": "Dancehall",
-        "photo": "",
+        "photo": "https://via.placeholder.com/500",
         "id": 1,
         "nationality": "France",
         "name": "Jaylis",

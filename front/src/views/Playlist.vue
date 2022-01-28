@@ -13,7 +13,7 @@
       </div>
 
       <div class="col-12">
-        <b-input v-model="search" type="search"></b-input>
+        <b-form-input v-model="searchedSong" type="search" placeholder="Search"></b-form-input>
 
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
@@ -24,16 +24,23 @@
 
           <v-list>
             <v-list-item-group>
-              <v-list-item v-for="item in sortingList" :key="item" @click="sortSongsBy(item)">
-                {{ item }}
+              <v-list-item v-for="(sortMethod, index) in sortingList" :key="index" @click="sortSongsBy(sortMethod)">
+                {{ sortMethod }}
               </v-list-item>
             </v-list-item-group>
           </v-list>
         </v-menu>
+
+        <!-- Advanced search -->
+        <b-link @click="showAdvanced=!showAdvanced">Advanced searched</b-link>
+        <div v-if="showAdvanced" id="advanced-search">
+          <v-combobox :items="['Dancehall', 'Rap']" chips clearable small-chips multiple></v-combobox>
+        </div>
       </div>
     </div>
 
-    <b-table ref="selectableTable" responsive="sm" :items="sortedSongs" :fields="['name', 'albumId', 'added_on']" :select-mode="selectMode" selectable @row-selected="onSongSelection">
+    <!-- Songs -->
+    <b-table ref="selectableTable" responsive="sm" :items="searchedSongs" :fields="['name', 'albumId', 'added_on']" :select-mode="selectMode" selectable @row-selected="onSongSelection">
       <template #cell(selected)="{ rowSelected }">
         <div v-if="rowSelected">G</div>
       </template>
@@ -42,36 +49,42 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'Playlist',
+
   data: () => ({
-    currentPlaylist: {},
+    showAdvanced: false,
     selectMode: 'single',
     selected: [],
-    search: null,
     sortingList: ['Album', 'Artist', 'Added', 'Duration', 'Genre', 'Name']
   }),
 
   computed: {
     ...mapGetters('userPlaylistModule', {
       sortedSongs: 'getSortedSongs',
-      seachedSongs: 'getSearchedSongs'
+      searchedSongs: 'getSearchedSongs'
     }),
 
-    searchedSongs: {
-      get: (vm) => { return vm.$store.getters['userPlaylistModule/getSearchedSongs']("c'est") },
-      set: () => {  }
+    ...mapState('userPlaylistModule', ['currentPlaylist']),
+
+    searchedSong: {
+      get () { 
+        return this.$store.state.userPlaylistModule.search
+      },
+      set (value) {
+        this.$store.commit('userPlaylistModule/setSearch', value)
+      }
     }
   },
 
-beforeMount() {
-    var currentPlaylist = this.$store.getters['userPlaylistModule/getPlaylist'](this.$route.params.id)
-    this.currentPlaylist = currentPlaylist
-    this.$store.commit('userPlaylistModule/setCurrentPlaylist', currentPlaylist)
+  beforeMount () {
+    // var currentPlaylist = this.$store.getters['userPlaylistModule/getPlaylist'](this.$route.params.id)
+    // this.currentPlaylist = currentPlaylist
+    // this.$store.commit('userPlaylistModule/setCurrentPlaylist', currentPlaylist)
+    this.$store.commit('userPlaylistModule/setCurrentPlaylist', this.$route.params.id)
   },
-
   
   methods: {
     onSongSelection (items) {
@@ -82,11 +95,10 @@ beforeMount() {
       this.$store.dispatch('playerModule/setCurrentSong', { song: items, playlist: this.currentPlaylist.songs, playlistId: this.currentPlaylist.id })
     },
 
-    sortSongsBy (item) {
+    sortSongsBy (sortMethod) {
       // Sort the current playlist by the
       // current item that is passed
-      // this.$store.getters['userPlaylistModule/sortedSongsInPlaylist'](item)
-      this.$store.commit('userPlaylistModule/setSortBy', item)
+      this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
     }
   }
 }

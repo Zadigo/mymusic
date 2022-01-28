@@ -2,16 +2,17 @@
   <section class="main-interface">
     <div class="left">
       <b-link :to="{ name: 'home' }">Home</b-link>
+      <b-link :to="{ name: 'search' }">Search</b-link>
       <b-link :to="{ name: 'playlists' }">Playlists</b-link>
     </div>
 
-    <div class="center px-3 px-3">
+    <div class="center p-3">
       <router-view />
     </div>
     
     <div class="right">b</div>
 
-    <mini-player />
+    <mini-player class="d-none" />
   </section>
 </template>
 
@@ -37,6 +38,7 @@ export default {
   }
 
   .left {
+    position: sticky;
     width: 30%;
     padding: 1rem;
     /* background-color: red; */
@@ -44,13 +46,28 @@ export default {
 
   .center {
     width: 100%;
+    overflow-y: scroll;
     /* padding: 1rem; */
     /* background-color: blue; */
   }
   
   .right {
+    position: sticky;
     width: 30%;
     padding: 1rem;
     /* background-color: black; */
+  }
+
+  .center::-webkit-scrollbar {
+    width: .25em;
+  }
+  
+  .center::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  .center::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    /* outline: 1px solid slategrey; */
   }
 </style>

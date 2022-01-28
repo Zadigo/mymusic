@@ -5,23 +5,31 @@ var _ = require('lodash')
 
 var userPlaylistModule = {
     namespaced: true,
+
     state: () => ({
         playlists: myplaylists,
         currentPlaylist: null,
-        sortBy: null
+        sortBy: 'name',
+        search: null
     }),
 
     mutations: {
-        setSortBy (state, item) {
+        setSortBy(state, sortMethod) {
             // Set the sorting method for the
             // playlist or for all the playlists
-            state.sortBy = item.toLowerCase()
+            state.sortBy = sortMethod.toLowerCase()
         },
 
-        setCurrentPlaylist(state, playlist) {
+        setCurrentPlaylist(state, playlistId) {
             // Set the current playlist that
             // is viewed/used by the user
-            state.currentPlaylist = playlist
+            // state.currentPlaylist = playlist
+            var id = toInteger(playlistId)
+            state.currentPlaylist = _.find(state.playlists, { id: id })
+        },
+
+        setSearch (state, value) {
+            state.search = value
         }
     },
 
@@ -35,24 +43,33 @@ var userPlaylistModule = {
             }
         },
 
-        getSortedSongs (state) {
-            // Return all the songs that were sorted
-            // in the playlist
-            var playlist = _.find(state.playlists, state.playlistName)
-            return _.sortBy(playlist.songs, [state.sortBy])
+        getSongs (state) {
+            // Get the songs from the current playlist
+            if (_.isNull(state.currentPlaylist)) {
+                return []
+            } else {
+                return state.currentPlaylist.songs
+            }
         },
 
-        getSearchedSongs (state) {
+        getSortedSongs (state, rootGetters) {
+            // Return all the songs that were sorted
+            // in the playlist. The default sort 
+            // is by the song name
+            return _.sortBy(rootGetters.getSongs, [state.sortBy])
+        },
+
+        getSearchedSongs (state, rootGetters) {
             // Return all the songs that were
             // searched for in the playlist
-            return (search) => {
-                if (_.isNull(search)) {
-                    return state.currentPlaylist.songs
-                } else {
-                    return _.filter(state.currentPlaylist.songs, (song) => {
-                        return song.name.includes(search) | song.artist.includes(search)
-                    })
-                }
+            if (_.isNull(state.search)) {
+                return rootGetters.getSortedSongs
+            } else {
+                return _.filter(rootGetters.getSortedSongs, (song) => {
+                    song
+                    // return song.name.includes(state.search) | song.artist.includes(state.search)
+                    return true
+                })
             }
         }
     }
