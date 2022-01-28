@@ -44,8 +44,8 @@ export default {
 
 <style>
   .player {
-    height: auto;
     position: absolute;
+    height: auto;
     bottom: 0;
     left: 0;
     width: 100%;

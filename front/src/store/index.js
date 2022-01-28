@@ -12,10 +12,10 @@ import userPlaylistModule from './modules/user_playlist'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
+  state: () => ({
     albums: albums,
     artists: artists
-  },
+  }),
 
   mutations: {
   },
@@ -32,8 +32,8 @@ export default new Vuex.Store({
     },
 
     getAlbum (state) {
-      return (name) => {
-        return _.find(state.albums, ['name', name])
+      return (albumId) => {
+        return _.find(state.albums, { id: albumId })
       }
     },
 

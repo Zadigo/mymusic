@@ -2,17 +2,15 @@
   <section id="playlist">
     <div class="row">
 
-      <div v-for="playlist in playlists" :key="playlist.id" class="col-4">
-        <b-card class="p-2" :title="playlist.name" :img-src="playlist.playlist_cover" :img-alt="playlist.name" img-top>
-          <b-card-text>
-            <p class="text-muted">Created by: {{ playlist.author }}</p>
-            <b-link :to="{ name: 'playlist', params: { id: playlist.id } }">
-              Go to playlist >>
-            </b-link>
-          </b-card-text>
-        </b-card>
+      <div class="col-12">
+        <v-btn v-for="(choice, index) in displayChoices" :key="index" text @click="componentToShow == choice.name">
+          {{ choice.name }}
+        </v-btn>
       </div>
-    
+
+      <list-playlists v-if="componentToShow == 'playlists'" :playlists="playlists" />
+      <list-artists v-else-if="componentToShow == 'artists'" />
+      <list-albums v-else-if="componentToShow == 'albums'" />
     </div>
   </section>
 </template>
@@ -20,10 +18,32 @@
 <script>
 import { mapState } from 'vuex'
 
+import ListPlaylists from '../components/collections/ListPlaylists.vue'
+import ListArtists from '../components/collections/ListArtists.vue'
+import ListAlbums from '../components/collections/ListAlbums.vue'
+
 export default {
   name: 'Playlists',
+
+  components: {
+    ListPlaylists,
+    ListArtists,
+    ListAlbums
+  },
+
   computed: {
     ...mapState('userPlaylistModule', ['playlists'])
+  },
+
+  data () {
+    return {
+      displayChoices: [
+        { name: 'playlists' },
+        { name: 'artists' },
+        { name: 'albums' }
+      ],
+      componentToShow: 'playlists'
+    }
   }
 }
 

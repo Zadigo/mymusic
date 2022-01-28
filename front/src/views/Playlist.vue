@@ -2,16 +2,18 @@
   <section id="playlist">
 
     <!-- Header -->
-    <div class="row p-5 mb-5">
-      <div class="col-3">
-        <b-img :src="currentPlaylist.playlistCover" :alt="currentPlaylist.name" rounded="top" fluid />
+    <div id="playlist-header" class="row p-5 mb-5 text-white">
+      <div class="col-5">
+        <b-img width="300" height="300" :src="currentPlaylist.playlist_cover" :alt="currentPlaylist.name" rounded fluid />
       </div>
 
-      <div class="col-9">
-        <h2>{{ currentPlaylist.name }}</h2>
+      <div class="col-auto">
+        <h1>{{ currentPlaylist.name }}</h1>
         <p>by {{ currentPlaylist.author }}</p>
       </div>
+    </div>
 
+    <div class="row">
       <div class="col-12">
         <b-form-input v-model="searchedSong" type="search" placeholder="Search"></b-form-input>
 
@@ -39,12 +41,32 @@
       </div>
     </div>
 
+    <div id="songs" class="row">
+      <div class="col-12">
+        <!-- <b-table ref="selectableTable" responsive="sm" :items="searchedSongs" :fields="['name', 'albumId', 'added_on']" :select-mode="selectMode" selectable @row-selected="onSongSelection">
+          <template #cell(selected)="{ rowSelected }">
+            <div v-if="rowSelected">G</div>
+          </template>
+        </b-table> -->
+        <b-list-group class="mt-4">
+          <b-list-group-item v-for="(song, index) in searchedSongs" :key="index" :aria-label="song.name" button @click="() => {}">
+            <div class="infos">
+              <b-img :alt="null" :src="getAlbumImage(song.album_id)" rounded fluid />
+              {{ song.name }}
+            </div>
+
+            {{ song.album_id }}
+
+            <div class="actions">
+              <font-awesome-icon icon="heart"></font-awesome-icon>
+              <time datetime="M2S20">2:20</time>
+            </div>
+          </b-list-group-item>
+        </b-list-group>
+      </div>
+    </div>
+
     <!-- Songs -->
-    <b-table ref="selectableTable" responsive="sm" :items="searchedSongs" :fields="['name', 'albumId', 'added_on']" :select-mode="selectMode" selectable @row-selected="onSongSelection">
-      <template #cell(selected)="{ rowSelected }">
-        <div v-if="rowSelected">G</div>
-      </template>
-    </b-table>
   </section>
 </template>
 
@@ -99,14 +121,19 @@ export default {
       // Sort the current playlist by the
       // current item that is passed
       this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
+    },
+    getAlbumImage (id) {
+      var album = this.$store.getters['getAlbum'](id)
+      return album.cover_image
     }
   }
 }
 </script>
 
 <style scoped>
-  #header {
-    background-color: blue;
-    height: 300px;
+  #playlist-header {
+    height: 500px;
+    /* background-image: url('https://picsum.photos/1200/400'); */
+    background-color: #3498db;
   }
 </style>

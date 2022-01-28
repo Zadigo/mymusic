@@ -34,6 +34,11 @@ const routes = [
         path: 'search/:search(\\w+)',
         name: 'search_more',
         component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue')
+      },
+      {
+        path: 'genres/:genre(\\w+)',
+        name: 'genre',
+        component: () => import(/* webpackChunkName: "genre" */ '../views/Genre.vue')
       }
     ]
   }
