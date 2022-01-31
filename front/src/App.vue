@@ -1,14 +1,15 @@
 <template>
   <div id="app">
     <v-app>
-      <transition name="general">
         <router-view :key="$route.name" />
-      </transition>
+      <!-- <transition name="general">
+      </transition> -->
     </v-app>
   </div>
 </template>
 
 <script>
+
 export default {
   name: 'App'
 }
@@ -41,5 +42,18 @@ export default {
   .scale-leave {
     opacity: 1;
     transform: scale(1, 1);
+  }
+
+  ::-webkit-scrollbar {
+    width: .25em;
+  }
+  
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    /* outline: 1px solid slategrey; */
   }
 </style>

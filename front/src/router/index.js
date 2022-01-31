@@ -39,6 +39,11 @@ const routes = [
         path: 'genres/:genre(\\w+)',
         name: 'genre',
         component: () => import(/* webpackChunkName: "genre" */ '../views/Genre.vue')
+      },
+      {
+        path: 'profile',
+        name: 'profile',
+        component: () => import(/* webpackChunkName: "profile" */ '../views/Profile.vue')
       }
     ]
   }

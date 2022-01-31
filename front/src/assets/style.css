@@ -1,0 +1,12 @@
+  .general-enter-active,
+  .general-leave-active {
+    transition: all .3s ease;
+  }
+  .general-enter,
+  .general-leave-to {
+    opacity: 0;
+  }
+  .general-enter-to,
+  .general-leave {
+    opacity: 1;
+  }

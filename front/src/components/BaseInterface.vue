@@ -1,12 +1,22 @@
 <template>
   <section class="main-interface">
+
     <div class="left d-flex flex-column justify-content-between">
-      <div id="app-navigation">
-        <router-link v-for="(navButton, index) in navButtons" id="nav-button" :key="index" :to="{ name: navButton.name }">
-          <font-awesome-icon class="mr-3" :icon="navButton.icon" />
-          {{ navButton.name }}
-        </router-link>
-      </div>
+      <transition name="general">
+        <div v-if="$route.name == 'profile'" id="profile-navigation">
+          <router-link v-for="(profileNavButton, index) in profileNavButtons" id="nav-button" :key="index" :to="{ name: profileNavButton.name }">
+            <font-awesome-icon class="mr-3" :icon="profileNavButton.icon" />
+            {{ profileNavButton.name }}
+          </router-link>
+        </div>
+
+        <div v-else id="app-navigation">
+          <router-link v-for="(navButton, index) in navButtons" id="nav-button" :key="index" :to="{ name: navButton.name }">
+            <font-awesome-icon class="mr-3" :icon="navButton.icon" />
+            {{ navButton.name }}
+          </router-link>
+        </div>
+      </transition>
 
       <div id="profile">
         <router-link id="nav-button" class="profile-button" :to="{ name: 'profile' }">
@@ -20,7 +30,7 @@
       <router-view />
     </div>
     
-    <div :class="{ minimize: minimizeSocials }" class="right">
+    <div v-if="$route.name !== 'profile'" :class="{ minimize: minimizeSocials }" class="right">
       <div class="row">
         <div class="col-12">
           <v-btn icons @click="doMinimizeSocials">
@@ -52,6 +62,7 @@
     </div>
 
     <mini-player class="d-none" />
+
   </section>
 </template>
 
@@ -70,10 +81,22 @@ export default {
   data () {
     return {
       minimizeSocials: false,
+      profileNavButtons: [
+        { name: 'home', icon: 'home'},
+        { name: 'account_overview', icon: 'home'},
+        { name: 'available_plans', icon: 'credit-card'},
+        { name: 'password', icon: 'key'},
+        { name: 'notification_settings', icon: 'bell'},
+        { name: 'privacy_settings', icon: 'lock'},
+        { name: 'recover_playlists', icon: 'redo-alt'},
+        { name: 'receipts', icon: 'receipt'},
+        // { name: 'apps', icon: 'app'},
+        // { name: 'delete_account', icon: 'trash-alt'}s
+      ],
       navButtons: [
         { name: 'home', icon: 'home'},
         { name: 'search', icon: 'search'},
-        { name: 'playlists', icon: 'list'},
+        { name: 'playlists', icon: 'list'}
       ]
     }
   },
@@ -120,6 +143,7 @@ export default {
     width: 30%;
     padding: 1rem;
     background-color: #343a40;
+    overflow-y: scroll;
     /* background-color: red; */
   }
 
