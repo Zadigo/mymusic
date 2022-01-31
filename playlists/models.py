@@ -1,7 +1,8 @@
-from artists.models import Songs
+from artists.models import Song
 from django.contrib.auth import get_user_model
 from django.db import models
 from imagekit.models import ProcessedImageField
+from imagekit.processors import ResizeToFill
 
 from playlists.utils import playlists_cover_image_path
 
@@ -13,10 +14,10 @@ class AbstractPlaylist(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField(max_length=100)
-    song = models.ManyToManyField(Songs, blank=True)
+    song = models.ManyToManyField(Song, blank=True)
     cover_image = ProcessedImageField(
         format='JPEG',
-        processors=[],
+        processors=[ResizeToFill(width=300, height=300)],
         options={'quality': 90}
     )
     followers = models.ManyToManyField(
@@ -33,5 +34,5 @@ class AbstractPlaylist(models.Model):
         return self.name
 
 
-class UserPlaylists(AbstractPlaylist):
+class UserPlaylist(AbstractPlaylist):
     pass

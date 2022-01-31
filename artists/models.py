@@ -1,12 +1,16 @@
 from django.db import models
+from django.db.models import Count
 from django.utils.timezone import make_aware, now
 from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
+from mutagen.mp3 import MP3
 
 from artists.choices import Genres, GeographicAreas, Nationalities
-from artists.utils import artist_cover_image_path, upload_cover_image_path
+from artists.utils import artist_cover_image_path, cover_image_path, song_path
 from artists.validators import song_file_validator
 
-class Artists(models.Model):
+
+class Artist(models.Model):
     name = models.CharField(
         max_length=100,
         unique=True,
@@ -38,7 +42,7 @@ class Artists(models.Model):
     cover_image = models.ImageField(upload_to=artist_cover_image_path)
     cover_image_thumbnail = ImageSpecField(
         source='cover_image',
-        processors=[],
+        processors=[ResizeToFill(width=300, height=300)],
         format='JPEG',
         options={'quality': 90}
     )
@@ -53,8 +57,8 @@ class Artists(models.Model):
         return self.name
 
 
-class Albums(models.Model):
-    artist = models.ForeignKey(Artists, on_delete=models.CASCADE)
+class Album(models.Model):
+    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
     name = models.CharField(
         max_length=100,
         blank=False,
@@ -65,13 +69,15 @@ class Albums(models.Model):
         choices=Genres.choices,
         default=Genres.DANCEHALL
     )
-    cover_image = models.ImageField(upload_to=upload_cover_image_path)
+    cover_image = models.ImageField(upload_to=cover_image_path)
     cover_image_thumbnail = ImageSpecField(
         source='cover_image',
-        processors=[],
+        processors=[ResizeToFill(width=400, height=400)],
         format='JPEG',
         options={'quality': 90}
     )
+    is_single = models.BooleanField(default=False)
+    number_of_plays = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True)
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
@@ -81,18 +87,23 @@ class Albums(models.Model):
     
     def __str__(self):
         return self.name
+    
+    @property
+    def number_of_songs(self):
+        return self.song_set.aggregrate(Count('song_set__id'))
 
 
-class Songs(models.Model):
-    album = models.ForeignKey(Albums, on_delete=models.CASCADE)
+class Song(models.Model):
+    album = models.ForeignKey(Album, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    song_file = models.FileField(upload_to=None, validators=[song_file_validator])
+    song_file = models.FileField(upload_to=song_path, validators=[song_file_validator])
     genre = models.CharField(
         max_length=100,
         choices=Genres.choices,
         default=Genres.DANCEHALL
     )
     duration = models.DurationField(blank=True, null=True)
+    bitrate = models.PositiveIntegerField(default=0)
     added_on = models.DateField(auto_now_add=True)
     
     class Meta:
@@ -100,3 +111,10 @@ class Songs(models.Model):
     
     def __str__(self):
         return self.name
+    
+    # def clean(self):
+    #     if self.song_file.path is not None:
+    #         instance = MP3(self.song_file.path)
+    #         self.bitrate = instance.info.bitrate
+    #         duration_in_minutes = instance.info.length / 60
+    #         self.duration = duration_in_minutes

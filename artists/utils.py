@@ -1,19 +1,25 @@
 import secrets
 
 
-def upload_song_path(instance, name):
+def song_path(instance, name):
     new_name = secrets.token_hex(nbytes=10)
     _, ext = name.split('.')
-    return f'songs/{new_name}.{ext}'
+    song_name, _ = name.split('.')
+    song_name = name.replace('-', '').replace(' ', '_')
+    return f'songs/{song_name}/{new_name}.{ext}'
 
 
-def upload_cover_image_path(instance, name):
+def cover_image_path(instance, name):
     new_name = secrets.token_hex(nbytes=10)
     _, ext = name.split('.')
-    return f'cover/{instance.artist.name}/{new_name}.{ext}'
+    album_name = instance.name
+    album_name = album_name.replace(' ', '_').lower()
+    return f'cover/{album_name}/{new_name}.{ext}'
 
 
 def artist_cover_image_path(instance, name):
     new_name = secrets.token_hex(nbytes=10)
     _, ext = name.split('.')
-    return f'artists/{instance.artist.name}/{new_name}.{ext}'
+    artist_name = instance.name
+    artist_name = artist_name.replace(' ', '_').lower()
+    return f'artists/{artist_name}/{new_name}.{ext}'
