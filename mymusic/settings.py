@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'django_extensions',
+    'corsheaders',
     'artists',
     'playlists'
 ]
@@ -37,6 +38,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -134,3 +136,27 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Debug
 
 INTERNAL_IPS = ['127.0.0.1']
+
+
+# Cors
+
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r'^https?\:\/\/localhost\:808\d{1}$',
+    r'^https?\:\/\/192\.168\.0\.\d{3}\:8080$'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://localhost:8080',
+    'http://192.168.0.105:8080'
+]
+
+
+# Restframework
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+#         'rest_framework.authentication.SessionAuthentication',
+#         'rest_framework.authentication.TokenAuthentication',
+#     ),
+# }

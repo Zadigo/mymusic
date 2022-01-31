@@ -4,10 +4,15 @@ from django.utils.timezone import make_aware, now
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from mutagen.mp3 import MP3
+from django.db.models import Index
 
 from artists.choices import Genres, GeographicAreas, Nationalities
 from artists.utils import artist_cover_image_path, cover_image_path, song_path
 from artists.validators import song_file_validator
+from django.contrib.auth import get_user_model
+
+
+USER_MODEL = get_user_model()
 
 
 class Artist(models.Model):
@@ -46,12 +51,19 @@ class Artist(models.Model):
         format='JPEG',
         options={'quality': 90}
     )
+    followers = models.ManyToManyField(
+        USER_MODEL,
+        blank=True
+    )
     
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
     
     class Meta:
         ordering = ['name']
+        indexes = [
+            Index(fields=['name', 'genre'])
+        ]
     
     def __str__(self):
         return self.name
@@ -84,6 +96,9 @@ class Album(models.Model):
     
     class Meta:
         ordering = ['name']
+        indexes = [
+            Index(fields=['artist', 'name', 'genre'])
+        ]
     
     def __str__(self):
         return self.name
@@ -108,6 +123,9 @@ class Song(models.Model):
     
     class Meta:
         ordering = ['name']
+        indexes = [
+            Index(fields=['name', 'genre', 'album'])
+        ]
     
     def __str__(self):
         return self.name
