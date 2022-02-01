@@ -6,6 +6,13 @@ import store from '../store/index'
 
 var baseAudio = Vue.extend({
     name: 'BaseAudio',
+
+    filters: {
+        formatTime() {
+
+        }
+    },
+
     props: {
         src: {
             type: String,
@@ -19,6 +26,7 @@ var baseAudio = Vue.extend({
 
             isPlaying: false,
             currentTime: 0,
+            currentVolume: 100,
             durationMinutes: null,
             durationSeconds: null,
             metaDataLoaded: false
@@ -36,6 +44,23 @@ var baseAudio = Vue.extend({
 
         completionPercentage() {
             return Math.floor(this.currentTime / this.durationSeconds * 100)
+        }
+    },
+
+    watch: {
+        src(newValue) {
+            // Watches for song changes/selection
+            // and sets th player to the current
+            // selected song
+            if (!_.isUndefined(newValue)) {
+                if (!this.playerLoaded) {
+                    this.createAudioPlayer(newValue)
+                    this.play()
+                } else {
+                    this.player.src = newValue
+                    this.play()
+                }
+            }
         }
     },
 
@@ -79,6 +104,16 @@ var baseAudio = Vue.extend({
             store.commit('playerModule/pause')
         },
 
+        previousSong () {
+            store.dispatch('playerModule/previousSong')
+            this.player.play()
+        },
+
+        nextSong () {
+            store.dispatch('playerModule/nextSong')
+            this.player.play()
+        },
+
         createAudioPlayer (src) {
             // Creates a new Audio player in order
             // to read the music
@@ -113,29 +148,6 @@ var baseAudio = Vue.extend({
             }
         }
     },
-    
-    filters: {
-        formatTime () {
-
-        }
-    },
-
-    watch: {
-        src (newValue) {
-            // Watches for song changes/selection
-            // and sets th player to the current
-            // selected song
-            if (!_.isUndefined(newValue)) {
-                if (!this.playerLoaded) {
-                    this.createAudioPlayer(newValue)
-                    this.play()
-                } else {
-                    this.player.src = newValue
-                    this.play()
-                }
-            }
-        }
-    },
 
     render: function (c) {
         var attributes = {
@@ -148,13 +160,18 @@ var baseAudio = Vue.extend({
         return c('div', attributes, [
             this.createPlayPauseButton(c),
             c('span', {}, [this.currentTime]),
-            c('v-btn', { class: 'mt-2' }, [this.createIcon(c, 'step-backward')]),
-            c('v-btn', { class: 'mt-2' }, [this.createIcon(c, 'step-forward')]),
+            c('v-btn', { class: 'mt-2', on: { click: this.previousSong } }, [this.createIcon(c, 'step-backward')]),
+            c('v-btn', { class: 'mt-2', on: { click: this.nextSong } }, [this.createIcon(c, 'step-forward')]),
             c('v-btn', { class: 'mt-2' }, [this.createIcon(c, 'redo-alt')]),
             c('v-btn', { class: 'mt-2' }, [this.createIcon(c, 'random')]),
-            c('v-progress-linear', { props: { value: this.completionPercentage, rounded: true } })
+            c('v-progress-linear', { props: { value: this.completionPercentage, rounded: true } }),
+            c('v-slider', { props: { prependIcon: 'volume-high', on: { change: (e) => { this.currentVolume = e.target.value } } } })
         ])
     }
 })
 
 Vue.component('base-audio', baseAudio)
+//     < v - slider
+// v - model="media"
+// prepend - icon="mdi-volume-high"
+//     ></v - slider >

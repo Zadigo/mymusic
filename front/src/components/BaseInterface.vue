@@ -39,6 +39,7 @@
           </v-btn>
 
           <div class="col-12 mt-5">
+            <span>{{ currentSong.name }}</span>
             <!-- Mini player -->
             <!-- <base-audio :src="'http://127.0.0.1:8000/media/songs/Jahlys___Bad_Like_Me.mp3/23bd4e9f4505817d9ece.mp3'"></base-audio> -->
             <base-audio :src="currentSong.source"></base-audio>
@@ -48,7 +49,7 @@
 
     </div>
 
-    <mini-player class="d-none" />
+    <!-- <mini-player class="d-none" /> -->
 
   </section>
 </template>
@@ -57,13 +58,13 @@
 var _ = require('lodash')
 
 import { mapState } from 'vuex'
-import MiniPlayer from './MiniPlayer.vue'
+// import MiniPlayer from './MiniPlayer.vue'
 
 export default {
   name: 'BaseInterface',
 
   components: {
-    MiniPlayer
+    // MiniPlayer
   },
 
   data () {

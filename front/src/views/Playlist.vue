@@ -46,9 +46,11 @@
         <b-list-group class="mt-4">
           <b-list-group-item v-for="(song, index) in searchedSongs" :key="index" :aria-label="song.name" button>
             <div class="infos">
-              <v-btn icon @click="onSongSelection(song.id)">
-                <font-awesome-icon v-if="isPlaying" icon="pause" />
-                <font-awesome-icon v-else icon="play" />
+              <v-btn v-if="isPlaying" icon @click="pauseSong(song.id)">
+                <font-awesome-icon icon="pause" />
+              </v-btn>
+              <v-btn v-else icon @click="playSong(song.id)">
+                <font-awesome-icon icon="play" />
               </v-btn>
 
               <b-img :alt="null" :src="getAlbumImage(song.album_id)" rounded fluid />
@@ -59,14 +61,13 @@
 
             <div class="actions">
               <font-awesome-icon icon="heart"></font-awesome-icon>
-              <time datetime="M2S20">2:20</time>
+              <time datetime="2M20S">2:20</time>
             </div>
           </b-list-group-item>
         </b-list-group>
       </div>
     </div>
 
-    <!-- Songs -->
   </section>
 </template>
 
@@ -108,12 +109,18 @@ export default {
   },
   
   methods: {
-    onSongSelection (songId) {
+    playSong (songId) {
       // Set the player to the current
       // selected song. Also let the player
       // know that it needs to continue with
       // the remaining songs in the playlist
-      this.$store.dispatch('playerModule/setSelectedAndPlay', { songId: songId, playlistId: this.currentPlaylist.id, playlist: this.currentPlaylist.songs })
+      // console.log(songId)
+      this.$store.dispatch('playerModule/playSelected', { songId: songId, playlistId: this.currentPlaylist.id, playlist: this.currentPlaylist.songs })
+    },
+
+    pauseSong (songId) {
+      // Pause the current select song
+      this.$store.dispatch('playerModule/pauseSelected', { songId: songId })
     },
 
     sortSongsBy (sortMethod) {

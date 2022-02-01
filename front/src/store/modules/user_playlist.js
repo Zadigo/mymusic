@@ -45,11 +45,7 @@ var userPlaylistModule = {
 
         getSongs (state) {
             // Get the songs from the current playlist
-            if (_.isNull(state.currentPlaylist)) {
-                return []
-            } else {
-                return state.currentPlaylist.songs
-            }
+            return _.isNull(state.currentPlaylist) ? [] : state.currentPlaylist.songs
         },
 
         getSortedSongs (state, rootGetters) {
@@ -66,9 +62,8 @@ var userPlaylistModule = {
                 return rootGetters.getSortedSongs
             } else {
                 return _.filter(rootGetters.getSortedSongs, (song) => {
-                    song
                     // return song.name.includes(state.search) | song.artist.includes(state.search)
-                    return true
+                    return song.name.includes(state.search)
                 })
             }
         }
