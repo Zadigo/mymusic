@@ -11,6 +11,8 @@ import './plugins/bootstrap-vue'
 import vuetify from './plugins/vuetify'
 import './plugins/fontawesome'
 
+import './components'
+
 Vue.config.productionTip = false
 
 new Vue({

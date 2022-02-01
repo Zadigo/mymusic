@@ -40,21 +40,8 @@
 
           <div class="col-12 mt-5">
             <!-- Mini player -->
-            <v-btn>
-              <font-awesome-icon icon="play" />
-            </v-btn>
-            <v-btn class="mt-2">
-              <font-awesome-icon icon="step-backward" />
-            </v-btn>
-            <v-btn class="mt-2">
-              <font-awesome-icon icon="step-forward" />
-            </v-btn>
-            <v-btn class="mt-2">
-              <font-awesome-icon icon="redo-alt" />
-            </v-btn>
-            <v-btn class="mt-2">
-              <font-awesome-icon icon="random" />
-            </v-btn>
+            <!-- <base-audio :src="'http://127.0.0.1:8000/media/songs/Jahlys___Bad_Like_Me.mp3/23bd4e9f4505817d9ece.mp3'"></base-audio> -->
+            <base-audio :src="currentSong.source"></base-audio>
           </div>
         </div>
       </div>
@@ -69,6 +56,7 @@
 <script>
 var _ = require('lodash')
 
+import { mapState } from 'vuex'
 import MiniPlayer from './MiniPlayer.vue'
 
 export default {
@@ -99,6 +87,10 @@ export default {
         { name: 'playlists', icon: 'list'}
       ]
     }
+  },
+
+  computed: {
+    ...mapState('playerModule', ['currentSong'])
   },
 
   beforeMount() {

@@ -43,14 +43,14 @@
 
     <div id="songs" class="row">
       <div class="col-12">
-        <!-- <b-table ref="selectableTable" responsive="sm" :items="searchedSongs" :fields="['name', 'albumId', 'added_on']" :select-mode="selectMode" selectable @row-selected="onSongSelection">
-          <template #cell(selected)="{ rowSelected }">
-            <div v-if="rowSelected">G</div>
-          </template>
-        </b-table> -->
         <b-list-group class="mt-4">
-          <b-list-group-item v-for="(song, index) in searchedSongs" :key="index" :aria-label="song.name" button @click="() => {}">
+          <b-list-group-item v-for="(song, index) in searchedSongs" :key="index" :aria-label="song.name" button>
             <div class="infos">
+              <v-btn icon @click="onSongSelection(song.id)">
+                <font-awesome-icon v-if="isPlaying" icon="pause" />
+                <font-awesome-icon v-else icon="play" />
+              </v-btn>
+
               <b-img :alt="null" :src="getAlbumImage(song.album_id)" rounded fluid />
               {{ song.name }}
             </div>
@@ -91,6 +91,8 @@ export default {
 
     ...mapState('userPlaylistModule', ['currentPlaylist']),
 
+    ...mapState('playerModule', ['isPlaying']),
+
     searchedSong: {
       get () { 
         return this.$store.state.userPlaylistModule.search
@@ -102,19 +104,16 @@ export default {
   },
 
   beforeMount () {
-    // var currentPlaylist = this.$store.getters['userPlaylistModule/getPlaylist'](this.$route.params.id)
-    // this.currentPlaylist = currentPlaylist
-    // this.$store.commit('userPlaylistModule/setCurrentPlaylist', currentPlaylist)
     this.$store.commit('userPlaylistModule/setCurrentPlaylist', this.$route.params.id)
   },
   
   methods: {
-    onSongSelection (items) {
+    onSongSelection (songId) {
       // Set the player to the current
       // selected song. Also let the player
       // know that it needs to continue with
       // the remaining songs in the playlist
-      this.$store.dispatch('playerModule/setCurrentSong', { song: items, playlist: this.currentPlaylist.songs, playlistId: this.currentPlaylist.id })
+      this.$store.dispatch('playerModule/setSelectedAndPlay', { songId: songId, playlistId: this.currentPlaylist.id, playlist: this.currentPlaylist.songs })
     },
 
     sortSongsBy (sortMethod) {
@@ -122,6 +121,7 @@ export default {
       // current item that is passed
       this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
     },
+
     getAlbumImage (id) {
       var album = this.$store.getters['getAlbum'](id)
       return album.cover_image

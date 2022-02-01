@@ -1,8 +1,10 @@
+var _ = require('lodash')
+
 var playerModule = {
     namespaced: true,
 
     state: () => ({
-        currentSong: null,
+        currentSong: {},
         currentAlbum: null,
         currentPlaylistId: null,
 
@@ -14,30 +16,33 @@ var playerModule = {
     }),
 
     mutations: {
-        setSong(state, payload) {
+        setSong(state, songId) {
             // Sets the current song to be
-            // played
-            state.currentSong = payload.song[0]
-            if (state.currentPlaylistId == null | state.currentPlaylistId != payload.playlistId) {
-                state.waitingList = payload.playlist
-            }
-            state.currentPlaylistId = payload.playlistId
+            // played and the playlist
+            // state.currentSong = payload.song[0]
+            state.currentSong = _.find(state.waitingList, ['id', songId])
         },
-
+        
         setWaitingList (state, playlist) {
             // Set the list of songs to play
             // by the player starting from
             // the current song
+            // if (state.currentPlaylistId == null | state.currentPlaylistId != payload.playlistId) {
+            //     state.waitingList = payload.playlist
+            // }
+            // state.currentPlaylistId = payload.playlistId
             state.waitingList = playlist
         },
 
         play (state) {
-            if (!state.isPlaying) {
-                state.isPlaying = true
-            }
+            // Sets the local Audio player
+            // state for the global application
+            state.isPlaying = true
         },
 
         pause (state) {
+            // Sets the local Audio player
+            // state for the global application
             state.isPlaying = false
         },
         
@@ -61,10 +66,13 @@ var playerModule = {
     },
 
     actions: {
-        setCurrentSong({commit}, payload) {
+        setSelectedAndPlay({commit}, payload) {
             // Sets the player to the current
             // song. Expects an array.
-            commit('setSong', payload)
+            let { songId, playlist } = payload
+
+            commit('setWaitingList', playlist)
+            commit('setSong', songId)
             commit('play')
         }
     }
