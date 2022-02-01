@@ -14,10 +14,18 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: () => ({
     albums: albums,
-    artists: artists
+    artists: artists,
+
+    cachedSearch: null
   }),
 
   mutations: {
+    setSearch (state, payload) {
+      // When the user does a search on the website,
+      // cache the result. In case the next search
+      // is similar, we don't need to hit the backend
+      state.cachedSearch = payload
+    }
   },
   
   actions: {
