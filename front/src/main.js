@@ -3,15 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
-import './assets/style.css'
 
 // Styling
 
-import './plugins/bootstrap-vue'
 import vuetify from './plugins/vuetify'
+import './assets/style.css'
+import './plugins/bootstrap-vue'
 import './plugins/fontawesome'
 
-import './components'
+// Components
+
+import './plugins/audio_player'
 
 Vue.config.productionTip = false
 
