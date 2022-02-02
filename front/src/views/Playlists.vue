@@ -9,7 +9,9 @@
       </div>
 
       <list-playlists v-if="componentToShow == 'playlists'" :playlists="playlists" />
+    
       <list-artists v-else-if="componentToShow == 'artists'" />
+      
       <list-albums v-else-if="componentToShow == 'albums'" />
     </div>
   </section>

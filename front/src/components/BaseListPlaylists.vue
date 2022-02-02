@@ -5,9 +5,9 @@
       
       <div class="row">
         <div v-for="playlist in 8" :key="playlist" class="col-3">
-          <b-card :id="playlist.name" :img-src="'http://via.placeholder.com/400'" img-top>
-
-          </b-card>
+          <router-link :to="{ name: 'playlist', params: { id: playlist } }">
+            <b-card :id="playlist.name" :img-src="'http://via.placeholder.com/400'" overlay></b-card>
+          </router-link>
         </div>
       </div>
     </div>
@@ -17,9 +17,9 @@
 
       <div class="row">
         <div v-for="playlist in 8" :key="playlist" class="col-3">
-          <b-card :id="playlist.name" :img-src="'http://via.placeholder.com/400'" img-top>
-
-          </b-card>
+          <router-link :to="{ name: 'playlist', params: { id: playlist } }">
+            <b-card :id="playlist.name" :img-src="'http://via.placeholder.com/400'" overlay></b-card>
+          </router-link>
         </div>
       </div>
     </div>
