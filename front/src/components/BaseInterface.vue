@@ -42,7 +42,7 @@
             <span>{{ currentSong.name }}</span>
             <!-- Mini player -->
             <!-- <base-audio :src="'http://127.0.0.1:8000/media/songs/Jahlys___Bad_Like_Me.mp3/23bd4e9f4505817d9ece.mp3'"></base-audio> -->
-            <base-audio :src="currentSong.source"></base-audio>
+            <!-- <base-audio :src="currentSong.source"></base-audio> -->
           </div>
         </div>
       </div>
@@ -96,9 +96,13 @@ export default {
 
   beforeMount() {
     var currentSettings = JSON.parse(localStorage.getItem('s'))
-    var socialsIsMinimized = currentSettings['minimize_socials']
-    if (socialsIsMinimized !== undefined) {
-      this.minimizeSocials = socialsIsMinimized
+    if (_.isNull(currentSettings)) {
+      // TODO: ??
+    } else {
+      var socialsIsMinimized = currentSettings['minimize_socials']
+      if (socialsIsMinimized !== undefined) {
+        this.minimizeSocials = socialsIsMinimized
+      }
     }
   },
 

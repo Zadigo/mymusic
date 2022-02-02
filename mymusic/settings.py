@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -29,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'django_extensions',
+    'rest_framework',
     'corsheaders',
     'artists',
     'playlists',
@@ -38,8 +40,8 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -141,6 +143,10 @@ INTERNAL_IPS = ['127.0.0.1']
 
 # Cors
 
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ALLOW_CREDENTIALS = True
+
 CORS_ORIGIN_REGEX_WHITELIST = [
     r'^https?\:\/\/localhost\:808\d{1}$',
     r'^https?\:\/\/192\.168\.0\.\d{3}\:8080$'
@@ -161,3 +167,18 @@ CSRF_TRUSTED_ORIGINS = [
 #         'rest_framework.authentication.TokenAuthentication',
 #     ),
 # }
+
+
+# Emailing
+
+EMAIL_HOST = 'smtp.gmail.com'
+
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', None)
+
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', None)
+
+EMAIL_USE_TLS = True
+
+EMAIL_PORT = 587
+
+EMAIL_USE_LOCALTIME = True

@@ -1,26 +1,26 @@
 <template>
-  <b-list-group v-if="getSearchedSongs.length > 0">
-    <b-list-group-item v-for="song in getSearchedSongs" :key="song.id" class="d-flex justify-content-between">
+  <b-list-group v-if="this.hasSongs">
+    <b-list-group-item v-for="song in songs" :key="song.id" class="d-flex justify-content-between">
       <div id="infos" class="row">
         <div class="col-auto">
           <v-btn class="mr-2" icon>
             <font-awesome-icon icon="play" />
           </v-btn>
 
-          <b-img src="http://via.placeholder.com/40" rounded fluid />
+          <b-img :src="song.cover_image_thumbnail" rounded fluid />
         </div>
 
         <div class="col-auto">
           <div class="d-flex flex-column">
             <span>{{ song.name }}</span>
-            <span class="text-muted">Artist name</span>
+            <span class="text-muted">{{ song.artist.name }}</span>
           </div>
         </div>
       </div>
 
       <div id="actions">
         <font-awesome-icon class="mx-4" icon="heart" />
-        <time :datetime="song.duration|formatDuration">{{ song.duration }}</time>
+        <time :datetime="song.duration|formatDuration">{{ song.duration|simpleDuration }}</time>
 
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
@@ -50,7 +50,7 @@
 // Component used to list songs using
 // a list group
 
-import { mapGetters, mapState } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'BaseListSongs',
@@ -64,10 +64,10 @@ export default {
 
   computed: {
     ...mapState('playerModule', ['isPlaying']),
-    // TODO: This should not display songs from a playlist
-    // but all the songs available on the plateform using
-    // in respect to the search
-    ...mapGetters('userPlaylistModule', ['getSearchedSongs'])
+
+    hasSongs () {
+      return this.songs.length > 0
+    }
   }
 }
 </script>

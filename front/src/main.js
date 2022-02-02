@@ -12,12 +12,13 @@ import './plugins/bootstrap-vue'
 import './plugins/fontawesome'
 
 // Plugins
-
 import globalPlugins from './plugins'
 
 // Components
-
 import './plugins/audio_player'
+
+// Mixins
+import './mixins'
 
 Vue.config.productionTip = false
 
