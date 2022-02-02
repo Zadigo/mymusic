@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     'django_extensions',
     'corsheaders',
     'artists',
-    'playlists'
+    'playlists',
+    'api'
 ]
 
 MIDDLEWARE = [

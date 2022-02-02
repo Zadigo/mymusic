@@ -7,6 +7,7 @@ from mutagen.mp3 import MP3
 from django.db.models import Index
 
 from artists.choices import Genres, GeographicAreas, Nationalities
+from artists.managers import AlbumManager, SongManager
 from artists.utils import artist_cover_image_path, cover_image_path, song_path
 from artists.validators import song_file_validator
 from django.contrib.auth import get_user_model
@@ -67,6 +68,10 @@ class Artist(models.Model):
     
     def __str__(self):
         return self.name
+    
+    @property
+    def number_of_followers(self):
+        return self.followers.all().count()
 
 
 class Album(models.Model):
@@ -94,6 +99,8 @@ class Album(models.Model):
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
     
+    objects = AlbumManager()
+    
     class Meta:
         ordering = ['name']
         indexes = [
@@ -105,7 +112,7 @@ class Album(models.Model):
     
     @property
     def number_of_songs(self):
-        return self.song_set.aggregrate(Count('song_set__id'))
+        return self.song_set.all().aggregate(Count('id'))['id__count']
 
 
 class Song(models.Model):
@@ -120,6 +127,8 @@ class Song(models.Model):
     duration = models.DurationField(blank=True, null=True)
     bitrate = models.PositiveIntegerField(default=0)
     added_on = models.DateField(auto_now_add=True)
+    
+    objects = SongManager()
     
     class Meta:
         ordering = ['name']
