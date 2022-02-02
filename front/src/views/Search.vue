@@ -30,18 +30,17 @@
               <div class="row">
                 
                 <!-- Genres -->
-                <transition-group>
                   <div v-for="(genre, index) in availableGenres" :key="index" class="col-4">
-                    <router-link :to="{ name: 'genre', params: { genre: genre } }">
-                      <b-card :title="genre" :img-src="'http://via.placeholder.com/500'" :img-alt="'a'" text-variant="white" overlay>
-                        <b-card-text>
-                          Some quick example text to build on the card and make up the bulk of the card's content.
-                        </b-card-text>
-                      </b-card> 
-                    </router-link>
+                    <transition-group>
+                      <router-link :to="{ name: 'genre', params: { genre: genre } }">
+                        <b-card :title="genre" :img-src="'http://via.placeholder.com/500'" :img-alt="'a'" text-variant="white" overlay>
+                          <b-card-text>
+                            Some quick example text to build on the card and make up the bulk of the card's content.
+                          </b-card-text>
+                        </b-card> 
+                      </router-link>
+                    </transition-group>
                   </div>
-                </transition-group>
-
 
               </div>
             </div>
