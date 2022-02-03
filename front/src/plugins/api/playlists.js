@@ -32,7 +32,7 @@ var deletePlaylist = (_axios) => {
     return (playlistId) => {
         return _axios({
             method: 'delete',
-            url: `/playlists/${playlistId}`
+            url: `/playlists/${playlistId}/delete`
         })
     }
 }
@@ -57,11 +57,23 @@ var changeSorting = (_axios) => {
     }
 }
 
+var createPlaylist = (_axios) => {
+    return () => {
+        return _axios({
+            method: 'post',
+            url: `/playlists/create`
+        })
+    }
+}
+
 export default (_axios) => ({
-    all: getAll(_axios),
     add: addSong(_axios),
     remove: removeSong(_axios),
+    
+    all: getAll(_axios),
+    create: createPlaylist(_axios),
     delete: deletePlaylist(_axios),
+    
     changeSort: changeSorting(_axios),
     changeName: changeName(_axios)
 })

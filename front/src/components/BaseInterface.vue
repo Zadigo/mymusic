@@ -19,7 +19,12 @@
       </transition>
 
       <div id="profile">
-        <router-link id="nav-button" class="profile-button" :to="{ name: 'profile' }">
+        <router-link v-if="$route.name == 'profile'" id="nav-button" class="profile-button" :to="{ name: 'home' }">
+          <font-awesome-icon class="mr-3" icon="arrow-left" />
+          Back to home
+        </router-link>
+
+        <router-link v-else id="nav-button" class="profile-button" :to="{ name: 'profile' }">
           <font-awesome-icon class="mr-3" icon="cog" />
           Profile
         </router-link>
@@ -71,7 +76,7 @@ export default {
     return {
       minimizeSocials: false,
       profileNavButtons: [
-        { name: 'home', icon: 'home'},
+        // { name: 'home', icon: 'home'},
         { name: 'account_overview', icon: 'home'},
         { name: 'available_plans', icon: 'credit-card'},
         { name: 'password', icon: 'key'},

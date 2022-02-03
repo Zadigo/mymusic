@@ -8,10 +8,20 @@
         </v-btn>
       </div>
 
+      <div class="col-12">
+        <v-btn @click="createPlaylist">
+          <font-awesome-icon class="mr-2" icon="plus" />
+          Create playlist
+        </v-btn>
+      </div>
+
+      <!-- Playlists -->
       <list-playlists v-if="componentToShow == 'playlists'" :playlists="playlists" />
-    
+
+      <!-- Artists -->
       <list-artists v-else-if="componentToShow == 'artists'" />
       
+      <!-- Albums -->
       <list-albums v-else-if="componentToShow == 'albums'" />
     </div>
   </section>
@@ -56,6 +66,20 @@ export default {
     .catch((error) => {
       console.log(error)
     })
+  },
+
+  methods: {
+    createPlaylist () {
+      this.$api.playlists.create()
+      .then((response) => {
+        var playlist = response.data
+        this.$store.commit('userPlaylistModule/updatePlaylists', playlist)
+        this.$router.push({ name: 'playlist', params: { id: playlist.id } })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
   }
 }
 

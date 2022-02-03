@@ -33,6 +33,22 @@
           </v-list>
         </v-menu>
 
+        <v-menu>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn color="primary" dark v-bind="attrs" v-on="on">
+              <font-awesome-icon icon="horizontal-dots" />
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item-group>
+              <v-list-item @click="deletePlaylist">
+                Delete
+              </v-list-item>
+            </v-list-item-group>
+          </v-list>
+        </v-menu>
+
         <!-- Advanced search -->
         <b-link @click="showAdvanced=!showAdvanced">Advanced searched</b-link>
         <div v-if="showAdvanced" id="advanced-search">
@@ -44,29 +60,6 @@
     <div id="songs" class="row">
       <div class="col-12">
         <base-list-playlist-songs :songs="searchedSongs" />
-        
-        <!-- <b-list-group class="mt-4">
-          <b-list-group-item v-for="(song, index) in searchedSongs" :key="index" :aria-label="song.name" button>
-            <div class="infos">
-              <v-btn v-if="isPlaying" icon @click="pauseSong(song.id)">
-                <font-awesome-icon icon="pause" />
-              </v-btn>
-              <v-btn v-else icon @click="playSong(song.id)">
-                <font-awesome-icon icon="play" />
-              </v-btn>
-
-              <b-img :alt="null" :src="song.cover_image|getFullUrl" height="30px" width="30px" rounded fluid />
-              {{ song.name }}
-            </div>
-
-            {{ song.album_id }}
-
-            <div class="actions">
-              <font-awesome-icon icon="heart"></font-awesome-icon>
-              <time datetime="2M20S">2:20</time>
-            </div>
-          </b-list-group-item>
-        </b-list-group> -->
       </div>
     </div>
 
@@ -136,6 +129,17 @@ export default {
     getAlbumImage (id) {
       var album = this.$store.getters['getAlbum'](id)
       return album.cover_image
+    },
+
+    deletePlaylist () {
+      this.$api.playlists.delete(this.$route.params.id)
+      .then((response) => {
+        this.$store.commit('userPlaylistModule/deletePlaylist', response.data)
+        this.$router.push({ name: 'playlists' })
+      })
+      .catch((error) => {
+        error
+      })
     }
   }
 }

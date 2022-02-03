@@ -19,6 +19,15 @@ var userPlaylistModule = {
             state.playlists = playlists
         },
 
+        updatePlaylists (state, playlist) {
+            state.playlists.push(playlist)
+        },
+
+        deletePlaylist (state, playlist) {
+            var playlistIndex = _.findIndex(state.playlists, ['id', playlist.id])
+            state.playlists.splice(playlistIndex, 1)
+        },
+
         setSortBy(state, sortMethod) {
             // Set the sorting method for the
             // playlist or for all the playlists
@@ -39,6 +48,12 @@ var userPlaylistModule = {
     },
 
     getters: {
+        hasPlaylists (state) {
+            // Check if the user's playlists were
+            // already loaded
+            return state.playlists.length > 0
+        },
+
         getPlaylist (state) {
             // Get a playlist for the list
             // of playlists created by the user

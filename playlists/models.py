@@ -18,7 +18,9 @@ class AbstractPlaylist(models.Model):
     cover_image = ProcessedImageField(
         format='JPEG',
         processors=[ResizeToFill(width=300, height=300)],
-        options={'quality': 90}
+        options={'quality': 90},
+        blank=True,
+        null=True
     )
     followers = models.ManyToManyField(
         USER_MODEL,
