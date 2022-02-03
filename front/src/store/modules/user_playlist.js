@@ -23,6 +23,13 @@ var userPlaylistModule = {
             state.playlists.push(playlist)
         },
 
+        updateSinglePlaylist (state, playlist) {
+            // Updates the informations of on playlist
+            // in the stack
+            var playlistIndex = _.findIndex(state.playlists, ['id', playlist.id])
+            state.playlists[playlistIndex].songs = playlist.songs
+        },
+
         deletePlaylist (state, playlist) {
             var playlistIndex = _.findIndex(state.playlists, ['id', playlist.id])
             state.playlists.splice(playlistIndex, 1)

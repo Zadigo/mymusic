@@ -34,19 +34,17 @@
               <h2 class="text-white mb-5">Explorer tout les genres</h2>
 
               <!-- Genres -->
-              <div class="row">
-                  <transition-group>
-                    <div v-for="genre in availableGenres" :key="genre.id" class="col-4">
-                        <router-link :key="genre.id" :to="{ name: 'genre', params: { genre: genre.name } }">
-                          <b-card :title="genre.name" :img-src="'http://via.placeholder.com/500'" :img-alt="'a'" text-variant="white" overlay>
-                            <b-card-text>
-                              Some quick example text to build on the card and make up the bulk of the card's content.
-                            </b-card-text>
-                          </b-card> 
-                        </router-link>
-                    </div>
-                  </transition-group>
-              </div>
+              <transition-group tag="div" class="row">
+                <div v-for="genre in availableGenres" :key="genre.id" class="col-4">
+                    <router-link :key="genre.id" :to="{ name: 'genre', params: { genre: genre.name } }">
+                      <b-card :title="genre.name" :img-src="'http://via.placeholder.com/500'" :img-alt="'a'" text-variant="white" overlay>
+                        <b-card-text>
+                          Some quick example text to build on the card and make up the bulk of the card's content.
+                        </b-card-text>
+                      </b-card> 
+                    </router-link>
+                </div>
+              </transition-group>
             </div>
           </div>        
         </div>
@@ -103,7 +101,7 @@
 <script>
 var _ = require('lodash')
 
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 import BaseListSongs from '../components/BaseListSongs.vue'
 import BaseListArtists from '../components/BaseListArtists.vue'
@@ -116,7 +114,7 @@ export default {
 
   data () {
     return {
-      availableGenres: [],
+      // availableGenres: [],
       showAdvancedSearch: false,
 
       searchedItem: {
@@ -131,6 +129,7 @@ export default {
   
   computed: {
     ...mapGetters(['searchAlbums']),
+    ...mapState(['availableGenres']),
 
     songSet () {
       // For each songs, implement some of the
@@ -169,13 +168,16 @@ export default {
   },
 
   beforeMount () {
-    // this.$api.genres.all()
-    // .then((response) => {
-    //   this.availableGenres = response.data
-    // })
-    // .catch((error) => {
-    //   console.log(error)
-    // })
+    if (this.availableGenres.length == 0) {
+      this.$api.genres.all()
+      .then((response) => {
+        // this.availableGenres = response.data
+        this.$store.commit('setAvailableGenres', response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
   },
 
   methods: {

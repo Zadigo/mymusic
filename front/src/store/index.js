@@ -15,7 +15,8 @@ export default new Vuex.Store({
   state: () => ({
     albums: albums,
     artists: artists,
-
+    
+    availableGenres: [],
     cachedSearch: null
   }),
 
@@ -25,6 +26,10 @@ export default new Vuex.Store({
       // cache the result. In case the next search
       // is similar, we don't need to hit the backend
       state.cachedSearch = payload
+    },
+
+    setAvailableGenres (state, genres) {
+      state.availableGenres = genres
     }
   },
   

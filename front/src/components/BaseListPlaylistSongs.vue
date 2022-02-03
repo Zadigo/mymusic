@@ -34,6 +34,10 @@
               <v-list-item>
                 Aller sur la page de l'artiste
               </v-list-item>
+              
+              <v-list-item @click="removeFromPlaylist(song.id)">
+                Remove from playlist
+              </v-list-item>
             </v-list-item-group>
           </v-list>
         </v-menu>
@@ -56,6 +60,19 @@ import listSongMixin from './list_songs_mixin'
 
 export default {
   name: 'BaseListPlaylistSongs',
-  mixins: [listSongMixin]
+  
+  mixins: [listSongMixin],
+
+  methods: {
+    removeFromPlaylist (songId) {
+      this.$api.playlists.remove(this.$route.params.id, songId)
+      .then((response) => {
+        this.$store.commit('userPlaylistModule/updateSinglePlaylist', response.data)
+      })
+      .catch((error) => {
+        error
+      })
+    }
+  }
 }
 </script>

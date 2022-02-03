@@ -24,6 +24,18 @@ def add_song_to_playlist(request, pk, **kwargs):
     return create_response(data={'state': 'True'})
 
 
+@api_view(['post', 'delete'])
+def remove_song_from_playlist(request, pk, **kwargs):
+    playlist = get_object_or_404(UserPlaylist, id=pk)
+    song = get_object_or_404(Song, id=request.data.get('song_id'))
+    
+    playlist.songs.remove(song)
+    playlist.refresh_from_db(fields=['songs'])
+    
+    serialized_playlist = PlaylistSerializer(instance=playlist)
+    return create_response(serializer=serialized_playlist)
+
+
 @api_view(['post'])
 def create_playlist(request, **kwargs):
     # TODO: Authentify the user that sends

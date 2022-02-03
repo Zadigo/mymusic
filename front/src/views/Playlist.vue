@@ -86,9 +86,7 @@ export default {
       sortedSongs: 'getSortedSongs',
       searchedSongs: 'getSearchedSongs'
     }),
-
     ...mapState('userPlaylistModule', ['currentPlaylist']),
-
     ...mapState('playerModule', ['isPlaying']),
 
     searchedSong: {
