@@ -1,5 +1,5 @@
 import { toInteger } from 'lodash'
-import myplaylists from '../../data/myplaylists.json'
+// import myplaylists from '../../data/myplaylists.json'
 
 var _ = require('lodash')
 
@@ -7,13 +7,18 @@ var userPlaylistModule = {
     namespaced: true,
 
     state: () => ({
-        playlists: myplaylists,
+        // playlists: myplaylists,
+        playlists: [],
         currentPlaylist: null,
         sortBy: 'name',
         search: null
     }),
 
     mutations: {
+        setUserPlaylists (state, playlists) {
+            state.playlists = playlists
+        },
+
         setSortBy(state, sortMethod) {
             // Set the sorting method for the
             // playlist or for all the playlists
@@ -66,6 +71,11 @@ var userPlaylistModule = {
                     return song.name.includes(state.search)
                 })
             }
+        },
+
+        getAllPlaylistNames (state) {
+            // Get all the user playlists names
+            return _.map(state.playlists, (playlist) => { return { id: playlist.id, name: playlist.name } })
         }
     }
 }

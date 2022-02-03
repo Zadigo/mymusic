@@ -7,7 +7,7 @@
             <font-awesome-icon icon="play" />
           </v-btn>
 
-          <b-img :src="song.cover_image_thumbnail" rounded fluid />
+          <b-img :src="song.album.cover_image_thumbnail|getFullUrl" width="40px" height="40px" rounded fluid />
         </div>
 
         <div class="col-auto">
@@ -29,10 +29,26 @@
             </v-btn>
           </template>
 
-          <v-list>
+          <v-list rounded>
             <v-list-item-group>
               <v-list-item>
                 Aller sur la page de l'artiste
+              </v-list-item>
+
+              <v-list-group no-action sub-group>
+                <template v-slot:activator>
+                  <v-list-item-content>
+                    <v-list-item-title>Add to playlist</v-list-item-title>
+                  </v-list-item-content>
+                </template>
+
+                <v-list-item v-for="playlist in getAllPlaylistNames" :key="playlist.id" @click="addToPlaylist(playlist.id, song.id)">
+                  {{ playlist.name }}
+                </v-list-item>
+              </v-list-group>
+
+              <v-list-item>
+                Share
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -50,7 +66,7 @@
 // Component used to list songs using
 // a list group
 
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   name: 'BaseListSongs',
@@ -64,9 +80,22 @@ export default {
 
   computed: {
     ...mapState('playerModule', ['isPlaying']),
+    ...mapGetters('userPlaylistModule', ['getAllPlaylistNames']),
 
     hasSongs () {
       return this.songs.length > 0
+    }
+  },
+
+  methods: {
+    addToPlaylist (playlistId, songId) {
+      this.$api.playlists.add(playlistId, songId)
+      .then((response) => {
+        response
+      })
+      .catch((error) => {
+        error
+      })
     }
   }
 }

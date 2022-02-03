@@ -4,7 +4,7 @@
     <!-- Header -->
     <div id="playlist-header" class="row p-5 mb-5 text-white">
       <div class="col-5">
-        <b-img width="300" height="300" :src="currentPlaylist.playlist_cover" :alt="currentPlaylist.name" rounded fluid />
+        <b-img width="300" height="300" :src="currentPlaylist.cover_image|getFullUrl" :alt="currentPlaylist.name" rounded fluid />
       </div>
 
       <div class="col-auto">
@@ -43,7 +43,9 @@
 
     <div id="songs" class="row">
       <div class="col-12">
-        <b-list-group class="mt-4">
+        <base-list-playlist-songs :songs="searchedSongs" />
+        
+        <!-- <b-list-group class="mt-4">
           <b-list-group-item v-for="(song, index) in searchedSongs" :key="index" :aria-label="song.name" button>
             <div class="infos">
               <v-btn v-if="isPlaying" icon @click="pauseSong(song.id)">
@@ -53,7 +55,7 @@
                 <font-awesome-icon icon="play" />
               </v-btn>
 
-              <b-img :alt="null" :src="getAlbumImage(song.album_id)" rounded fluid />
+              <b-img :alt="null" :src="song.cover_image|getFullUrl" height="30px" width="30px" rounded fluid />
               {{ song.name }}
             </div>
 
@@ -64,7 +66,7 @@
               <time datetime="2M20S">2:20</time>
             </div>
           </b-list-group-item>
-        </b-list-group>
+        </b-list-group> -->
       </div>
     </div>
 
@@ -73,8 +75,10 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import BaseListPlaylistSongs from '../components/BaseListPlaylistSongs.vue'
 
 export default {
+  components: {BaseListPlaylistSongs  },
   name: 'Playlist',
 
   data: () => ({

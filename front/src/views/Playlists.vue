@@ -46,6 +46,16 @@ export default {
 
   computed: {
     ...mapState('userPlaylistModule', ['playlists'])
+  },
+
+  beforeMount () {
+    this.$api.playlists.all()
+    .then((response) => {
+      this.$store.commit('userPlaylistModule/setUserPlaylists', response.data)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
   }
 }
 

@@ -14,7 +14,7 @@ class AbstractPlaylist(models.Model):
         on_delete=models.CASCADE
     )
     name = models.CharField(max_length=100)
-    song = models.ManyToManyField(Song, blank=True)
+    songs = models.ManyToManyField(Song, blank=True)
     cover_image = ProcessedImageField(
         format='JPEG',
         processors=[ResizeToFill(width=300, height=300)],

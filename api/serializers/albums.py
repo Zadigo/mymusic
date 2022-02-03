@@ -24,7 +24,7 @@ class SongSerializer(Serializer):
     genre = fields.CharField()
     duration = fields.DurationField()
     bitrate = fields.IntegerField()
-
+    
 
 class AlbumSerializer(Serializer):
     id = fields.IntegerField()

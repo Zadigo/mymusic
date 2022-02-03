@@ -12,7 +12,7 @@
         </b-link>
 
         <div v-if="showAdvancedSearch" id="advanced">
-          <v-combobox :items="['Guadeloupe', 'Martinique', 'Jamaïque', 'Congo']" multiple chips clearable hide-selected></v-combobox>
+          <v-combobox v-model="searchedItem.area" :items="['Guadeloupe', 'Martinique', 'Jamaïque', 'Congo']" multiple chips clearable hide-selected></v-combobox>
           
           <v-range-slider :value="[2009, 2020]" hint="Choose year" min="2000" max="2022" step="1">
             <template v-slot:thumb-label="props">
@@ -122,7 +122,7 @@ export default {
       searchedItem: {
         name: null,
         genre: null,
-        area: null
+        area: []
       },
 
       searchResult: []
@@ -133,15 +133,18 @@ export default {
     ...mapGetters(['searchAlbums']),
 
     songSet () {
+      // For each songs, implement some of the
+      // album information
       var songSet = []
-        _.forEach(this.searchResult, (album) => {
-          var songs = album.song_set.map((song) => {
-            song['artist'] = { name: album.artist.name }
-            return song
-          })
-          songSet.push(...songs)
+      _.forEach(this.searchResult, (album) => {
+        var songs = album.song_set.map((song) => {
+          song['artist'] = { name: album.artist.name }
+          song['album'] = { cover_image_thumbnail: album.cover_image_thumbnail }
+          return song
         })
-        return _.uniqBy(songSet, 'id')
+        songSet.push(...songs)
+      })
+      return _.uniqBy(songSet, 'id')
     },
 
     artistSet () {
