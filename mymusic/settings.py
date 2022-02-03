@@ -182,3 +182,13 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 
 EMAIL_USE_LOCALTIME = True
+
+
+# Cache
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache'),
+    }
+}

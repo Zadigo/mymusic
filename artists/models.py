@@ -1,17 +1,15 @@
+from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Count
+from django.db.models import Count, Index
 from django.utils.timezone import make_aware, now
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from mutagen.mp3 import MP3
-from django.db.models import Index
 
 from artists.choices import Genres, GeographicAreas, Nationalities
 from artists.managers import AlbumManager, SongManager
 from artists.utils import artist_cover_image_path, cover_image_path, song_path
 from artists.validators import song_file_validator
-from django.contrib.auth import get_user_model
-
 
 USER_MODEL = get_user_model()
 
@@ -96,6 +94,7 @@ class Album(models.Model):
     is_single = models.BooleanField(default=False)
     number_of_plays = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True)
+    
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
     

@@ -22,4 +22,4 @@ def create_response(data: Any=None, serializer: Serializer=None):
 
 def map_list(dataset: list):
     for i, item in enumerate(dataset):
-        yield { 'id': i, 'name': item}
+        yield {'id': i, 'name': item, 'viewname': item.lower()}

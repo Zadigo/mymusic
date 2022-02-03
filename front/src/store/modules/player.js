@@ -23,6 +23,10 @@ var playerModule = {
             state.currentSong = _.find(state.waitingList, ['id', songId])
         },
 
+        setTracks (state, songs) {
+            state.waitingList = songs
+        },
+
         moveToIndex (state, index) {
             // Move to the next index
             state.currentSong = state.waitingList[index]

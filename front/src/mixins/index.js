@@ -4,6 +4,9 @@ var _ = require('lodash')
 var globalMixins = {
     filters: {
         getFullUrl (path) {
+            // if (_.isNull(path)) {
+            //     return 'http://via.placeholder.com/800'
+            // }
             var url = new URL(path, 'http://127.0.0.1:8000')
             return url.toString()
         },

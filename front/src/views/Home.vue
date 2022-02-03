@@ -20,7 +20,7 @@ export default {
     // Load all the user's playlists in order
     // to facilitate further navigation
     if (!this.hasPlaylists) {
-      this.$api.playlists.all()
+      this.$api.playlists.all(1)
       .then((response) => {
         this.$store.commit('userPlaylistModule/setUserPlaylists', response.data)
       })

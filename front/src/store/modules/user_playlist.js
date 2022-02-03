@@ -17,10 +17,24 @@ var userPlaylistModule = {
     mutations: {
         setUserPlaylists (state, playlists) {
             state.playlists = playlists
+            // To track if a song is playing on an
+            // individual level in a playlist, 
+            //  we use this flag
+            // _.forEach(state.playlists, (playlist) => {
+            //     _.forEach(playlist.song, (song) => {
+            //         song['is_playing'] = false
+            //     })
+            // })
         },
 
         updatePlaylists (state, playlist) {
             state.playlists.push(playlist)
+        },
+
+        updatePlaylistSorting (state, payload) {
+            let { id, songs } = payload
+            var playlistIndex = _.findIndex(state.playlists, ['id', id])
+            state.playlists[playlistIndex]['songs'] = songs  
         },
 
         updateSinglePlaylist (state, playlist) {
@@ -41,12 +55,11 @@ var userPlaylistModule = {
             state.sortBy = sortMethod.toLowerCase()
         },
 
-        setCurrentPlaylist(state, playlistId) {
+        setCurrentViewedPlaylist(state, playlistId) {
             // Set the current playlist that
             // is viewed/used by the user
-            // state.currentPlaylist = playlist
             var id = toInteger(playlistId)
-            state.currentPlaylist = _.find(state.playlists, { id: id })
+            state.currentPlaylist = _.find(state.playlists, ['id', id])
         },
 
         setSearch (state, value) {
@@ -71,24 +84,25 @@ var userPlaylistModule = {
         },
 
         getSongs (state) {
-            // Get the songs from the current playlist
-            return _.isNull(state.currentPlaylist) ? [] : state.currentPlaylist.songs
+            // Returns the songs from the current playlist
+            // the the user is visiting
+            return _.isUndefined(state.currentPlaylist) ? [] : state.currentPlaylist.songs
         },
 
-        getSortedSongs (state, rootGetters) {
-            // Return all the songs that were sorted
-            // in the playlist. The default sort 
-            // is by the song name
-            return _.sortBy(rootGetters.getSongs, [state.sortBy])
-        },
+        // getSortedSongs (state, rootGetters) {
+        //     // Return all the songs that were sorted
+        //     // in the playlist. The default sort 
+        //     // is by the song name
+        //     return _.sortBy(rootGetters.getSongs, [state.sortBy])
+        // },
 
         getSearchedSongs (state, rootGetters) {
             // Return all the songs that were
             // searched for in the playlist
             if (_.isNull(state.search)) {
-                return rootGetters.getSortedSongs
+                return rootGetters.getSongs
             } else {
-                return _.filter(rootGetters.getSortedSongs, (song) => {
+                return _.filter(rootGetters.getSongs, (song) => {
                     // return song.name.includes(state.search) | song.artist.includes(state.search)
                     return song.name.includes(state.search)
                 })

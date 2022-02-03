@@ -51,8 +51,8 @@ var changeSorting = (_axios) => {
     return (playlistId, method) => {
         return _axios({
             method: 'post',
-            url: `/playlists/${playlistId}`,
-            data: { method: method }
+            url: `/playlists/${playlistId}/sort`,
+            data: { user_sort: method }
         })
     }
 }

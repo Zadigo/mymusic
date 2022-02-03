@@ -31,12 +31,12 @@
             <div class="col-12"></div>
 
             <div class="col-12">
-              <h2 class="text-white mb-5">Explorer tout les genres</h2>
+              <h2 class="text-white mb-5">Explore all genres</h2>
 
               <!-- Genres -->
               <transition-group tag="div" class="row">
                 <div v-for="genre in availableGenres" :key="genre.id" class="col-4">
-                    <router-link :key="genre.id" :to="{ name: 'genre', params: { genre: genre.name } }">
+                    <router-link :key="genre.id" :to="{ name: 'genre', params: { genre: genre.viewname } }">
                       <b-card :title="genre.name" :img-src="'http://via.placeholder.com/500'" :img-alt="'a'" text-variant="white" overlay>
                         <b-card-text>
                           Some quick example text to build on the card and make up the bulk of the card's content.

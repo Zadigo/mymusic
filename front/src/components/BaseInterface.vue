@@ -31,7 +31,8 @@
       </div>
     </div>
 
-    <div class="center p-3">
+    <!-- <div class="center p-3"> -->
+    <div class="center">
       <router-view />
     </div>
     

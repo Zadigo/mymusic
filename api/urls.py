@@ -10,6 +10,7 @@ router = DefaultRouter()
 urlpatterns = [
     re_path(r'^search/albums', albums.search_albums),
     
+    re_path(r'^playlists/(?P<pk>\d+)/sort', playlists.update_sorting),
     re_path(r'^playlists/(?P<pk>\d+)/remove', playlists.remove_song_from_playlist),
     re_path(r'^playlists/(?P<pk>\d+)/delete', playlists.delete_playlist),
     re_path(r'^playlists/(?P<pk>\d+)/add', playlists.add_song_to_playlist),

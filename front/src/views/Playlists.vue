@@ -1,5 +1,5 @@
 <template>
-  <section id="playlist">
+  <section id="playlists">
     <div class="row">
 
       <div class="col-12">
@@ -23,6 +23,7 @@
       
       <!-- Albums -->
       <list-albums v-else-if="componentToShow == 'albums'" />
+
     </div>
   </section>
 </template>
@@ -59,7 +60,9 @@ export default {
   },
 
   beforeMount () {
-    this.$api.playlists.all()
+    // TODO: The user should only be
+    // able to get his playlists
+    this.$api.playlists.all(1)
     .then((response) => {
       this.$store.commit('userPlaylistModule/setUserPlaylists', response.data)
     })
