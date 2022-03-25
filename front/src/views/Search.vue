@@ -4,15 +4,18 @@
 
       <!-- Search -->
       <div class="col-12">
-        <b-form-input v-model="searchedItem.name" placeholder="Search"></b-form-input>
-        <v-btn @click="doSearch">Search</v-btn>
+        <v-text-field v-model="searchedItem.name" type=" text" placeholder="Search" hide-details solo></v-text-field>
+        <!-- <b-form-input v-model="searchedItem.name" placeholder="Search"></b-form-input> -->
+        <!-- <v-btn @click="doSearch">
+          Search
+        </v-btn> -->
 
         <b-link @click="showAdvancedSearch = !showAdvancedSearch">
           Advanced search
         </b-link>
 
         <div v-if="showAdvancedSearch" id="advanced">
-          <v-combobox v-model="searchedItem.area" :items="['Guadeloupe', 'Martinique', 'Jamaïque', 'Congo']" multiple chips clearable hide-selected></v-combobox>
+          <v-combobox v-model="searchedItem.area" :items="['Guadeloupe', 'Martinique', 'Jamaïque', 'Congo']" outlined multiple chips clearable hide-selected hide-details></v-combobox>
           
           <v-range-slider :value="[2009, 2020]" hint="Choose year" min="2000" max="2022" step="1">
             <template v-slot:thumb-label="props">
@@ -24,8 +27,8 @@
         </div>
       </div>
 
-      <transition name="scale">
-        <!-- Explore -->
+      <!-- Explore -->
+      <transition>
         <div v-if="searchedItem.name == null | searchedItem.name == ''" class="col-12">
           <div class="row">
             <div class="col-12"></div>
@@ -57,7 +60,7 @@
                 <div class="d-flex justify-content-between">
                   <h2 class="h4 mb-3">Meilleurs résultats</h2>
                   <router-link :to="{ name: 'search_more', params: { search: 'songs' } }" class="text-uppercase font-weight-bold text-muted">
-                    Voir tout
+                    See all
                   </router-link>
                 </div>
                 
@@ -71,7 +74,7 @@
             <div class="row">
               <div class="col-12 text-right">
                 <router-link :to="{ name: 'search_more', params: { search: 'artists' } }" class="text-uppercase font-weight-bold text-muted">
-                  Voir tout
+                  See all
                 </router-link>
               </div>
 
@@ -84,7 +87,7 @@
             <div class="row">
               <div class="col-12 text-right">
                 <router-link :to="{ name: 'search_more', params: { search: 'albums' } }" class="text-uppercase font-weight-bold text-muted">
-                  Voir tout
+                  See all
                 </router-link>
               </div>
 
@@ -103,9 +106,9 @@ var _ = require('lodash')
 
 import { mapGetters, mapState } from 'vuex'
 
-import BaseListSongs from '../components/BaseListSongs.vue'
-import BaseListArtists from '../components/BaseListArtists.vue'
 import BaseListAlbums from '../components/BaseListAlbums.vue'
+import BaseListArtists from '../components/BaseListArtists.vue'
+import BaseListSongs from '../components/BaseListSongs.vue'
 
 export default {
   name: 'Search',
@@ -114,7 +117,6 @@ export default {
 
   data () {
     return {
-      // availableGenres: [],
       showAdvancedSearch: false,
 
       searchedItem: {
@@ -126,10 +128,29 @@ export default {
       searchResult: []
     }
   },
+
+  watch: {
+    'searchedItem.name'(newValue, oldValue) {
+      if (newValue && newValue !== oldValue) {
+        this.search()
+      }
+    }
+  },
   
   computed: {
     ...mapGetters(['searchAlbums']),
     ...mapState(['availableGenres']),
+
+    searchQuery() {
+      return _.map(Object.keys(this.searchedItem), (key) => {
+        var value = this.searchedItem[key]
+        if (typeof value == 'object') {
+          value = _.join(',', value)
+        }
+        var instance = new URLSearchParams({ [`${key}`]: value })
+        return instance.toString()
+      })
+    },
 
     songSet () {
       // For each songs, implement some of the
@@ -161,37 +182,63 @@ export default {
       // in the search results
       var albumSet = []
        _.forEach(this.searchResult, (album) => {
-        albumSet.push({ id: album.id, cover_image: album.cover_image, cover_image_thumbnail: album.cover_image_thumbnail, name: album.name, artist: { name: album.artist.name }})
+        albumSet.push({ 
+          id: album.id, 
+          cover_image: album.cover_image,
+          cover_image_thumbnail: album.cover_image_thumbnail,
+          name: album.name,
+          artist: { name: album.artist.name }
+        })
       })
       return _.uniqBy(albumSet, 'id')
     }
   },
 
   beforeMount () {
-    if (this.availableGenres.length == 0) {
-      this.$api.genres.all()
-      .then((response) => {
-        // this.availableGenres = response.data
-        this.$store.commit('setAvailableGenres', response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    }
+    // if (this.availableGenres.length == 0) {
+    //   this.$api.genres.all()
+    //   .then((response) => {
+    //     this.$store.commit('setAvailableGenres', response.data)
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //   })
+    // }
+    if (this.availableGenres == 0) {
+      this.getAvailableGenres()
+    } 
   },
 
   methods: {
-    doSearch () {
-      // this.$store.commit('userPlaylistModule/setSearch', value)
+    async getAvailableGenres() {
+      try {
+        var response = await this.$axios.get('/genres')
+        this.$store.commit('setAvailableGenres', response.data)
+      } catch(error) {
+        console.log(error)
+      }
+    },
 
-      this.$api.albums.search(this.searchedItem)
-      .then((response) => {
+    async search() {
+      try {
+        var response = await this.$axios.get('/search', { params: this.searchedItem })
         this.searchResult = response.data
-      })
-      .catch((error) => {
-        error
-      })
+      } catch(error) {
+        console.log(error)
+      }
     }
-  },
+
+    // doSearch () {
+    //   // this.$store.commit('userPlaylistModule/setSearch', value)
+
+    //   this.$api.albums.search(this.searchedItem)
+    //   .then((response) => {
+    //     this.searchResult = response.data
+    //   })
+    //   .catch((error) => {
+    //     error
+    //   })
+    // }
+  }
 }
 </script>

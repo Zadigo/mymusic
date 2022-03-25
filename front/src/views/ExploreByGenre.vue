@@ -1,6 +1,8 @@
 <template>
   <section id="genre">
-    <h1 :aria-label="currentGenre">{{ currentGenre }}</h1>
+    <h1 :aria-label="currentGenre">
+      {{ currentGenre }}
+    </h1>
 
     <div class="row">
       <div class="col-12">
@@ -18,14 +20,28 @@ export default {
 
   components: { BaseListPlaylists },
 
-  data () {
-    return {
-      currentGenre: null
+  data: () => ({
+    currentGenre: null,
+    result: {
+      playlists: [],
+      novelties: []
     }
-  },
+  }),
 
   beforeMount() {
     this.currentGenre = this.$route.params.genre
+    this.getPlaylists()
   },
+
+  methods: {
+    async getPlaylists() {
+      try {
+        var response = await this.$axios.get(`/playlists/${this.currentGenre}`)
+        this.result = response.data
+      } catch(error) {
+        console.log(error)
+      }
+    }
+  }
 }
 </script>

@@ -23,10 +23,6 @@ var playerModule = {
             state.currentSong = _.find(state.waitingList, ['id', songId])
         },
 
-        setTracks (state, songs) {
-            state.waitingList = songs
-        },
-
         moveToIndex (state, index) {
             // Move to the next index
             state.currentSong = state.waitingList[index]
@@ -67,13 +63,19 @@ var playerModule = {
     },
 
     actions: {
-        playSelected ({commit}, payload) {
+        playSelected ({ commit }, payload) {
             // Sets the player to the current
             // song. Expects an array.
             let { songId, playlist } = payload
-            // console.log(payload)
+
             commit('setWaitingList', playlist)
             commit('setSong', songId)
+            commit('play')
+        },
+
+        startPlaylist({ commit }, playlistSongs) {
+            commit('setWaitingList', playlistSongs)
+            commit('setSong', _.first(playlistSongs)['id'])
             commit('play')
         },
 
@@ -83,14 +85,14 @@ var playerModule = {
             commit('pause')
         },
 
-        previousSong ({ state, rootGetters, commit }) {
+        playPreviousSong ({ state, rootGetters, commit }) {
             // Go to the next song of the playlist
             var currentSongIndex = _.findIndex(state.waitingList, ['id', state.currentSong.id])
             var nextSongIndex = currentSongIndex + 1
             nextSongIndex > rootGetters.numberOfSongs ? nextSongIndex = 0 : nextSongIndex
             commit('moveToIndex', nextSongIndex)
         },
-        nextSong ({ state, rootGetters, commit }) {
+        playNextSong ({ state, rootGetters, commit }) {
             // Go to the next song of the playlist
             var currentSongIndex = _.findIndex(state.waitingList, ['id', state.currentSong.id])
             var nextSongIndex = currentSongIndex - 1

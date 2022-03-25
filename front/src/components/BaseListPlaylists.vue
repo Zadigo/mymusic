@@ -1,27 +1,28 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <h2>Meilleures playlists</h2>
+      <h2>Best playlists</h2>
       
-      <div class="row">
+      <transition-group tag="div" class="row">
         <div v-for="playlist in 8" :key="playlist" class="col-3">
           <router-link :to="{ name: 'playlist', params: { id: playlist } }">
             <b-card :id="playlist.name" :img-src="'http://via.placeholder.com/400'" overlay></b-card>
           </router-link>
         </div>
-      </div>
+      </transition-group>
     </div>
     
     <div class="col-12">
-      <h2>Les nouveautés</h2>
+      <!-- Les nouveautés -->
+      <h2>Novelties</h2>
 
-      <div class="row">
+      <transition-group tag="div" class="row">
         <div v-for="playlist in 8" :key="playlist" class="col-3">
           <router-link :to="{ name: 'playlist', params: { id: playlist } }">
             <b-card :id="playlist.name" :img-src="'http://via.placeholder.com/400'" overlay></b-card>
           </router-link>
         </div>
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>

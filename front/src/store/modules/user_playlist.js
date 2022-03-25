@@ -1,5 +1,4 @@
 import { toInteger } from 'lodash'
-// import myplaylists from '../../data/myplaylists.json'
 
 var _ = require('lodash')
 
@@ -7,7 +6,6 @@ var userPlaylistModule = {
     namespaced: true,
 
     state: () => ({
-        // playlists: myplaylists,
         playlists: [],
         currentPlaylist: null,
         sortBy: 'name',
@@ -17,24 +15,17 @@ var userPlaylistModule = {
     mutations: {
         setUserPlaylists (state, playlists) {
             state.playlists = playlists
-            // To track if a song is playing on an
-            // individual level in a playlist, 
-            //  we use this flag
-            // _.forEach(state.playlists, (playlist) => {
-            //     _.forEach(playlist.song, (song) => {
-            //         song['is_playing'] = false
-            //     })
-            // })
         },
 
         updatePlaylists (state, playlist) {
             state.playlists.push(playlist)
         },
 
-        updatePlaylistSorting (state, payload) {
+        updatePlaylistSorting(state, payload) {
             let { id, songs } = payload
-            var playlistIndex = _.findIndex(state.playlists, ['id', id])
-            state.playlists[playlistIndex]['songs'] = songs  
+            var index = _.findIndex(state.playlists, {id: id})
+            state.playlists[index]['songs'] = songs
+            state.currentPlaylist = state.playlists[index]
         },
 
         updateSinglePlaylist (state, playlist) {
@@ -83,10 +74,14 @@ var userPlaylistModule = {
             }
         },
 
-        getSongs (state) {
+        playlistSongs(state) {
             // Returns the songs from the current playlist
-            // the the user is visiting
-            return _.isUndefined(state.currentPlaylist) ? [] : state.currentPlaylist.songs
+            // the user is visiting
+            try {
+                return state.currentPlaylist.songs
+            } catch {
+                return []
+            }
         },
 
         // getSortedSongs (state, rootGetters) {
@@ -100,17 +95,17 @@ var userPlaylistModule = {
             // Return all the songs that were
             // searched for in the playlist
             if (_.isNull(state.search)) {
-                return rootGetters.getSongs
+                return rootGetters.playlistSongs
             } else {
-                return _.filter(rootGetters.getSongs, (song) => {
+                return _.filter(rootGetters.playlistSongs, (song) => {
                     // return song.name.includes(state.search) | song.artist.includes(state.search)
-                    return song.name.includes(state.search)
+                    return song.name.includes(state.search) | song.album.artist.name.includes(state.search) | song.genre.includes(state.search) | song.genre.toLowerCase().includes(state.search)
                 })
             }
         },
 
         getAllPlaylistNames (state) {
-            // Get all the user playlists names
+            // Get all the user's playlists names
             return _.map(state.playlists, (playlist) => { return { id: playlist.id, name: playlist.name } })
         }
     }

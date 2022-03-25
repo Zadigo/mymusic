@@ -1,6 +1,6 @@
 "use strict";
 
-// import Vue from 'vue';
+import Vue from 'vue';
 import axios from "axios";
 // import globalApi from './api'
 
@@ -9,19 +9,18 @@ import axios from "axios";
 // axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
 // axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
+axios.defaults.headers['Accept'] = 'application/json, */*'
+axios.defaults.headers['Content-Type'] = 'application/json'
+
 let config = {
-  baseURL: 'http://127.0.0.1:8000/api/v1/',
-  headers: { 
-    'Accept': 'application/json, */*',
-    'Content-Type': 'application/json' 
-  },
-  responseType: 'json',
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
+  baseURL: 'http://127.0.0.1:8000/api/v1/',
+  responseType: 'json',
   timeout: 60 * 1000,
   withCredentials: true
 }
 
-const _axios = axios.create(config)
+const client = axios.create(config)
 
 // _axios.interceptors.request.use(
 //   function(config) {
@@ -67,6 +66,12 @@ const _axios = axios.create(config)
 
 // export default Plugin;
 
-window.axios = _axios
+window.axios = client
 
-export default _axios
+Vue.use({
+  install: (Vue) => {
+    Vue.prototype.$axios = client
+  }
+})
+
+export default client

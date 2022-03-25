@@ -36,7 +36,7 @@ import ListArtists from '../components/collections/ListArtists.vue'
 import ListAlbums from '../components/collections/ListAlbums.vue'
 
 export default {
-  name: 'Playlists',
+  name: 'PlaylistsView',
 
   components: {
     ListPlaylists,

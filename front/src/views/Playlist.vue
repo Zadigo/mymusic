@@ -2,25 +2,28 @@
   <section id="playlist" :style="`background-color: #${currentPlaylist.background_color};`">
 
     <!-- Header -->
-    <div id="playlist-header" class="row p-5 mb-5 text-white">
-      <div class="col-5">
-        <b-img class="shadow" width="300" height="300" :src="currentPlaylist.cover_image|getFullUrl" :alt="currentPlaylist.name" rounded fluid />
-      </div>
+    <header>
+      <div id="playlist-header" class="row p-5 mb-5 text-white">
+        <div class="col-5">
+          <b-img class="shadow" width="300" height="300" :src="currentPlaylist.cover_image|getFullUrl" :alt="currentPlaylist.name" rounded fluid />
+        </div>
 
-      <div class="col-auto">
-        <h1>{{ currentPlaylist.name }}</h1>
-        <p class="font-weight-bold">by {{ currentPlaylist.author.username }}</p>
-        <p class="text-muted">{{ currentPlaylist.songs.length }} songs / 15 000 followers</p>
-        <v-btn @click="playAllSongs(currentPlaylist.songs)">
-          <font-awesome-icon class="mr-2" icon="play" />
-          Play all
-        </v-btn>
-      </div>
-    </div>
+        <div class="col-auto">
+          <h1>{{ currentPlaylist.name }}</h1>
+          <p class="font-weight-bold">by {{ currentPlaylist.author.username }}</p>
+          <p class="text-muted">{{ currentPlaylist.songs.length }} songs / 15 000 followers</p>
 
-    <!-- Search -->
+          <v-btn @click="playAllSongs(currentPlaylist)">
+            <font-awesome-icon class="mr-2" icon="play" />
+            Play all
+          </v-btn>
+        </div>
+      </div>
+    </header>
+
     <div class="row px-5">
 
+      <!-- Search -->
       <div class="col-12">
         <div class="row">
           <div class="col-9">
@@ -80,7 +83,7 @@
 
       <!-- Songs -->
       <div class="col-12">
-        <base-list-playlist-songs :songs="searchedSongs" />
+        <base-list-playlist-songs :songs="searchedSongs" @play-song="playSong" @pause-song="pauseSong" />
       </div>
     </div>
 
@@ -89,6 +92,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+
 import BaseListPlaylistSongs from '../components/BaseListPlaylistSongs.vue'
 
 export default {
@@ -101,6 +105,7 @@ export default {
     selected: [],
     sortingList: [
       // 'Album', 'Artist', 'Added', 'Duration', 'Genre', 'Name'
+      { name: 'Song name', method: 'Song name' },
       { name: 'Album', method: 'Album name' },
       { name: 'Genre', method: 'Genre' },
       { name: 'Artist', method: 'Artist name'},
@@ -131,32 +136,39 @@ export default {
     this.$store.commit('userPlaylistModule/setCurrentViewedPlaylist', this.$route.params.id)
   },
   
-  methods: {
-    playSong (songId) {
+  methods: {    
+    playSong(song) {
       // Set the player to the current
       // selected song. Also let the player
       // know that it needs to continue with
       // the remaining songs in the playlist
-      // console.log(songId)
-      this.$store.dispatch('playerModule/playSelected', { songId: songId, playlistId: this.currentPlaylist.id, playlist: this.currentPlaylist.songs })
+      this.$store.dispatch('playerModule/playSelected', { songId: song.id, playlistId: this.currentPlaylist.id, playlist: this.currentPlaylist.songs })
     },
 
-    pauseSong (songId) {
+    pauseSong(song) {
       // Pause the current select song
-      this.$store.dispatch('playerModule/pauseSelected', { songId: songId })
+      this.$store.dispatch('playerModule/pauseSelected', { songId: song.id })
     },
 
-    sortSongsBy (sortMethod) {
+    async sortSongsBy(sortMethod) {
       // Sort the current playlist by the
       // current item that is passed
-      this.$api.playlists.changeSort(this.$route.params.id, sortMethod)
-      .then((response) => {
-        this.$store.commit('userPlaylistModule/updatePlaylistSorting', response.data)
+      // this.$api.playlists.changeSort(this.$route.params.id, sortMethod)
+      // .then((response) => {
+      //   this.$store.commit('userPlaylistModule/updatePlaylistSorting', response.data)
+      //   this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
+      // })
+      // .catch((error) => {
+      //   error
+      // })
+      try {
+        var response = await this.$axios.post(`/playlists/${this.$route.params.id}/sort`, { user_sort: sortMethod})
+        
+        this.$store.commit('userPlaylistModule/updatePlaylistSorting', { id: response.data['id'], songs: response.data['songs']})
         this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
-      })
-      .catch((error) => {
-        error
-      })
+      } catch(error) {
+        console.log(error)
+      }
     },
 
     getAlbumImage (id) {
@@ -175,8 +187,8 @@ export default {
       })
     },
 
-    playAllSongs (songs) {
-      this.$store.commit('playerModule/setTracks', songs)
+    playAllSongs (playlist) {
+      this.$store.dispatch('playerModule/startPlaylist', playlist.songs)
     }
   }
 }

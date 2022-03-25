@@ -1,11 +1,19 @@
 <template>
   <b-list-group v-if="this.hasSongs">
-    <b-list-group-item v-for="song in songs" :key="song.id" class="d-flex justify-content-between">
+
+    <b-list-group-item v-for="song in songs" :key="song.id" class="d-flex justify-content-between" @play-song="$emit('play-song')" @pause-song="$emit('pause-song')">
       <div id="infos" class="row">
+        <!-- Play/Pause -->
         <div class="col-auto">
-          <v-btn class="mr-2" icon>
+          <v-btn v-if="currentSong.id == song.id && isPlaying" class="mr-2" icon @click="$emit('pause-song', song)">
+            <font-awesome-icon icon="pause" />
+          </v-btn>
+
+          <v-btn v-else class="mr-2" icon @click="$emit('play-song', song)">
             <font-awesome-icon icon="play" />
           </v-btn>
+          
+
 
           <b-img :src="song.album.cover_image|getFullUrl" width="40px" height="40px" rounded fluid />
         </div>
@@ -43,10 +51,11 @@
         </v-menu>
       </div>
     </b-list-group-item>
+  
   </b-list-group>
 
   <div v-else>
-    <h1>There's no songs found</h1>
+    <h1>There were no songs found</h1>
   </div>
 </template>
 
@@ -56,15 +65,15 @@
 // because the iteration reasons by albums 
 //  whereas this reasons by songs
 
-import listSongMixin from './list_songs_mixin'
+import ListSongsMixin from './ListSongsMixin'
 
 export default {
   name: 'BaseListPlaylistSongs',
   
-  mixins: [listSongMixin],
+  mixins: [ListSongsMixin],
 
   methods: {
-    removeFromPlaylist (songId) {
+    removeFromPlaylist(songId) {
       this.$api.playlists.remove(this.$route.params.id, songId)
       .then((response) => {
         this.$store.commit('userPlaylistModule/updateSinglePlaylist', response.data)

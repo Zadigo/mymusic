@@ -34,6 +34,8 @@
     <!-- <div class="center p-3"> -->
     <div class="center">
       <router-view />
+      <!-- <div class="container">
+      </div> -->
     </div>
     
     <div v-if="$route.name !== 'profile'" :class="{ minimize: minimizeSocials }" class="right">
@@ -152,8 +154,10 @@ export default {
 
   .center {
     width: 100%;
+    overflow-x: hidden;
     overflow-y: scroll;
-    /* padding: 1rem; */
+    /* padding-left: 2rem;
+    padding-right: 2rem; */
     background-color: #6c757d;
   }
   
