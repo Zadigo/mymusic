@@ -113,16 +113,19 @@ USE_I18N = True
 
 USE_TZ = True
 
+LANGUAGE = 'en'
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = 'staticfiles'
+STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
 
 STATIC_FILES_DIRS = [
-    Path.joinpath(BASE_DIR, 'static')
+    Path.joinpath(BASE_DIR, 'static'),
+    Path.joinpath(FRONT_DIR, 'static')
 ]
 
 MEDIA_URL = 'media/'

@@ -12,8 +12,6 @@
           <v-btn v-else class="mr-2" icon @click="$emit('play-song', song)">
             <font-awesome-icon icon="play" />
           </v-btn>
-          
-
 
           <b-img :src="song.album.cover_image|getFullUrl" width="40px" height="40px" rounded fluid />
         </div>
@@ -43,7 +41,7 @@
                 Aller sur la page de l'artiste
               </v-list-item>
               
-              <v-list-item @click="removeFromPlaylist(song.id)">
+              <v-list-item @click="removeFromPlaylist(song)">
                 Remove from playlist
               </v-list-item>
             </v-list-item-group>
@@ -73,14 +71,13 @@ export default {
   mixins: [ListSongsMixin],
 
   methods: {
-    removeFromPlaylist(songId) {
-      this.$api.playlists.remove(this.$route.params.id, songId)
-      .then((response) => {
+    async removeFromPlaylist(song) {
+      try {
+        var response = await this.$axios.post(`/playlists/${this.$route.params.id}/remove`, { song_id: song.id})
         this.$store.commit('userPlaylistModule/updateSinglePlaylist', response.data)
-      })
-      .catch((error) => {
-        error
-      })
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
 }

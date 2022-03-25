@@ -31,11 +31,10 @@
       </div>
     </div>
 
-    <!-- <div class="center p-3"> -->
     <div class="center">
-      <router-view />
-      <!-- <div class="container">
-      </div> -->
+      <transition name="general-transition" mode="out-in">
+        <router-view />
+      </transition>
     </div>
     
     <div v-if="$route.name !== 'profile'" :class="{ minimize: minimizeSocials }" class="right">

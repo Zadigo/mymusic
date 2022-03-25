@@ -1,59 +1,57 @@
 <template>
   <div id="app">
     <v-app>
-        <router-view :key="$route.name" />
-      <!-- <transition name="general">
-      </transition> -->
+      <router-view :key="$route.name" />
     </v-app>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
-  name: 'App'
+  name: 'App',
+  
+  computed: {
+    ...mapGetters('userPlaylistModule', ['hasPlaylists'])
+  },
+
+  mounted() {
+    // Initially load all the users playlists
+    // when we start the app since some pages
+    // require this to be set in advance so that
+    // they can be displayed
+    if (!this.hasPlaylists) {
+      this.getPlaylists()
+    }
+  },
+
+  methods: {
+    async getPlaylists() {
+      try {
+        var response = await this.$axios.post('/playlists/', { user_id: 1 })
+        this.$store.commit('userPlaylistModule/setUserPlaylists', response.data)
+      } catch(error) {
+        console.log(error)
+      }
+    }
+  }
 }
 </script>
 
 <style>
-  .general-enter-active,
-  .general-leave-active {
-    transition: all .3s ease;
-  }
-  .general-enter,
-  .general-leave-to {
-    opacity: 0;
-  }
-  .general-enter-to,
-  .general-leave {
-    opacity: 1;
-  }
+@import url('./assets/style.css');
 
-  .scale-enter-active,
-  .scale-leave-active {
-    transition: all .3s ease;
-  }
-  .scale-enter,
-  .scale-leave-to {
-    opacity: 0;
-    transform: scale(.98, .98);
-  }
-  .scale-enter-to,
-  .scale-leave {
-    opacity: 1;
-    transform: scale(1, 1);
-  }
+::-webkit-scrollbar {
+  width: .25em;
+}
 
-  ::-webkit-scrollbar {
-    width: .25em;
-  }
-  
-  ::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    /* outline: 1px solid slategrey; */
-  }
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  /* outline: 1px solid slategrey; */
+}
 </style>

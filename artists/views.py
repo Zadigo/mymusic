@@ -29,7 +29,6 @@ def search_albums_view(request, **kwargs):
     valid_search_criteria = ['name', 'area', 'genre']
     items = list(filter(lambda x: x[0] in valid_search_criteria, search.items()))
     items = OrderedDict(items)
-
     queryset = Album.objects.search(**items)
     serializer = AlbumSerializer(instance=queryset, many=True)
     return create_response(serializer=serializer)

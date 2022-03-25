@@ -27,7 +27,8 @@
       <div class="col-12">
         <div class="row">
           <div class="col-9">
-            <b-form-input v-model="searchedSong" type="search" placeholder="Search"></b-form-input>
+            <v-text-field v-model="searchedSong" type="text" label="Search playlist by song name, genre, artist name..." elevation="0" solo hide-details></v-text-field>
+            <!-- <b-form-input v-model="searchedSong" type="search" placeholder="Search"></b-form-input> -->
           </div>
 
           <div class="col-auto">
@@ -136,7 +137,29 @@ export default {
     this.$store.commit('userPlaylistModule/setCurrentViewedPlaylist', this.$route.params.id)
   },
   
-  methods: {    
+  methods: {
+    async sortSongsBy(sortMethod) {
+      try {
+        var response = await this.$axios.post(`/playlists/${this.$route.params.id}/sort`, { user_sort: sortMethod})
+        
+        this.$store.commit('userPlaylistModule/updatePlaylistSorting', { id: response.data['id'], songs: response.data['songs']})
+        this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
+      } catch(error) {
+        console.log(error)
+      }
+    },
+
+    async deletePlaylist() {
+      try {
+        var response = this.$axios.post(`/playlists/${this.$route.params.id}/delete`)
+
+        this.$store.commit('userPlaylistModule/deletePlaylist', response.data)
+        this.$router.push({ name: 'playlists' })
+      } catch(error) {
+        console.log(error)
+      }
+    },
+    
     playSong(song) {
       // Set the player to the current
       // selected song. Also let the player
@@ -150,41 +173,9 @@ export default {
       this.$store.dispatch('playerModule/pauseSelected', { songId: song.id })
     },
 
-    async sortSongsBy(sortMethod) {
-      // Sort the current playlist by the
-      // current item that is passed
-      // this.$api.playlists.changeSort(this.$route.params.id, sortMethod)
-      // .then((response) => {
-      //   this.$store.commit('userPlaylistModule/updatePlaylistSorting', response.data)
-      //   this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
-      // })
-      // .catch((error) => {
-      //   error
-      // })
-      try {
-        var response = await this.$axios.post(`/playlists/${this.$route.params.id}/sort`, { user_sort: sortMethod})
-        
-        this.$store.commit('userPlaylistModule/updatePlaylistSorting', { id: response.data['id'], songs: response.data['songs']})
-        this.$store.commit('userPlaylistModule/setSortBy', sortMethod)
-      } catch(error) {
-        console.log(error)
-      }
-    },
-
     getAlbumImage (id) {
       var album = this.$store.getters['getAlbum'](id)
       return album.cover_image
-    },
-
-    deletePlaylist () {
-      this.$api.playlists.delete(this.$route.params.id)
-      .then((response) => {
-        this.$store.commit('userPlaylistModule/deletePlaylist', response.data)
-        this.$router.push({ name: 'playlists' })
-      })
-      .catch((error) => {
-        error
-      })
     },
 
     playAllSongs (playlist) {

@@ -6,16 +6,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 
-from playlists.choices import UserCustomsort
 from playlists.models import UserPlaylist
 from playlists.serializers import PlaylistSerializer, SortPlaylistSerializer
-
 
 USER_MODEL = get_user_model()
 
 
-@api_view(['get'])
-def get_user_playlists(request, **kwargs):
+@api_view(['post'])
+def user_playslists_view(request, **kwargs):
     queryset = UserPlaylist.objects.filter(author__username='zadigo')
     serializers = PlaylistSerializer(instance=queryset, many=True)
     return create_response(serializer=serializers)
@@ -97,3 +95,11 @@ def delete_playlist_view(request, pk, **kwargs):
     playlist = get_object_or_404(UserPlaylist, id=pk)
     playlist.delete()
     return create_response(data={'id': playlist.id})
+
+
+@api_view(['get'])
+def explore_genre_view(request, genre, **kwargs):
+    # TODO: Find a way to get a playlist by genre
+    playlists = UserPlaylist.objects.filter(name__icontains=genre)
+    serializer = PlaylistSerializer(instance=playlists, many=True)
+    return create_response(serializer=serializer)

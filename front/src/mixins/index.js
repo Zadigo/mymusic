@@ -1,4 +1,6 @@
 import Vue from 'vue'
+import dayjs from '@/plugins/dayjs-plugin'
+
 var _ = require('lodash')
 
 var globalMixins = {
@@ -11,7 +13,8 @@ var globalMixins = {
         simpleDuration (value) {
             if (!_.isNull(value) | _.isUndefined(value)) {
                 var tokens = value.split(':')
-                return `${tokens[1]}:${tokens[2]}`
+                var instance = dayjs.duration({ minutes: tokens[1], seconds: tokens[2] })
+                return instance.format('mm:ss')
             } else {
                 return '00:00'
             }

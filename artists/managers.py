@@ -4,7 +4,7 @@ from django.core.cache import cache
 
 class AlbumManager(Manager):
     def search(self, name=None, genre=None, area=[]):
-        """Search the websitee by name, genre or area"""
+        """Search the website by name, genre or area"""
         queryset = self.prefetch_related('song_set')
         
         if name is not None:

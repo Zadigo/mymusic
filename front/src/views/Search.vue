@@ -141,16 +141,16 @@ export default {
     ...mapGetters(['searchAlbums']),
     ...mapState(['availableGenres']),
 
-    searchQuery() {
-      return _.map(Object.keys(this.searchedItem), (key) => {
-        var value = this.searchedItem[key]
-        if (typeof value == 'object') {
-          value = _.join(',', value)
-        }
-        var instance = new URLSearchParams({ [`${key}`]: value })
-        return instance.toString()
-      })
-    },
+    // searchQuery() {
+    //   return _.map(Object.keys(this.searchedItem), (key) => {
+    //     var value = this.searchedItem[key]
+    //     if (typeof value == 'object') {
+    //       value = _.join(',', value)
+    //     }
+    //     var instance = new URLSearchParams({ [`${key}`]: value })
+    //     return instance.toString()
+    //   })
+    // },
 
     songSet () {
       // For each songs, implement some of the
@@ -195,15 +195,6 @@ export default {
   },
 
   beforeMount () {
-    // if (this.availableGenres.length == 0) {
-    //   this.$api.genres.all()
-    //   .then((response) => {
-    //     this.$store.commit('setAvailableGenres', response.data)
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //   })
-    // }
     if (this.availableGenres == 0) {
       this.getAvailableGenres()
     } 
@@ -212,7 +203,8 @@ export default {
   methods: {
     async getAvailableGenres() {
       try {
-        var response = await this.$axios.get('/genres')
+        console.log(1)
+        var response = await this.$axios.get('/artists/genres')
         this.$store.commit('setAvailableGenres', response.data)
       } catch(error) {
         console.log(error)
@@ -221,24 +213,12 @@ export default {
 
     async search() {
       try {
-        var response = await this.$axios.get('/search', { params: this.searchedItem })
+        var response = await this.$axios.post('/artists/search', this.searchedItem)
         this.searchResult = response.data
       } catch(error) {
         console.log(error)
       }
     }
-
-    // doSearch () {
-    //   // this.$store.commit('userPlaylistModule/setSearch', value)
-
-    //   this.$api.albums.search(this.searchedItem)
-    //   .then((response) => {
-    //     this.searchResult = response.data
-    //   })
-    //   .catch((error) => {
-    //     error
-    //   })
-    // }
   }
 }
 </script>

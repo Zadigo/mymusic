@@ -59,29 +59,17 @@ export default {
     ...mapState('userPlaylistModule', ['playlists'])
   },
 
-  beforeMount () {
-    // TODO: The user should only be
-    // able to get his playlists
-    this.$api.playlists.all(1)
-    .then((response) => {
-      this.$store.commit('userPlaylistModule/setUserPlaylists', response.data)
-    })
-    .catch((error) => {
-      console.log(error)
-    })
-  },
-
   methods: {
-    createPlaylist () {
-      this.$api.playlists.create()
-      .then((response) => {
+    async createPlaylist() {
+      try {
+        var response = await this.$axios.post('/playlists/create')
         var playlist = response.data
+
         this.$store.commit('userPlaylistModule/updatePlaylists', playlist)
         this.$router.push({ name: 'playlist', params: { id: playlist.id } })
-      })
-      .catch((error) => {
+      } catch(error) {
         console.log(error)
-      })
+      }
     }
   }
 }

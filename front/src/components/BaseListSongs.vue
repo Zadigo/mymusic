@@ -42,7 +42,7 @@
                   </v-list-item-content>
                 </template>
 
-                <v-list-item v-for="playlist in getAllPlaylistNames" :key="playlist.id" @click="addToPlaylist(playlist.id, song.id)">
+                <v-list-item v-for="playlist in getAllPlaylistNames" :key="playlist.id" @click="addToPlaylist(playlist, song)">
                   {{ playlist.name }}
                 </v-list-item>
               </v-list-group>
@@ -88,14 +88,13 @@ export default {
   },
 
   methods: {
-    addToPlaylist (playlistId, songId) {
-      this.$api.playlists.add(playlistId, songId)
-      .then((response) => {
+    async addToPlaylist(playlist, song) {
+      try {
+        var response = await this.$axios.post(`/playlists/${playlist.id}/add`, { song_id: song.id})
         response
-      })
-      .catch((error) => {
-        error
-      })
+      } catch(error) {
+        console.log(error)
+      }
     }
   }
 }

@@ -11,6 +11,7 @@ import axios from "axios";
 
 axios.defaults.headers['Accept'] = 'application/json, */*'
 axios.defaults.headers['Content-Type'] = 'application/json'
+axios.defaults.headers['Accept-Language'] = 'fr, en,q=0.9; en-US,q=0.8; en-GB,q=0.7;'
 
 let config = {
   // baseURL: process.env.baseURL || process.env.apiUrl || ""
@@ -22,49 +23,27 @@ let config = {
 
 const client = axios.create(config)
 
-// _axios.interceptors.request.use(
-//   function(config) {
-//     // Do something before request is sent
-//     return config
-//   },
-//   function(error) {
-//     // Do something with request error
-//     return Promise.reject(error)
-//   }
-// );
+client.interceptors.request.use(
+  function(config) {
+    // config.headers['Authorization'] = `Token ${'something'}`
+    return config
+  },
+  function(error) {
+    return Promise.reject(error)
+  }
+)
 
-// // Add a response interceptor
-// _axios.interceptors.response.use(
-//   function(response) {
-//     // Do something with response data
-//     return response
-//   },
-//   function(error) {
-//     // Do something with response error
-//     return Promise.reject(error)
-//   }
-// )
-
-// Plugin.install = function(Vue, options) {
-//   Vue.axios = _axios;
-//   window.axios = _axios;
-//   Object.defineProperties(Vue.prototype, {
-//     axios: {
-//       get() {
-//         return _axios;
-//       }
-//     },
-//     $axios: {
-//       get() {
-//         return _axios;
-//       }
-//     },
-//   });
-// };
-
-// Vue.use(Plugin)
-
-// export default Plugin;
+client.interceptors.response.use(
+  function(response) {
+    if (response.status === 401) {
+      // Do something here
+    }
+    return response
+  },
+  function(error) {
+    return Promise.reject(error)
+  }
+)
 
 window.axios = client
 
