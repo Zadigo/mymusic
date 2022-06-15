@@ -46,6 +46,7 @@
 
           <div class="col-12 mt-5">
             <span>{{ currentSong.name }}</span>
+            <base-music-player-vue :src="formatUrl(currentSong.song_file)" />
             <!-- Mini player -->
             <!-- <base-audio :src="'http://127.0.0.1:8000/media/songs/Jahlys___Bad_Like_Me.mp3/23bd4e9f4505817d9ece.mp3'"></base-audio> -->
             <!-- <base-audio :src="currentSong.source"></base-audio> -->
@@ -59,11 +60,13 @@
 <script>
 import _ from 'lodash'
 import { mapState } from 'vuex'
+import { mediaUrl } from '../utils'
+import BaseMusicPlayerVue from './BaseMusicPlayer.vue'
 
 export default {
   name: 'BaseInterface',
   components: {
-    // MiniPlayer
+    BaseMusicPlayerVue
   },
   data () {
     return {
@@ -106,6 +109,9 @@ export default {
     }
   },
   methods: {
+    formatUrl(path) {
+      return mediaUrl(path)
+    },
     doMinimizeSocials () {
       this.minimizeSocials = !this.minimizeSocials
       // Store the current state in the local storage
