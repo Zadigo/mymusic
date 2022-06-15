@@ -94,9 +94,9 @@ export default {
 
     navButtons() {
       return [
-        { name: 'home', icon: 'home'},
-        { name: 'search', icon: 'search'},
-        { name: 'playlists', icon: 'list'}
+        { name: 'home_view', icon: 'home'},
+        { name: 'search_view', icon: 'search'},
+        { name: 'playlists_view', icon: 'list'}
       ]
     }
   },

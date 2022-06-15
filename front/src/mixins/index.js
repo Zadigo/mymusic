@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import dayjs from '@/plugins/dayjs-plugin'
+import dayjs from '@/plugins/dayjs'
 
 var _ = require('lodash')
 
