@@ -7,13 +7,8 @@
 <script>
 export default {
   name: 'App',
-  created() {
-    console.log(import.meta.BASE_URL)
-  },
-  computed: {
-    google() {
-      return []
-    }
+  mounted () {
+    console.info(import.meta.env.VITE_BASE_URL)
   }
 }
 </script>

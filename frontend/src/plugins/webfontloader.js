@@ -1,7 +1,7 @@
-import WebFontLoader  from 'webfontloader'
+import WebFontLoader from 'webfontloader'
 
 WebFontLoader.load({
-    google: {
-        families: ['Roboto']
-    }
+  google: {
+    families: ['Roboto']
+  }
 })
