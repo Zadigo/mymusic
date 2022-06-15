@@ -2,6 +2,7 @@ from api.serializers.albums import SongSerializer
 from api.views import create_response
 from artists.models import Song
 from django.contrib.auth import get_user_model
+from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
@@ -15,6 +16,7 @@ USER_MODEL = get_user_model()
 @api_view(['post'])
 def user_playslists_view(request, **kwargs):
     queryset = UserPlaylist.objects.filter(author__username='zadigo')
+    queryset = queryset.annotate(number_of_followers=Count('followers__id'))
     serializers = PlaylistSerializer(instance=queryset, many=True)
     return create_response(serializer=serializers)
 
@@ -103,3 +105,12 @@ def explore_genre_view(request, genre, **kwargs):
     playlists = UserPlaylist.objects.filter(name__icontains=genre)
     serializer = PlaylistSerializer(instance=playlists, many=True)
     return create_response(serializer=serializer)
+
+
+@api_view(['get'])
+def playlist_details_view(request, pk, **kwargs):
+    playlist = get_object_or_404(UserPlaylist, id=pk)
+    return_response = {
+        **playlist.followers.aggregate(count=Count('id'))
+    }
+    return create_response(data=return_response)

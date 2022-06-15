@@ -32,13 +32,15 @@
           <v-list rounded>
             <v-list-item-group>
               <v-list-item>
-                Aller sur la page de l'artiste
+                {{ $t("Aller sur la page de l'artiste") }}
               </v-list-item>
 
               <v-list-group no-action sub-group>
                 <template v-slot:activator>
                   <v-list-item-content>
-                    <v-list-item-title>Add to playlist</v-list-item-title>
+                    <v-list-item-title>
+                      {{ $t('Add to playlist') }}
+                    </v-list-item-title>
                   </v-list-item-content>
                 </template>
 
@@ -48,7 +50,7 @@
               </v-list-group>
 
               <v-list-item>
-                Share
+                {{ $t('Share') }}
               </v-list-item>
             </v-list-item-group>
           </v-list>
@@ -58,7 +60,7 @@
   </b-list-group>
 
   <div v-else>
-    <h1>There's no songs found</h1>
+    <h1>{{ $t("There's no songs found") }}</h1>
   </div>
 </template>
 

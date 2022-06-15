@@ -1,17 +1,16 @@
 <template>
-  <section id="search">
+  <section id="search" class="p-5">
     <div class="row">
-
       <!-- Search -->
       <div class="col-12">
-        <v-text-field v-model="searchedItem.name" type=" text" placeholder="Search" hide-details solo></v-text-field>
+        <v-text-field v-model="searchedItem.name" :placeholder="$t('Search')" type=" text" elevaton="0" hide-details solo></v-text-field>
         <!-- <b-form-input v-model="searchedItem.name" placeholder="Search"></b-form-input> -->
         <!-- <v-btn @click="doSearch">
           Search
         </v-btn> -->
 
-        <b-link @click="showAdvancedSearch = !showAdvancedSearch">
-          Advanced search
+        <b-link class="my-4" @click="showAdvancedSearch=!showAdvancedSearch">
+          {{ $t('Advanced search') }}
         </b-link>
 
         <div v-if="showAdvancedSearch" id="advanced">
@@ -34,7 +33,9 @@
             <div class="col-12"></div>
 
             <div class="col-12">
-              <h2 class="text-white mb-5">Explore all genres</h2>
+              <h2 class="text-white mb-5">
+                {{ $t('Explore all genres') }}
+              </h2>
 
               <!-- Genres -->
               <transition-group tag="div" class="row">
@@ -60,7 +61,7 @@
                 <div class="d-flex justify-content-between">
                   <h2 class="h4 mb-3">Meilleurs résultats</h2>
                   <router-link :to="{ name: 'search_more', params: { search: 'songs' } }" class="text-uppercase font-weight-bold text-muted">
-                    See all
+                    {{ $t('See all') }}
                   </router-link>
                 </div>
                 
@@ -74,7 +75,7 @@
             <div class="row">
               <div class="col-12 text-right">
                 <router-link :to="{ name: 'search_more', params: { search: 'artists' } }" class="text-uppercase font-weight-bold text-muted">
-                  See all
+                  {{ $t('See all') }}
                 </router-link>
               </div>
 
@@ -87,7 +88,7 @@
             <div class="row">
               <div class="col-12 text-right">
                 <router-link :to="{ name: 'search_more', params: { search: 'albums' } }" class="text-uppercase font-weight-bold text-muted">
-                  See all
+                  {{ $t('See all') }}
                 </router-link>
               </div>
 
@@ -102,8 +103,7 @@
 </template>
 
 <script>
-var _ = require('lodash')
-
+import _ from 'lodash'
 import { mapGetters, mapState } from 'vuex'
 
 import BaseListAlbums from '../components/BaseListAlbums.vue'
@@ -112,9 +112,7 @@ import BaseListSongs from '../components/BaseListSongs.vue'
 
 export default {
   name: 'Search',
-
   components: { BaseListSongs, BaseListArtists, BaseListAlbums },
-
   data () {
     return {
       showAdvancedSearch: false,
@@ -128,7 +126,6 @@ export default {
       searchResult: []
     }
   },
-
   watch: {
     'searchedItem.name'(newValue, oldValue) {
       if (newValue && newValue !== oldValue) {
@@ -136,7 +133,6 @@ export default {
       }
     }
   },
-  
   computed: {
     ...mapGetters(['searchAlbums']),
     ...mapState(['availableGenres']),
@@ -222,3 +218,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .card {
+    background-color: rgba(0, 0, 0, .5);
+  }
+</style>

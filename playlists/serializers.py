@@ -27,6 +27,7 @@ class PlaylistSerializer(Serializer):
 
     cover_image = fields.ImageField()
     background_color = fields.CharField()
+    number_of_followers = fields.IntegerField()
     created_on = fields.DateField()
 
 

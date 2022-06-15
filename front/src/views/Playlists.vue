@@ -1,9 +1,9 @@
 <template>
-  <section id="playlists">
+  <section id="playlists" class="p-5">
     <div class="row">
 
       <div class="col-12">
-        <v-btn v-for="(choice, index) in displayChoices" :key="index" text @click="componentToShow == choice.name">
+        <v-btn v-for="(choice, index) in displayChoices" :key="index" color="white" text @click="componentToShow == choice.name">
           {{ choice.name }}
         </v-btn>
       </div>
@@ -11,7 +11,7 @@
       <div class="col-12">
         <v-btn @click="createPlaylist">
           <font-awesome-icon class="mr-2" icon="plus" />
-          Create playlist
+          {{ $t('Create playlist') }}
         </v-btn>
       </div>
 

@@ -1,6 +1,5 @@
 <template>
   <section class="main-interface">
-
     <div class="left d-flex flex-column justify-content-between">
       <transition name="general">
         <div v-if="$route.name == 'profile'" id="profile-navigation">
@@ -13,7 +12,7 @@
         <div v-else id="app-navigation">
           <router-link v-for="(navButton, index) in navButtons" id="nav-button" :key="index" :to="{ name: navButton.name }">
             <font-awesome-icon class="mr-3" :icon="navButton.icon" />
-            {{ navButton.name }}
+            {{ $t(navButton.name) }}
           </router-link>
         </div>
       </transition>
@@ -21,12 +20,12 @@
       <div id="profile">
         <router-link v-if="$route.name == 'profile'" id="nav-button" class="profile-button" :to="{ name: 'home' }">
           <font-awesome-icon class="mr-3" icon="arrow-left" />
-          Back to home
+          {{ $t('Back to home') }}
         </router-link>
 
         <router-link v-else id="nav-button" class="profile-button" :to="{ name: 'profile' }">
           <font-awesome-icon class="mr-3" icon="cog" />
-          Profile
+          {{ $t('Profile') }}
         </router-link>
       </div>
     </div>
@@ -57,13 +56,11 @@
     </div>
 
     <!-- <mini-player class="d-none" /> -->
-
   </section>
 </template>
 
 <script>
-var _ = require('lodash')
-
+import _ from 'lodash'
 import { mapState } from 'vuex'
 // import MiniPlayer from './MiniPlayer.vue'
 
@@ -88,17 +85,20 @@ export default {
         { name: 'receipts', icon: 'receipt'},
         // { name: 'apps', icon: 'app'},
         // { name: 'delete_account', icon: 'trash-alt'}s
-      ],
-      navButtons: [
-        { name: 'home', icon: 'home'},
-        { name: 'search', icon: 'search'},
-        { name: 'playlists', icon: 'list'}
       ]
     }
   },
 
   computed: {
-    ...mapState('playerModule', ['currentSong'])
+    ...mapState('playerModule', ['currentSong']),
+
+    navButtons() {
+      return [
+        { name: 'home', icon: 'home'},
+        { name: 'search', icon: 'search'},
+        { name: 'playlists', icon: 'list'}
+      ]
+    }
   },
 
   beforeMount() {
@@ -146,9 +146,10 @@ export default {
     position: sticky;
     width: 30%;
     padding: 1rem;
-    background-color: #343a40;
+    /* background-color: #343a40; */
     overflow-y: scroll;
     /* background-color: red; */
+    background-color: rgba(0, 0, 0, 0.8);
   }
 
   .center {
@@ -157,14 +158,16 @@ export default {
     overflow-y: scroll;
     /* padding-left: 2rem;
     padding-right: 2rem; */
-    background-color: #6c757d;
+    /* background-color: #6c757d; */
+    background-color: rgba(0, 0, 0, 0.9);
   }
   
   .right {
     position: sticky;
     width: 30%;
     padding: 1rem;
-    background-color: #343a40;
+    /* background-color: #343a40; */
+    background-color: rgba(0, 0, 0, 0.8);
     overflow: hidden;
   }
 

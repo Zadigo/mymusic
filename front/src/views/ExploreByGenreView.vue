@@ -1,5 +1,5 @@
 <template>
-  <section id="genre">
+  <section id="genre" class="p-5">
     <h1 :aria-label="currentGenre">
       {{ currentGenre }}
     </h1>

@@ -11,11 +11,9 @@ import { mapGetters } from 'vuex'
 
 export default {
   name: 'App',
-  
   computed: {
     ...mapGetters('userPlaylistModule', ['hasPlaylists'])
   },
-
   mounted() {
     // Initially load all the users playlists
     // when we start the app since some pages
@@ -25,7 +23,6 @@ export default {
       this.getPlaylists()
     }
   },
-
   methods: {
     async getPlaylists() {
       try {

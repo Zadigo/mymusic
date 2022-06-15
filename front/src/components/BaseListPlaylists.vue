@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <h2>Best playlists</h2>
+      <h2>{{ $t('Best playlists') }}</h2>
       
       <transition-group tag="div" class="row">
         <div v-for="playlist in 8" :key="playlist" class="col-3">
@@ -14,7 +14,7 @@
     
     <div class="col-12">
       <!-- Les nouveautés -->
-      <h2>Novelties</h2>
+      <h2>{{ $t('Novelties') }}</h2>
 
       <transition-group tag="div" class="row">
         <div v-for="playlist in 8" :key="playlist" class="col-3">

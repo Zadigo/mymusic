@@ -1,6 +1,5 @@
 <template>
   <section id="profile">
-
     <div id="header">
       <b-img src="https://picsum.photos/1200/500" fluid />
       
@@ -11,7 +10,6 @@
     </div>
 
     <div class="row">
-
       <div class="col-8">
         <h1 class="my-4">Account overview</h1>
 
@@ -48,7 +46,6 @@
         </b-card>
       </div>
     </div>
-
   </section>
 </template>
 

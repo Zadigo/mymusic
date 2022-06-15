@@ -1,6 +1,5 @@
 <template>
-  <section id="playlist" :style="`background-color: #${currentPlaylist.background_color};`">
-
+  <section id="playlist" :style="`background-color: #${currentPlaylist.background_color};`" class="p-5">
     <!-- Header -->
     <header>
       <div id="playlist-header" class="row p-5 mb-5 text-white">
@@ -10,24 +9,23 @@
 
         <div class="col-auto">
           <h1>{{ currentPlaylist.name }}</h1>
-          <p class="font-weight-bold">by {{ currentPlaylist.author.username }}</p>
-          <p class="text-muted">{{ currentPlaylist.songs.length }} songs / 15 000 followers</p>
+          <p class="font-weight-bold">{{ $t('by', { username: currentPlaylist.author.username }) }}</p>
+          <p class="text-muted">{{ $tc('songs', currentPlaylist.songs.length) }} / {{ $tc('followers', currentPlaylist.number_of_followers) }}</p>
 
           <v-btn @click="playAllSongs(currentPlaylist)">
             <font-awesome-icon class="mr-2" icon="play" />
-            Play all
+            {{ $t('Play all') }}
           </v-btn>
         </div>
       </div>
     </header>
 
     <div class="row px-5">
-
       <!-- Search -->
       <div class="col-12">
         <div class="row">
           <div class="col-9">
-            <v-text-field v-model="searchedSong" type="text" label="Search playlist by song name, genre, artist name..." elevation="0" solo hide-details></v-text-field>
+            <v-text-field v-model="searchedSong" type="text" :label="$t('Search playlist by song name, genre, artist name...')" elevation="0" solo hide-details></v-text-field>
             <!-- <b-form-input v-model="searchedSong" type="search" placeholder="Search"></b-form-input> -->
           </div>
 
@@ -35,7 +33,7 @@
             <v-menu>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn class="mr-2" color="primary" dark v-bind="attrs" v-on="on">
-                  Sort
+                  {{ $t('Sort') }}
                 </v-btn>
               </template>
 
@@ -58,7 +56,7 @@
               <v-list>
                 <v-list-item-group>
                   <v-list-item @click="deletePlaylist">
-                    Delete
+                    {{ $t('Delete') }}
                   </v-list-item>
                 </v-list-item-group>
               </v-list>
@@ -69,7 +67,7 @@
             <!-- Advanced search -->
             <v-btn text @click="showAdvanced=!showAdvanced">
               <font-awesome-icon icon="arrow-down" class="mr-2" />
-              Advanced search
+              {{ $t('Advanced search') }}
             </v-btn>
           </div>
 
@@ -87,7 +85,6 @@
         <base-list-playlist-songs :songs="searchedSongs" @play-song="playSong" @pause-song="pauseSong" />
       </div>
     </div>
-
   </section>
 </template>
 
@@ -99,7 +96,6 @@ import BaseListPlaylistSongs from '../components/BaseListPlaylistSongs.vue'
 export default {
   name: 'Playlist',
   components: {BaseListPlaylistSongs  },
-
   data: () => ({
     showAdvanced: false,
     selectMode: 'single',
@@ -114,7 +110,6 @@ export default {
       { name: 'Duration', method: 'Duration' }
     ]
   }),
-
   computed: {
     ...mapGetters('userPlaylistModule', {
       searchedSongs: 'getSearchedSongs'
@@ -135,9 +130,18 @@ export default {
 
   beforeMount () {
     this.$store.commit('userPlaylistModule/setCurrentViewedPlaylist', this.$route.params.id)
+    // this.playlistDetails()
   },
   
   methods: {
+    // async playlistDetails() {
+    //   try {
+    //     var response = await this.$axios.get(`/playlist/${this.currentPlaylist.id}`)
+    //     this.$store.commit('userPlaylistModule/playlistDetails', response.data)
+    //   } catch(error) {
+    //     console.log(error)
+    //   }
+    // },
     async sortSongsBy(sortMethod) {
       try {
         var response = await this.$axios.post(`/playlists/${this.$route.params.id}/sort`, { user_sort: sortMethod})
