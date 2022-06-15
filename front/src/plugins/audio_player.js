@@ -171,7 +171,3 @@ var baseAudio = Vue.extend({
 })
 
 Vue.component('base-audio', baseAudio)
-//     < v - slider
-// v - model="media"
-// prepend - icon="mdi-volume-high"
-//     ></v - slider >

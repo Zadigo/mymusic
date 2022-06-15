@@ -126,13 +126,6 @@ export default {
       searchResult: []
     }
   },
-  watch: {
-    'searchedItem.name'(newValue, oldValue) {
-      if (newValue && newValue !== oldValue) {
-        this.search()
-      }
-    }
-  },
   computed: {
     ...mapGetters(['searchAlbums']),
     ...mapState(['availableGenres']),
@@ -177,7 +170,7 @@ export default {
       // Returns all the albums present
       // in the search results
       var albumSet = []
-       _.forEach(this.searchResult, (album) => {
+        _.forEach(this.searchResult, (album) => {
         albumSet.push({ 
           id: album.id, 
           cover_image: album.cover_image,
@@ -189,7 +182,13 @@ export default {
       return _.uniqBy(albumSet, 'id')
     }
   },
-
+  watch: {
+    'searchedItem.name'(newValue, oldValue) {
+      if (newValue && newValue !== oldValue) {
+        this.search()
+      }
+    }
+  },
   beforeMount () {
     if (this.availableGenres == 0) {
       this.getAvailableGenres()

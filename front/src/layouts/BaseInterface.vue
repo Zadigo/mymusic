@@ -52,25 +52,19 @@
           </div>
         </div>
       </div>
-
     </div>
-
-    <!-- <mini-player class="d-none" /> -->
   </section>
 </template>
 
 <script>
 import _ from 'lodash'
 import { mapState } from 'vuex'
-// import MiniPlayer from './MiniPlayer.vue'
 
 export default {
   name: 'BaseInterface',
-
   components: {
     // MiniPlayer
   },
-
   data () {
     return {
       minimizeSocials: false,
@@ -88,7 +82,6 @@ export default {
       ]
     }
   },
-
   computed: {
     ...mapState('playerModule', ['currentSong']),
 
@@ -112,7 +105,6 @@ export default {
       }
     }
   },
-
   methods: {
     doMinimizeSocials () {
       this.minimizeSocials = !this.minimizeSocials

@@ -99,7 +99,9 @@ export default {
       name: null
     }
   }),
-
+  computed: {
+    ...mapState('userPlaylistModule', ['currentPlaylist'])
+  },
   watch: {
     'searchedItem.name'(newValue, oldValue) {
       if (newValue && newValue !== oldValue) {
@@ -107,11 +109,6 @@ export default {
       }
     }
   },
-
-  computed: {
-    ...mapState('userPlaylistModule', ['currentPlaylist'])
-  },
-
   methods: {
     async removeFromPlaylist(song) {
       try {

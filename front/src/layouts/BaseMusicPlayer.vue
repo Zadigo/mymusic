@@ -69,14 +69,6 @@ export default {
   // mounted() {
   //   this.getAudioDetails()
   // },
-  watch: {
-    src(current, previous) {
-      if (current !== previous) {
-        this.$refs.link.src = current
-        this.updateAudioDetails()
-      }
-    }
-  },
   computed: {
     formattedDuration() {
       return this.formatTime(this.duration)
@@ -86,6 +78,14 @@ export default {
     },
     progressPercentage() {
       return (this.currentTime / this.duration) * 100;
+    }
+  },
+  watch: {
+    src(current, previous) {
+      if (current !== previous) {
+        this.$refs.link.src = current
+        this.updateAudioDetails()
+      }
     }
   },
   methods: {

@@ -54,8 +54,15 @@
       "parser": "babel-eslint"
     },
     "rules": {
-      "vue/attributes-order": "error",
-      "vue/order-in-components": "warn"
+      "vue/attributes-order": "warn",
+      "vue/no-v-html": "warn",
+      "vue/order-in-components": "warn",
+      "vue/this-in-template": "error",
+      "vue/array-bracket-spacing": "warn",
+      "vue/no-reserved-component-names": "error",
+      "vue/attribute-hyphenation": "warn",
+      "vue/prop-name-casing": "error",
+      "vue/no-confusing-v-for-v-if": "error"
     }
   },
   "browserslist": [
