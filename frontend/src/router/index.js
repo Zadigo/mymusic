@@ -6,6 +6,13 @@ const routes = [
     path: '/',
     name: 'home_view',
     component: loadView('HomeView')
+  },
+  {
+    path: '/:lang',
+    component: {
+      template: '<router-view></router-view>'
+    },
+    children: []
   }
 ]
 
