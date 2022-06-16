@@ -123,8 +123,6 @@ class VueSession {
      * Renews the session key
      */
     renew() {
-        // Fails silently if there is no
-        // session in the storage
         try {
             var storedData = this.data
             storedData['session-id'] = Date.now()
@@ -137,8 +135,6 @@ class VueSession {
      * Clears all data stored under the global key
      */
     clear() {
-        // Fails silently if there is no
-        // session in the storage
         try {
             var sessionId = this.data['session-id']
             this.storage.setItem(this.VUE_SESSION_KEY, JSON.stringify({ 'session-id': sessionId }))

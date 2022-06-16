@@ -14,10 +14,7 @@
 
 <script>
 export default {
-  name: 'App',
-  mounted () {
-    console.info(import.meta.env)
-  }
+  name: 'App'
 }
 </script>
 
