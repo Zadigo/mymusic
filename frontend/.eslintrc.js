@@ -5,7 +5,7 @@ module.exports = {
   },
 
   parser: 'vue-eslint-parser',
-  
+
   rules: {
     'vue/attributes-order': 'warn',
     'vue/v-bind-style': [
@@ -35,9 +35,7 @@ module.exports = {
     ],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-trailing-spaces': {
-      ignoreComments: true
-    }
+    'no-trailing-spaces': ['warn', { 'ignoreComments': true }]
   },
 
   root: true,
