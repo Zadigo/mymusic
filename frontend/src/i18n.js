@@ -15,7 +15,7 @@ function loadLocaleMessages () {
   return messages
 }
 
-const i18n = createI18n({
+const i18n = IVueI18n({
   locale: 'en',
   messages: loadLocaleMessages()
 })

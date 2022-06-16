@@ -1,6 +1,14 @@
 <template>
   <div class="container">
-    Some test for you
+    <div class="row">
+      <div class="col-12">
+        <router-view v-slot="{ Component }">
+          <transition name="opacity" mode="in-out">
+            <component :is="Component" />
+          </transition>
+        </router-view>
+      </div>
+    </div>
   </div>
 </template>
 
