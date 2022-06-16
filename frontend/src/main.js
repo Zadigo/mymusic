@@ -1,5 +1,5 @@
 // import { createApp } from 'vue'
-import { createApp } from 'vue/dist/vue.esm-bundler'
+import { createApp, markRaw } from 'vue/dist/vue.esm-bundler'
 import { createPinia } from 'pinia'
 import { createVueSession } from './plugins/vue-storages/session-storage'
 import { createVueLocalStorage } from './plugins/vue-storages/local-storage'
@@ -15,12 +15,19 @@ import '@mdi/font/css/materialdesignicons.css'
 import './plugins/webfontloader'
 
 const pinia = createPinia()
+const session = createVueSession()
+const localstorage = createVueLocalStorage()
+
+pinia.use(({ store }) => {
+    store.$localStorage = markRaw(localstorage)
+    store.$session = markRaw(session)
+})
 
 const app = createApp(App)
 app.use(router)
 app.use(createAxios())
-app.use(createVueSession())
-app.use(createVueLocalStorage())
+app.use(session)
+app.use(localstorage)
 app.use(i18n)
 app.use(pinia)
 app.mount('#app')
