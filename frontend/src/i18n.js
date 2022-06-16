@@ -15,9 +15,32 @@ function loadLocaleMessages () {
   return messages
 }
 
-const i18n = IVueI18n({
-  locale: 'en',
-  messages: loadLocaleMessages()
+const numberFormats = {
+  en: {
+    currency: {
+      style: 'currency',
+      currency: 'USD',
+      currencyDisplay: 'symbol'
+    }
+  },
+  fr: {
+    currency: {
+      style: 'currency',
+      currency: 'EUR',
+      currencyDisplay: 'symbol'
+    }
+  }
+}
+
+const i18n = createI18n({
+  locale: import.meta.env.VITE_I18N_LOCALE || 'en',
+  fallbackLocale: import.meta.env.VITE_FALLBACK_I18N_LOCALE || 'en',
+  messages: loadLocaleMessages(),
+  numberFormats
 })
+
+if (import.meta.env.DEV) {
+  window.translate = i18n
+}
 
 export default i18n

@@ -16,7 +16,7 @@
 export default {
   name: 'App',
   mounted () {
-    console.info(import.meta.env.VITE_BASE_URL)
+    console.info(import.meta.env)
   }
 }
 </script>
