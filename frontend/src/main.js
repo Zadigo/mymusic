@@ -17,17 +17,18 @@ import './plugins/webfontloader'
 const pinia = createPinia()
 const session = createVueSession()
 const localstorage = createVueLocalStorage()
+const app = createApp(App)
 
 pinia.use(({ store }) => {
-    store.$localStorage = markRaw(localstorage)
-    store.$session = markRaw(session)
+  store.$localStorage = markRaw(localstorage)
+  store.$session = markRaw(session)
 })
 
-const app = createApp(App)
 app.use(router)
 app.use(createAxios())
 app.use(session)
 app.use(localstorage)
 app.use(i18n)
 app.use(pinia)
+
 app.mount('#app')
