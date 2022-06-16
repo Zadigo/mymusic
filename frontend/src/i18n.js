@@ -1,7 +1,19 @@
 import { createI18n } from 'vue-i18n'
 
-function loadLocaleMessages () {
-  const messages = {}
+function setLanguage (locale) {
+  const html = document.querySelector('html')
+  html.setAttribute('lang', locale)
+}
+
+async function loadLocaleMessages () {
+  const messages = {
+    en: {
+      welcome: 'Welcome'
+    },
+    fr: {
+      welcome: 'Bienvenue'
+    }
+  }
   // const locales = require.context('./', true, /[A-Za-z0-9-_,\s]+\.json$/i)
 
   // locales.keys().forEach(key => {
@@ -11,7 +23,8 @@ function loadLocaleMessages () {
   //     messages[locale] = locales(key)
   //   }
   // })
-
+  // const result = await import(`./locales/${locale}.json`)
+  // return result.default
   return messages
 }
 
@@ -39,8 +52,10 @@ const i18n = createI18n({
   numberFormats
 })
 
+setLanguage(i18n.global.locale)
+
 if (import.meta.env.DEV) {
-  window.translate = i18n
+  window.translation = i18n
 }
 
 export default i18n

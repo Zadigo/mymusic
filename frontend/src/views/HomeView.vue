@@ -1,5 +1,5 @@
 <template>
-  <div>This your home</div>
+  <h1 class="text-center">{{ $t('welcome') }}</h1>
 </template>
 
 <script>
