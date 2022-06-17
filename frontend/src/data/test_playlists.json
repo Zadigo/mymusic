@@ -30,6 +30,14 @@
                             "genre": "Dancehall",
                             "duration": "00:01:24",
                             "bitrate": 256000
+                        },
+                        {
+                            "id": 4,
+                            "name": "I chose you over love",
+                            "song_file": "/media/songs/As_You_Fade_Away__NEFFEX.mp3/b1f0fdf2f781feaa88f2.mp3",
+                            "genre": "Kompa",
+                            "duration": null,
+                            "bitrate": 0
                         }
                     ],
                     "name": "Bad like me",
@@ -38,7 +46,7 @@
                     "cover_image_thumbnail": "/media/CACHE/images/cover/bad_like_me/154cc69a66a9f6f869b4/a43553d9a2befe727ee26be17accf1a1.jpg",
                     "is_single": true,
                     "number_of_plays": 0,
-                    "number_of_songs": 1,
+                    "number_of_songs": 2,
                     "active": true,
                     "created_on": "2022-01-31"
                 },
@@ -110,6 +118,14 @@
                             "name": "Struggle life",
                             "song_file": "/media/songs/Jahlys__Struggle_life.mp3/99b544437af043e736b8.mp3",
                             "genre": "Bouyon",
+                            "duration": "00:00:10",
+                            "bitrate": 0
+                        },
+                        {
+                            "id": 5,
+                            "name": "Struggle life",
+                            "song_file": "/media/songs/As_You_Fade_Away__NEFFEX.mp3/771d41405e9eed316a42.mp3",
+                            "genre": "Zouk",
                             "duration": null,
                             "bitrate": 0
                         }
@@ -120,19 +136,19 @@
                     "cover_image_thumbnail": "/media/CACHE/images/cover/struggle_life/f5ce663c11687982cbca/b0566c476594749d1f6d2e091e4eb43f.jpg",
                     "is_single": true,
                     "number_of_plays": 0,
-                    "number_of_songs": 1,
+                    "number_of_songs": 2,
                     "active": true,
                     "created_on": "2022-02-01"
                 },
                 "name": "Struggle life",
                 "song_file": "/media/songs/Jahlys__Struggle_life.mp3/99b544437af043e736b8.mp3",
                 "genre": "Bouyon",
-                "duration": null,
+                "duration": "00:00:10",
                 "bitrate": 0
             }
         ],
         "cover_image": "/media/bad_like_me.jpg",
-        "background_color": "A939B1",
+        "background_color": "000000",
         "number_of_followers": 0,
         "created_on": "2022-02-03"
     },
@@ -211,7 +227,57 @@
             "id": 1,
             "username": "zadigo"
         },
-        "songs": [],
+        "songs": [
+            {
+                "id": 5,
+                "album": {
+                    "id": 2,
+                    "artist": {
+                        "id": 1,
+                        "name": "Jahlys",
+                        "area": "Guadeloupe",
+                        "date_of_birth": "2022-01-31",
+                        "genre": "Dancehall",
+                        "cover_image": "/media/artists/jahlys/f16a4d30d9fa173503d7.png",
+                        "cover_image_thumbnail": "/media/CACHE/images/artists/jahlys/f16a4d30d9fa173503d7/74116fffa2b1d04d7d691623dcabd205.jpg",
+                        "number_of_followers": 0,
+                        "created_on": "2022-01-31"
+                    },
+                    "song_set": [
+                        {
+                            "id": 2,
+                            "name": "Struggle life",
+                            "song_file": "/media/songs/Jahlys__Struggle_life.mp3/99b544437af043e736b8.mp3",
+                            "genre": "Bouyon",
+                            "duration": "00:00:10",
+                            "bitrate": 0
+                        },
+                        {
+                            "id": 5,
+                            "name": "Struggle life",
+                            "song_file": "/media/songs/As_You_Fade_Away__NEFFEX.mp3/771d41405e9eed316a42.mp3",
+                            "genre": "Zouk",
+                            "duration": null,
+                            "bitrate": 0
+                        }
+                    ],
+                    "name": "Struggle life",
+                    "genre": "Dancehall",
+                    "cover_image": "/media/cover/struggle_life/f5ce663c11687982cbca.jpg",
+                    "cover_image_thumbnail": "/media/CACHE/images/cover/struggle_life/f5ce663c11687982cbca/b0566c476594749d1f6d2e091e4eb43f.jpg",
+                    "is_single": true,
+                    "number_of_plays": 0,
+                    "number_of_songs": 2,
+                    "active": true,
+                    "created_on": "2022-02-01"
+                },
+                "name": "Struggle life",
+                "song_file": "/media/songs/As_You_Fade_Away__NEFFEX.mp3/771d41405e9eed316a42.mp3",
+                "genre": "Zouk",
+                "duration": null,
+                "bitrate": 0
+            }
+        ],
         "cover_image": null,
         "background_color": null,
         "number_of_followers": 0,

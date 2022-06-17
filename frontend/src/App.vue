@@ -8,7 +8,7 @@
 
 <script>
 import { usePlaylists } from './store/playlists'
-import testplaylists from './data/test_playlists.json'
+
 export default {
   name: 'App',
   setup () {
@@ -25,12 +25,12 @@ export default {
       try {
         const hasPlaylists = this.sessionStorage.hasPlaylists
         if (!hasPlaylists) {
-          const result = testplaylists
+          const response = await this.$http.post('/playlists/')
           this.store.$patch({
-            playlists: result
+            playlists: response.data
           })
           this.$session.create('hasPlaylists', true)
-          this.$session.create('playlists', result)
+          this.$session.create('playlists', response.data)
         } else {
           this.store.playlists = this.$session.retrieve('playlists')
         }

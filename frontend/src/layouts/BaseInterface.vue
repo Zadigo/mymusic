@@ -41,15 +41,31 @@
     </div>
 
     <!-- Right -->
-    <div class="right">
-      goog
-    </div>
+    <keep-alive>
+      <div class="right">
+        <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @paused="player.pause()" />
+      </div>
+    </keep-alive>
   </section>
 </template>
 
 <script>
+import { mediaUrl } from '@/utils'
+import { usePlayer } from '../store/player'
+import BaseMusicPlayerVue from './BaseMusicPlayer.vue'
+
 export default {
   name: 'BaseInterface',
+  components: {
+    BaseMusicPlayerVue
+  },
+  setup () {
+    const player = usePlayer()
+    return {
+      mediaUrl,
+      player
+    }
+  },
   data: () => ({
     minimizeRight: false,
     navButtons: [
