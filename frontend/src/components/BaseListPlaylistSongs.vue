@@ -3,11 +3,11 @@
     <div v-for="song in songs" :key="song.id" class="list-group-item d-flex justify-content-between align-items-center">
       <div class="row align-items-center">
         <div class="col-auto">
-          <button v-if="isPlaying && isCurrentSong(song)" class="btn btn-sm btn-primary" @click="pauseSong(song)">
+          <button v-if="isPlaying && isCurrentSong(song)" class="btn btn-sm btn-primary" type="button" @click="pauseSong(song)">
             <span class="mdi mdi-pause" />
           </button>
 
-          <button v-else class="btn btn-sm btn-primary" @click="playSong(song)">
+          <button v-else class="btn btn-sm btn-primary" type="button" @click="playSong(song)">
             <span class="mdi mdi-play" />
           </button>
         </div>

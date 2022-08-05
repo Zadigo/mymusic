@@ -8,7 +8,7 @@
       </div>
 
       <div class="col-12 mt-4">
-        <button type="button" class="btn btn-primary">
+        <button type="button" class="btn btn-primary" @click="create">
           Create playlist
         </button>
       </div>
@@ -37,6 +37,11 @@ export default {
       { name: 'albums', component: 'list-albums-vue' }
     ],
     activeComponent: 'list-playlists-vue'
-  })
+  }),
+  methods: {
+    async create () {
+
+    }
+  }
 }
 </script>

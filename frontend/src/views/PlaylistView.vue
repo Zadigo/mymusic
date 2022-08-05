@@ -80,7 +80,7 @@ export default {
     }
   },
   data: () => ({
-    search: undefined,
+    search: null,
     showAdvancedSearch: false,
     recommendations: []
   }),

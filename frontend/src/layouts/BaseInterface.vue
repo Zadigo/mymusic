@@ -5,7 +5,7 @@
       <transition name="general">
         <div v-if="$route.name == 'profile'" id="app-navigation">
           <router-link v-for="(profileNavButton, index) in profileNavButtons" :key="index" :to="{ name: profileNavButton.name }" class="nav-button">
-            <!-- <font-awesome-icon class="mr-3" :icon="profileNavButton.icon" /> -->
+            <font-awesome-icon class="mr-3" :icon="`fa-solid fa-${profileNavButton.icon}`" />
             {{ profileNavButton.name }}
           </router-link>
         </div>

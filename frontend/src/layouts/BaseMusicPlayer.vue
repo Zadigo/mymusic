@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card bg-transparent">
     <div class="card-body position-relative">
       <audio ref="link" preload="auto" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner = true" @canplay="showSpinner = false">
         <!-- <source :src="require('../assets/music1.wav')" type="audio/mpeg"> -->
@@ -25,20 +25,20 @@
     </div>
 
     <div class="card-footer text-center">
-      <button type="button" class="btn btn-primary mx-2" @click="handleSkipPrevious">
+      <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="handleSkipPrevious">
         <span class="mdi mdi-skip-previous" />
       </button>
 
-      <button type="button" class="btn btn-primary mx-2" @click="toggleAudioPlay">
+      <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="toggleAudioPlay">
         <span v-if="isPlaying" class="mdi mdi-pause" />
         <span v-else class="mdi mdi-play" />
       </button>
 
-      <button type="button" class="btn btn-primary mx-2" @click="handleSkipNext">
+      <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="handleSkipNext">
         <span class="mdi mdi-skip-next" />
       </button>
 
-      <button type="button" class="btn btn-info">
+      <button :disabled="!canPlay" type="button" class="btn btn-info btn-block shadow-sm">
         <!-- <span class="mdi mdi-volume-high"></span> -->
         <!-- <span class="mdi mdi-volume-low"></span> -->
         <span class="mdi mdi-volume-medium" />
@@ -68,6 +68,8 @@ export default {
     'skipped': () => true,
     'next-song': () => true
   },
+  setup () {
+  },
   data: () => ({
     showSpinner: true,
     duration: 0,
@@ -86,6 +88,9 @@ export default {
     },
     progressPercentage () {
       return (this.currentTime / this.duration) * 100
+    },
+    canPlay () {
+      return this.src !== null
     }
   },
   watch: {
