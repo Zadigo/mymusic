@@ -25,20 +25,20 @@
     </div>
 
     <div class="card-footer text-center">
-      <button class="btn btn-primary mx-2" @click="handleSkipPrevious">
+      <button type="button" class="btn btn-primary mx-2" @click="handleSkipPrevious">
         <span class="mdi mdi-skip-previous" />
       </button>
 
-      <button class="btn btn-primary mx-2" @click="toggleAudioPlay">
+      <button type="button" class="btn btn-primary mx-2" @click="toggleAudioPlay">
         <span v-if="isPlaying" class="mdi mdi-pause" />
         <span v-else class="mdi mdi-play" />
       </button>
 
-      <button class="btn btn-primary mx-2" @click="handleSkipNext">
+      <button type="button" class="btn btn-primary mx-2" @click="handleSkipNext">
         <span class="mdi mdi-skip-next" />
       </button>
 
-      <button class="btn btn-info">
+      <button type="button" class="btn btn-info">
         <!-- <span class="mdi mdi-volume-high"></span> -->
         <!-- <span class="mdi mdi-volume-low"></span> -->
         <span class="mdi mdi-volume-medium" />
@@ -59,7 +59,15 @@ export default {
       type: Boolean
     }
   },
-  emits: ['player-ready', 'playing', 'completed', 'paused', 'skipped-backwards', 'skipped', 'next-song'],
+  emits: {
+    'player-ready': () => true,
+    'playing': () => true,
+    'completed': () => true,
+    'paused': () => true,
+    'skipped-backwards': () => true,
+    'skipped': () => true,
+    'next-song': () => true
+  },
   data: () => ({
     showSpinner: true,
     duration: 0,
@@ -201,11 +209,6 @@ export default {
   width: 100%;
   align-items: center;
   /* border-radius: 6px; */
-}
-
-.progress-bar-container {
-  /* display: flex; */
-  /* width: 100%; */
 }
 
 .progress-bar-completed {

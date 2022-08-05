@@ -1,7 +1,15 @@
-import { setupDevtoolsPlugin } from '@vue/devtools-api'
+// import vue from 'vue'
+
+const { setupDevtoolsPlugin } = require('@vue/devtools-api')
+
+const DEBUG = (process.env.NODE_ENV !== 'production')
+
+// const storageSymbol = (DEBUG ? Symbol('vue-local-storage') : Symbol())
+
+// const storageSymbol = /*#__PURE__*/ Symbol('local')
 
 function setupDevtools (app, storage) {
-  // let devtoolsApi = null
+  let devtoolsApi = null
   const devtools = {}
 
   setupDevtoolsPlugin({
@@ -13,8 +21,8 @@ function setupDevtools (app, storage) {
     enableEarlyProxy: true,
     app
   }, api => {
-    // devtoolsApi = api
-
+    devtoolsApi = api
+    devtoolsApi
     api.addInspector({
       id: 'vue-local-storage',
       label: 'Vue Local Storage',
@@ -42,24 +50,23 @@ function setupDevtools (app, storage) {
         ]
       }
     })
+
+    // api.notifyComponentUpdate('vue-local-storage')
+    // api.sendInspectorTree('vue-local-storage')
+    // api.sendInspectorState('vue-local-storage')
   })
 
   return devtools
 }
 
 class VueLocalStorage {
-  constructor () {
+  constructor() {
     this.DEFAULT_KEY_NAME = 'vue_local'
     this.storage = localStorage
   }
 
-  /**
-    * Returns all items saved in the localStorage
-    *
-    * @returns dictionnary
-    */
   get data () {
-    const result = JSON.parse(this.storage.getItem(this.DEFAULT_KEY_NAME))
+    var result = JSON.parse(this.storage.getItem(this.DEFAULT_KEY_NAME))
 
     if (!result) {
       this._save({})
@@ -70,67 +77,37 @@ class VueLocalStorage {
   }
 
   _save (data) {
+    // Saves an element under the global session key
     this.storage.setItem(this.DEFAULT_KEY_NAME, JSON.stringify(data))
   }
 
-  /**
-   * Returns the value store under a given key
-   *
-   * @param key - key to use
-   * @returns an object, a string or an array
-   */
   retrieve (key) {
     return this.data[key]
   }
 
-  /**
-   * Creates a new record under the given key
-   *
-   * @param key - key under which to save the element
-   * @param value - string, array or dictionnary
-   * @returns null
-   */
   create (key, value) {
-    const storedData = this.data
+    var storedData = this.data
     storedData[key] = value
     this._save(storedData)
   }
 
-  /**
-   * Removes an element stored under a given key
-   *
-   * @param key key of the element to remove
-   * @returns null
-   */
   remove (key) {
-    const result = this.data
+    var result = this.data
     delete result[key]
     this._save(result)
   }
 
-  /**
-   * Saves an item globally in the local storage
-   *
-   * @param key - key under which to save the element
-   * @param value - string, array or dictionnary
-   * @returns null
-   */
   save (key, value) {
     this.storage.setItem(key, value)
   }
 
-  /**
-   * Returns a value saved globally and not under the session key
-   *
-   * @param key - key under which to save the element
-   * @returns string, array or dictionnary
-   */
   getValue (key) {
     return this.storage.getItem(key)
   }
 
   install (app) {
     setupDevtools(app, this)
+    // app.provide(storageSymbol, this)
     app.config.globalProperties.$localstorage = this
     app.mixin({
       data: () => ({
@@ -138,17 +115,17 @@ class VueLocalStorage {
       })
     })
 
-    if (import.meta.env.DEV) {
+    if (DEBUG) {
       window.VueLocalStorage = this
     }
   }
 }
 
-function createVueLocalStorage () {
+function createLocalStorage () {
   return new VueLocalStorage()
 }
 
 export {
-  createVueLocalStorage,
+  createLocalStorage,
   VueLocalStorage
 }
