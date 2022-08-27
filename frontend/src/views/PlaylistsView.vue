@@ -2,13 +2,14 @@
   <section id="playlists" class="p-5">
     <div class="row">
       <div class="col-12">
-        <button v-for="(choice, i) in displayChoices" :key="i" :class="{'mx-2': i > 0 }" type="button" class="btn btn-light" @click="activeComponent = choice.component">
+        <button v-for="(choice, i) in displayChoices" :key="i" :class="[choice.component === activeComponent ? 'active' : null, { 'mx-2': i > 0 }]" type="button" class="btn btn-light" @click="activeComponent = choice.component">
           {{ choice.name }}
         </button>
       </div>
 
       <div class="col-12 mt-4">
         <button type="button" class="btn btn-primary" @click="create">
+          <font-awesome-icon icon="fa-solid fa-plus" class="me-2" />
           Create playlist
         </button>
       </div>

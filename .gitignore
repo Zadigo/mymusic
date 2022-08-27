@@ -132,3 +132,7 @@ node_modules
 
 media/
 cache/
+
+# Project setup
+project.ini
+init.ipynb

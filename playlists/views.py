@@ -76,8 +76,6 @@ def remove_song_from_playlist(request, pk, **kwargs):
 
 @api_view(['post'])
 def create_playlist_view(request, **kwargs):
-    # TODO: Authentify the user that sends
-    # the request by using a token
     user = get_object_or_404(USER_MODEL, id=1)
 
     last_playlist = UserPlaylist.objects.last()
@@ -91,7 +89,6 @@ def create_playlist_view(request, **kwargs):
 
 @api_view(['post', 'delete'])
 def delete_playlist_view(request, pk, **kwargs):
-    # TODO: Authentify the user on the backend
     user = None
     # playlist = get_object_or_404(UserPlaylist, id=request.data.get('playlist_id'), user=user)
     playlist = get_object_or_404(UserPlaylist, id=pk)

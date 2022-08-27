@@ -17,19 +17,39 @@ const routes = [
         component: loadView('SearchView')
       },
       {
+        path: '/search/:search(\\w+)',
+        name: 'search_more_view',
+        component: loadView('SearchView')
+      },
+      {
+        path: '/search/genre',
+        name: 'genre_view',
+        component: loadView('SearchView')
+      },
+      {
         path: '/playlists',
         name: 'playlists_view',
         component: loadView('PlaylistsView')
       },
       {
-        path: '/playlists',
-        name: 'profile_view',
-        component: loadView('PlaylistsView')
-      },
-      {
-        path: '/playlist/:id(\\d+)',
+        path: '/playlists/:id(\\d+)',
         name: 'playlist_view',
         component: loadView('PlaylistView')
+      },
+      {
+        path: '/artist/:id([a-zA-Z0-9]+)',
+        name: 'artist_view',
+        component: loadView('ArtistView')
+      },
+      {
+        path: '/album/:id([a-zA-Z0-9]+)',
+        name: 'album_view',
+        component: loadView('AlbumView')
+      },
+      {
+        path: '/profile',
+        name: 'profile_view',
+        component: loadView('AlbumView')
       }
     ]
   }

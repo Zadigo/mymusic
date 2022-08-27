@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 my-3">
     <div v-if="store.playlists.length > 0" class="row">
-      <div v-for="playlist in store.playlists" :key="playlist.id" class="col-4">
+      <article v-for="playlist in store.playlists" :key="playlist.id" class="col-4">
         <router-link :to="{ name: 'playlist_view', params: { id: playlist.id } }" :aria-label="playlist.name" class="text-decoration-none text-white">
           <div class="card my-2">
             <img :src="mediaUrl(playlist.cover_image)" :alt="playlist.name" class="card-img-top">
@@ -11,37 +11,28 @@
             </div>
           </div>
         </router-link>
-      </div>
+      </article>
     </div>
 
-    <div v-else class="row">
-      <div class="col-12">
-        <div class="card bg-transparent shadow-none py-5 my-5 text-muted text-center">
-          <div class="card-content">
-            <font-awesome-icon icon="fa-solid fa-music" class="mb-4" size="5x" />
-            <h4 class="display-5">
-              There are no playlists available
-            </h4>
-          </div>
-        </div>
-      </div>
-    </div>
+    <empty-iteration-vue v-else content="There are no playlists available" />
   </div>
 </template>
 
 <script>
 import { usePlaylists } from '../../store/playlists'
 import { mediaUrl } from '@/utils'
+import EmptyIterationVue from '../EmptyIteration.vue'
 
 export default {
-  name: 'ListPlaylists',
-  setup () {
-    const store = usePlaylists()
+  name: "ListPlaylists",
+  components: { EmptyIterationVue },
+    setup () {
+    const store = usePlaylists();
     return {
       store,
       mediaUrl
-    }
-  }
+    };
+  },
 }
 </script>
 
@@ -58,5 +49,4 @@ export default {
 .card:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
-
 </style>
