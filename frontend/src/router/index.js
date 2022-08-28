@@ -22,9 +22,9 @@ const routes = [
         component: loadView('SearchView')
       },
       {
-        path: '/search/genre',
+        path: '/genre/:genre(\\w+)',
         name: 'genre_view',
-        component: loadView('SearchView')
+        component: loadView('GenreView')
       },
       {
         path: '/playlists',

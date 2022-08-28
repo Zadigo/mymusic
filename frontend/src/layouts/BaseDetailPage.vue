@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div ref="link" class="bg-dark px-4 py-5 bg-image" :style="`background-image: url(${require('@/assets/cover3.jpg') })`">
+    <div ref="link" class="bg-dark px-4 py-5 bg-image">
       <div class="py-5">
         <slot></slot>
 
@@ -18,8 +18,15 @@
 <script>
 export default {
   name: 'BaseDetailPage',
+  // props: {
+  //   image: {
+  //     type: String,
+  //     default: '@/assets/cover3.jpg',
+  //     required: false
+  //   }
+  // },
   mounted () {
-    // this.$refs.link.style.backgroundImage = 'url(public/cover.jpg)'
+    // this.$refs.link.style.backgroundImage = `background-image: url(${require(this.image)})`
   }
 }
 </script>

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { usePlayer } from './player'
-import _ from 'lodash'
+import _, { toNumber } from 'lodash'
 
 const usePlaylists = defineStore('playlists', {
   state: () => ({
@@ -11,7 +11,7 @@ const usePlaylists = defineStore('playlists', {
   }),
   actions: {
     setPlaylist (id) {
-      const numberId = Number.parseInt(id)
+      const numberId = toNumber(id)
       this.currentPlaylist = _.find(this.playlists, ['id', numberId])
     },
     increaseCursor () {
@@ -56,6 +56,9 @@ const usePlaylists = defineStore('playlists', {
   getters: {
     currentSong () {
       return this.currentPlaylist.songs[this.cursor]
+    },
+    byGenre () {
+      return []
     }
   }
 })

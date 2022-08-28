@@ -13,6 +13,13 @@ const usePlayer = defineStore('player', {
     pause () {
       this.isPlaying = false
     }
+  },
+  getters: {
+    isCurrentSong () {
+      return (song) => {
+        return song.name === this.currentSong.name
+      }
+    }
   }
 })
 
