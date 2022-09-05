@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
+from django.utils.functional import cached_property
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from mymusic.utils import dominant_image_color
@@ -44,6 +45,10 @@ class AbstractPlaylist(models.Model):
     
     def __str__(self):
         return self.name
+
+    @cached_property
+    def number_of_followers(self):
+        return self.followers.count()
     
     # def clean(self):
     #     if self.background_color is None:

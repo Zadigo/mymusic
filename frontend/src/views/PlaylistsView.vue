@@ -23,6 +23,7 @@
 import ListArtistsVue from '../components/playlists/ListArtists.vue'
 import ListAlbumsVue from '../components/playlists/ListAlbums.vue'
 import ListPlaylistsVue from '../components/playlists/ListPlaylists.vue'
+import { usePlaylists } from '@/store/playlists'
 
 export default {
   name: 'PlaylistsView',
@@ -33,6 +34,12 @@ export default {
   },
   emits: {
     'display-alert': () => true
+  },
+  setup () {
+    const store = usePlaylists()
+    return {
+      store
+    }
   },
   data: () => ({
     displayChoices: [
@@ -46,6 +53,8 @@ export default {
     async create () {
       try {
         const response = await this.$http.post('playlists/create')
+        this.$session.updateArray('playlists', response.data)
+        this.store.loadFromCache(true)
         this.$emit('display-alert', 'success', 'Playlist created', response)
       } catch (error) {
         this.$emit('display-alert', 'error', 'PLA-CRE', error.message)

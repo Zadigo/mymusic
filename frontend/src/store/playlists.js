@@ -57,9 +57,13 @@ const usePlaylists = defineStore('playlists', {
       const { isPlaying } = storeToRefs(store)
       return isPlaying
     },
-    loadFromCache () {
-      if (Object.keys(this.currentPlaylist).length === 0) {
+    loadFromCache (forceUpdate = false) {
+      if (forceUpdate) {
         this.playlists = this.$session.retrieve('playlists')
+      } else {
+        if (Object.keys(this.currentPlaylist).length === 0) {
+          this.playlists = this.$session.retrieve('playlists')
+        }
       }
     }
   },
