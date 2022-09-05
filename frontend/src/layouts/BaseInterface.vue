@@ -3,7 +3,7 @@
     <!-- Left -->
     <div class="left d-flex flex-column justify-content-between">
       <transition name="general">
-        <div v-if="$route.name == 'profile'" id="app-navigation">
+        <div v-if="$route.name === 'profile'" id="app-navigation">
           <router-link v-for="(profileNavButton, index) in profileNavButtons" :key="index" :to="{ name: profileNavButton.name }" class="nav-button">
             <font-awesome-icon class="mr-3" :icon="`fa-solid fa-${profileNavButton.icon}`" />
             {{ profileNavButton.name }}
@@ -12,7 +12,7 @@
 
         <div v-else id="app-navigation">
           <router-link v-for="(navButton, index) in navButtons" :key="index" :to="{ name: navButton.to }" class="nav-button ripple-effect">
-            <!-- <font-awesome-icon class="mr-3" :icon="navButton.icon" /> -->
+            <font-awesome-icon class="me-3" :icon="navButton.icon" />
             {{ $t(navButton.name) }}
           </router-link>
         </div>
@@ -25,13 +25,12 @@
         </router-link>
 
         <router-link v-else id="nav-button" class="nav-button profile" :to="{ name: 'profile_view' }">
-          <!-- <font-awesome-icon class="mr-3" icon="cog" /> -->
+          <font-awesome-icon class="me-3" icon="fa-solid fa-cog" />
           {{ $t('Profile') }}
         </router-link>
       </div>
     </div>
 
-    
     <!-- Center -->
     <div class="center">
       <teleport to="body">
@@ -44,13 +43,14 @@
         </transition>
       </router-view>
     </div>
-    
+
     <!-- Right -->
-    <keep-alive>
-      <div class="right">
+    <div class="right">
+      <img v-if="Object.keys(player.currentSong).length > 0" :src="mediaUrl(player.currentSong.album.cover_image_thumbnail)" :alt="player.currentSong.album.artist.name" class="img-fluid rounded shadow-sm mb-3">
+      <keep-alive>
         <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
-      </div>
-    </keep-alive>
+      </keep-alive>
+    </div>
   </section>
 </template>
 
@@ -79,7 +79,7 @@ export default {
     minimizeRight: false,
     navButtons: [
       { name: 'Home', to: 'home_view', icon: 'home' },
-      { name: 'Search', to: 'search_view', icon: 'search' },
+      { name: 'Search', to: 'search_view', icon: 'magnifying-glass' },
       { name: 'Playlists', to: 'playlists_view', icon: 'list' }
     ]
   }),
@@ -105,6 +105,7 @@ export default {
 
 <style scoped>
 
+
 .main-interface {
   display: flex;
   flex-direction: row;
@@ -116,7 +117,7 @@ export default {
 
 .left {
   position: sticky;
-  width: 30%;
+  width: 25%;
   padding: 1rem;
   /* overflow-y: scroll; */
   background-color: rgba(0, 0, 0, .8);
@@ -131,7 +132,7 @@ export default {
 
 .right {
   position: sticky;
-  width: 30%;
+  width: 25%;
   padding: 1rem;
   overflow: hidden;
   background-color: rgba(0, 0, 0, 0.8);

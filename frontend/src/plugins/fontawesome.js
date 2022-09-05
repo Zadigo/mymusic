@@ -1,4 +1,4 @@
-import { faMusic, faHome, faSearch, faList, faPlus, faPlay, faEllipsisVertical, faPause, faHeartCircleCheck, faHeartCircleMinus, faHeart, faCircleInfo, faE, faCirclePlus, faIcons } from '@fortawesome/free-solid-svg-icons'
+import { faMusic, faHome, faSearch, faList, faPlus, faPlay, faEllipsisVertical, faPause, faHeartCircleCheck, faHeartCircleMinus, faHeart, faCircleInfo, faE, faCirclePlus, faIcons, faMagnifyingGlass, faCog } from '@fortawesome/free-solid-svg-icons'
 import { library } from '@fortawesome/fontawesome-svg-core'
 
 
@@ -17,3 +17,5 @@ library.add(faCircleInfo)
 library.add(faCirclePlus)
 library.add(faIcons)
 library.add(faE)
+library.add(faMagnifyingGlass)
+library.add(faCog)
