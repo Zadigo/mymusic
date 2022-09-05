@@ -1,5 +1,7 @@
 from rest_framework.serializers import Serializer
 from rest_framework import fields
+from artists.models import Artist
+from django.db.models import Q
 
 
 class ArtistSerializer(Serializer):
@@ -30,7 +32,7 @@ class SongSerializer(Serializer):
 class AlbumSerializer(Serializer):
     id = fields.IntegerField()
 
-    artist = ArtistSerializer()
+    # artist = ArtistSerializer()
 
     song_set = SongSerializer(many=True)
 
@@ -46,3 +48,41 @@ class AlbumSerializer(Serializer):
 
     active = fields.BooleanField()
     created_on = fields.DateField()
+
+
+class ArtistDetailsSerializer(Serializer):
+    id = fields.IntegerField()
+    name = fields.CharField()
+
+    album_set = AlbumSerializer(many=True)
+
+    area = fields.CharField()
+
+    date_of_birth = fields.DateField()
+    genre = fields.DateField()
+    cover_image = fields.ImageField()
+    cover_image_thumbnail = fields.FileField()
+
+    number_of_followers = fields.IntegerField()
+    created_on = fields.DateField()
+
+
+class SearchSerializer(Serializer):
+    name = fields.CharField(allow_null=True)
+    area = fields.ListField()
+    genre = fields.CharField(allow_null=True)
+
+    def search(self):
+        if self.validated_data['name']:
+            queryset = Artist.objects.filter(
+                name__icontains=self.validated_data['name'])
+        else:
+            queryset = Artist.objects.all()
+
+        if self.validated_data['area']:
+            queryset = queryset.filter(area__in=self.validated_data['area'])
+
+        if self.validated_data['genre']:
+            queryset = queryset.filter(
+                genre__iexact=self.validated_data['genre'])
+        return ArtistDetailsSerializer(instance=queryset[:4], many=True)

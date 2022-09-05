@@ -1,5 +1,8 @@
 <template>
-  <base-messages />
+  <!-- Messages -->
+  <!-- <base-messages /> -->
+  <vue-basic-alert ref="alert" :duration="300" />
+
   <router-view v-slot="{ Component }">
     <transition :key="$route.name" name="opacity" mode="in-out">
       <component :is="Component" />
@@ -9,17 +12,26 @@
 
 <script>
 import { usePlaylists } from './store/playlists'
-import BaseMessages from './components/BaseMessages.vue'
+import { useDark, useToggle } from '@vueuse/core'
+import { provide } from 'vue'
+
+import VueBasicAlert from 'vue-basic-alert'
+// import BaseMessages from './components/BaseMessages.vue'
 
 export default {
-  name: "App",
+  name: 'App',
   components: {
-    BaseMessages
+    VueBasicAlert
+    // BaseMessages
   },
   setup () {
     const store = usePlaylists()
+    const darkMode = useDark()
+    const toggleDark = useToggle(darkMode)
+    provide('darkMode', darkMode)
     return {
-      store
+      store,
+      toggleDark
     }
   },
   created () {
@@ -29,8 +41,7 @@ export default {
     async getPlaylists () {
       try {
         if (!this.sessionStorage.hasPlaylists) {
-          const response = await this.$http.post('/playlists/')
-          console.info('playlists', response)
+          const response = await this.$http.get('playlists')
           this.store.$patch((state) => {
             state.playlists = response.data
 
@@ -38,10 +49,10 @@ export default {
             this.$session.create('playlists', response.data)
           })
         } else {
-          this.store.playlists = this.$session.retrieve('playlists')
+          this.store.playlists = this.sessionStorage.playlists
         }
       } catch (error) {
-        this.store.addErrorMessage(error)
+        this.$refs.alert.showAlert('error', error.message, 'PLA-RE')
       }
     }
   }

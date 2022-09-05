@@ -31,6 +31,9 @@ export default {
     ListAlbumsVue,
     ListPlaylistsVue
   },
+  emits: {
+    'display-alert': () => true
+  },
   data: () => ({
     displayChoices: [
       { name: 'playlists', component: 'list-playlists-vue' },
@@ -41,7 +44,12 @@ export default {
   }),
   methods: {
     async create () {
-
+      try {
+        const response = await this.$http.post('playlists/create')
+        this.$emit('display-alert', 'success', 'Playlist created', response)
+      } catch (error) {
+        this.$emit('display-alert', 'error', 'PLA-CRE', error.message)
+      }
     }
   }
 }

@@ -1,11 +1,26 @@
-from typing import OrderedDict
-
+from operator import ge
 from api.views import create_response, map_list
 from django.core.cache import cache
 from rest_framework.decorators import api_view
 
-from artists.models import Album
-from artists.serializers import AlbumSerializer
+from artists.models import Album, Artist
+from artists.serializers import AlbumSerializer, ArtistDetailsSerializer, SearchSerializer
+
+
+@api_view(['post'])
+def artist_view(request, reference):
+    artist = Artist.objects.filter(name='Jahlys')
+    serializer = ArtistDetailsSerializer(instance=artist)
+    return create_response(serializer=serializer)
+
+
+@api_view(['post'])
+def search_albums_view(request, **kwargs):
+    """Search all albums on the website"""
+    serializer = SearchSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    results_serializer = serializer.search()
+    return create_response(serializer=results_serializer)
 
 
 @api_view(['get'])
@@ -18,23 +33,11 @@ def albums_view(request, **kwargs):
     return create_response(serializer=serializer)
 
 
-@api_view(['post'])
-def search_albums_view(request, **kwargs):
-    """Search all albums on the website"""
-    search = request.data
-
-    # From the post object only retain the valid
-    # search criteria just in the case someone
-    # places something that is not valid
-    valid_search_criteria = ['name', 'area', 'genre']
-    items = list(filter(lambda x: x[0] in valid_search_criteria, search.items()))
-    items = OrderedDict(items)
-    queryset = Album.objects.search(**items)
-    serializer = AlbumSerializer(instance=queryset, many=True)
-    return create_response(serializer=serializer)
-
-
 @api_view(['get'])
 def genres_view(request, **kwargs):
-    genres = Album.objects.genres()
-    return create_response(data=map_list(genres))
+    genres = cache.get('genres', [])
+    if not genres:
+        genres = Album.objects.genres()
+        genres = list(map_list(genres))
+        cache.set('genres', genres, 0)
+    return create_response(data=genres)

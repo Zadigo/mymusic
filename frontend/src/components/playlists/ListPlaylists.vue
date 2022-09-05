@@ -2,7 +2,7 @@
   <div class="col-12 my-3">
     <div v-if="store.playlists.length > 0" class="row">
       <article v-for="playlist in store.playlists" :key="playlist.id" class="col-4">
-        <router-link :to="{ name: 'playlist_view', params: { id: playlist.id } }" :aria-label="playlist.name" class="text-decoration-none text-white">
+        <router-link :to="navigateToPlaylist(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
           <div class="card my-2">
             <img :src="mediaUrl(playlist.cover_image)" :alt="playlist.name" class="card-img-top">
             <div class="card-body">
@@ -19,20 +19,28 @@
 </template>
 
 <script>
+import { useUrls } from '@/composables/utils'
 import { usePlaylists } from '../../store/playlists'
-import { mediaUrl } from '@/utils'
+
 import EmptyIterationVue from '../EmptyIteration.vue'
 
 export default {
-  name: "ListPlaylists",
+  name: 'ListPlaylists',
   components: { EmptyIterationVue },
     setup () {
-    const store = usePlaylists();
+    const store = usePlaylists()
+    const { mediaUrl } = useUrls()
     return {
       store,
       mediaUrl
     };
   },
+  methods: {
+    navigateToPlaylist (playlist) {
+      this.store.setPlaylist(playlist.id)
+      return { name: 'playlist_view', params: { id: playlist.id } }
+    }
+  }
 }
 </script>
 

@@ -31,35 +31,44 @@
       </div>
     </div>
 
+    
     <!-- Center -->
     <div class="center">
+      <teleport to="body">
+        <vue-basic-alert ref="alert" :duration="300" />
+      </teleport>
+
       <router-view v-slot="{ Component }">
         <transition name="opacity" mode="in-out">
-          <component :is="Component" />
+          <component :is="Component" @display-alert="displayAlert" />
         </transition>
       </router-view>
     </div>
-
+    
     <!-- Right -->
     <keep-alive>
       <div class="right">
-        <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @paused="player.pause()" />
+        <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
       </div>
     </keep-alive>
   </section>
 </template>
 
 <script>
-import { mediaUrl } from '@/utils'
+import { useUrls } from '@/composables/utils'
 import { usePlayer } from '../store/player'
+
 import BaseMusicPlayerVue from './BaseMusicPlayer.vue'
+import VueBasicAlert from 'vue-basic-alert'
 
 export default {
   name: 'BaseInterface',
   components: {
-    BaseMusicPlayerVue
+    BaseMusicPlayerVue,
+    VueBasicAlert
   },
   setup () {
+    const { mediaUrl } = useUrls()
     const player = usePlayer()
     return {
       mediaUrl,
@@ -86,6 +95,9 @@ export default {
       let settings = this.$localstorage.retrieve('settings')
       settings = settings || {}
       settings.minimized = this.minimizeRight
+    },
+    displayAlert (type, title, content) {
+      this.$refs.alert.showAlert(type, content, title)
     }
   }
 }

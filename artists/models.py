@@ -36,13 +36,13 @@ class Artist(models.Model):
         blank=True,
         null=True
     )
-    
+
     genre = models.CharField(
         max_length=100,
         choices=Genres.choices,
         default=Genres.DANCEHALL
     )
-    
+
     cover_image = models.ImageField(upload_to=artist_cover_image_path)
     cover_image_thumbnail = ImageSpecField(
         source='cover_image',
@@ -54,19 +54,19 @@ class Artist(models.Model):
         USER_MODEL,
         blank=True
     )
-    
+
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
-    
+
     class Meta:
         ordering = ['name']
         indexes = [
             Index(fields=['name', 'genre'])
         ]
-    
+
     def __str__(self):
         return self.name
-    
+
     @property
     def number_of_followers(self):
         return self.followers.all().count()
@@ -94,21 +94,21 @@ class Album(models.Model):
     is_single = models.BooleanField(default=False)
     number_of_plays = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True)
-    
+
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
-    
+
     objects = AlbumManager()
-    
+
     class Meta:
         ordering = ['name']
         indexes = [
             Index(fields=['artist', 'name', 'genre'])
         ]
-    
+
     def __str__(self):
         return self.name
-    
+
     @property
     def number_of_songs(self):
         return self.song_set.all().aggregate(Count('id'))['id__count']
@@ -117,7 +117,10 @@ class Album(models.Model):
 class Song(models.Model):
     album = models.ForeignKey(Album, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
-    song_file = models.FileField(upload_to=song_path, validators=[song_file_validator])
+    song_file = models.FileField(
+        upload_to=song_path,
+        validators=[song_file_validator]
+    )
     genre = models.CharField(
         max_length=100,
         choices=Genres.choices,
@@ -126,18 +129,18 @@ class Song(models.Model):
     duration = models.DurationField(blank=True, null=True)
     bitrate = models.PositiveIntegerField(default=0)
     added_on = models.DateField(auto_now_add=True)
-    
+
     objects = SongManager()
-    
+
     class Meta:
         ordering = ['name']
         indexes = [
             Index(fields=['name', 'genre', 'album'])
         ]
-    
+
     def __str__(self):
         return self.name
-    
+
     # def clean(self):
     #     if self.song_file.path is not None:
     #         instance = MP3(self.song_file.path)

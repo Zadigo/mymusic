@@ -1,0 +1,65 @@
+{
+  "id": 1,
+  "name": "Jahlys",
+  "album_set": [
+    {
+      "id": 1,
+      "song_set": [
+        {
+          "id": 2,
+          "name": "Gloria",
+          "song_file": "/media/songs/song2.mp3/9ed3ece56347fad40a1a.mp3",
+          "genre": "Dancehall",
+          "duration": null,
+          "bitrate": 0
+        },
+        {
+          "id": 1,
+          "name": "Really going",
+          "song_file": "/media/songs/song1.mp3/801e8accfe048b786597.mp3",
+          "genre": "Dancehall",
+          "duration": null,
+          "bitrate": 0
+        }
+      ],
+      "name": "Bad like me",
+      "genre": "Dancehall",
+      "cover_image": "/media/cover/bad_like_me/c839308d246e6201ddc0.jpg",
+      "cover_image_thumbnail": "/media/CACHE/images/cover/bad_like_me/c839308d246e6201ddc0/b296bffd1b8baf6858c683645d9b0b8b.jpg",
+      "is_single": false,
+      "number_of_plays": 0,
+      "number_of_songs": 2,
+      "active": true,
+      "created_on": "2022-08-28"
+    },
+    {
+      "id": 2,
+      "song_set": [
+        {
+          "id": 3,
+          "name": "Finnessor",
+          "song_file": "/media/songs/song1.mp3/3e6b7f9c85e1d8d8abb4.mp3",
+          "genre": "Bouyon",
+          "duration": null,
+          "bitrate": 0
+        }
+      ],
+      "name": "Period",
+      "genre": "Kompa",
+      "cover_image": "/media/cover/period/f73fa4ce641ee9ac0e2b.jpg",
+      "cover_image_thumbnail": "/media/CACHE/images/cover/period/f73fa4ce641ee9ac0e2b/44929f7c8641926d923108093bd5ff72.jpg",
+      "is_single": false,
+      "number_of_plays": 0,
+      "number_of_songs": 1,
+      "active": true,
+      "created_on": "2022-08-28"
+    }
+  ],
+  "area": "Guadeloupe",
+  "date_of_birth": "2022-01-28",
+  "genre": "Dancehall",
+  "cover_image": "/media/artists/jahlys/18003593652897f54c04.jpg",
+  "cover_image_thumbnail": "/media/CACHE/images/artists/jahlys/18003593652897f54c04/3a20e63bc1dc5d05f06c3c71c827128c.jpg",
+  "number_of_followers": 0,
+  "created_on": "2022-08-28"
+}

@@ -30,19 +30,20 @@
 
         <div class="row">
           <article v-for="genre in genres" :key="genre.id" :aria-label="genre.name" class="col-4">
-            <router-link :key="genre.id" :to="{ name: 'genre_view', params: { genre: genre.viewname } }">
-              <div class="card text-bg-dark">
-                <img :src="require('@/assets/cover.jpg')" alt="" class="card-img">
+            <div class="card text-bg-primary">
+              <router-link :key="genre.id" :to="{ name: 'genre_view', params: { genre: genre.viewname } }" class="text-light">
+                <!-- <img :src="require('@/assets/cover.jpg')" alt="" class="card-img"> -->
 
-                <div class="card-img-overlay">
+                <!-- <div class="card-img-overlay"> -->
+                <div class="card-body">
                   <h4 class="card-title">
                     {{ genre.name }}
                   </h4>
 
                   <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
                 </div>
-              </div>
-            </router-link>
+              </router-link>
+            </div>
           </article>
         </div>
       </div>
@@ -99,9 +100,8 @@ export default {
   methods: {
     async getGenres () {
       try {
-        // const response = await this.$http.get('/artists/genres')
-        // this.genres = response.data
-        this.genres = this.genresData
+        const response = await this.$http.get('/artists/genres')
+        this.genres = response.data
       } catch (error) {
         console.log(error)
       }

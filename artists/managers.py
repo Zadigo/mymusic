@@ -33,16 +33,7 @@ class AlbumManager(Manager):
 
     def genres(self):
         """Return all available genres on the website"""
-        from django.core.cache import cache
-
-        queryset = cache.get('genres')
-        if not queryset:
-            queryset = self.values_list('genre', flat=True)
-            cache.set('genres', queryset, 3600)
-        else:
-            new_queryset = self.values_list('genre', flat=True)
-            if queryset.lenght < new_queryset.lenght:
-                cache.set('genres', new_queryset, 3600)
+        queryset = self.values_list('genre', flat=True)
         return list(set(queryset))
 
 

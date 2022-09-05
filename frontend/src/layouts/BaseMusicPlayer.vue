@@ -30,8 +30,8 @@
       </button>
 
       <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="toggleAudioPlay">
-        <span v-if="isPlaying" class="mdi mdi-pause" />
-        <span v-else class="mdi mdi-play" />
+        <font-awesome-icon v-if="togglePlay" icon="fa-solid fa-pause"></font-awesome-icon>
+        <font-awesome-icon v-else icon="fa-solid fa-play"></font-awesome-icon>
       </button>
 
       <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="handleSkipNext">
@@ -60,6 +60,7 @@ export default {
     }
   },
   emits: {
+    'player-error': () => true,
     'player-ready': () => true,
     'playing': () => true,
     'completed': () => true,
@@ -67,8 +68,6 @@ export default {
     'skipped-backwards': () => true,
     'skipped': () => true,
     'next-song': () => true
-  },
-  setup () {
   },
   data: () => ({
     showSpinner: true,
@@ -100,12 +99,10 @@ export default {
         this.updateAudioDetails()
       }
     },
-    togglePlay (current) {
-      if (current) {
-        this.toggleAudioPlay()
-      }
+    togglePlay () {
+      this.toggleAudioPlay()
     },
-    currenTime (current) {
+    currentTime (current) {
       if (this.isPlaying && current === this.duration) {
         this.$emit('completed')
       }
@@ -124,21 +121,23 @@ export default {
           this.$emit('paused', this.currentTime)
         }
       } catch (error) {
-        console.error(error)
+        // console.error(error)
+        // this.$refs.alert.showAlert()
+        this.$emit('player-error', 'Could not start track')
       }
     },
     updateAudioDetails () {
       try {
         this.duration = this.$refs.link.duration
         this.currentTime = this.$refs.link.currentTime
-
-        if (this.$refs.link.paused) {
-          this.isPlaying = false
-          this.$refs.link.pause()
-        } else {
-          this.isPlaying = true
-          this.$refs.link.play()
-        }
+        
+        // if (this.$refs.link.paused) {
+        //   this.isPlaying = false
+        //   this.$refs.link.pause()
+        // } else {
+        //   this.isPlaying = true
+        //   this.$refs.link.play()
+        // }
       } catch (error) {
         console.log(error)
       }

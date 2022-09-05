@@ -13,7 +13,7 @@ from playlists.serializers import PlaylistSerializer, SortPlaylistSerializer
 USER_MODEL = get_user_model()
 
 
-@api_view(['post'])
+@api_view(['get'])
 def user_playslists_view(request, **kwargs):
     queryset = UserPlaylist.objects.filter(author__username='zadigo')
     queryset = queryset.annotate(number_of_followers=Count('followers__id'))
@@ -45,7 +45,7 @@ def update_sorting_view(request, pk, **kwargs):
     #     pass
     # elif method == str(UserCustomsort.DURATION):
     #     songs = songs.order_by('duration')
-        
+
     # playlist.user_sort = serializer.validated_data['user_sort']
     # playlist.save()
     songs = serializer.sort_items(playlist)
@@ -57,7 +57,7 @@ def update_sorting_view(request, pk, **kwargs):
 def add_song_to_playlist(request, pk, **kwargs):
     playlist = get_object_or_404(UserPlaylist, id=pk)
     song = get_object_or_404(Song, id=request.data.get('song_id'))
-    
+
     playlist.songs.add(song)
     return create_response(data={'state': 'True'})
 

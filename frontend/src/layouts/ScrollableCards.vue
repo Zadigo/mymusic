@@ -7,6 +7,7 @@
 </template>
 
 <style scoped>
+
 .wrapper {
   overflow-x: scroll;
   width: 100%;
@@ -18,18 +19,14 @@
 }
 
 .wrapper::-webkit-scrollbar {
-  transition: all .3s ease;
-  scroll-behavior: smooth;
-  background-color: white;
-  height: 5px;
+  height: .25em;
+}
+
+.wrapper::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, .2);
 }
 
 .wrapper::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, .2);
-  border-radius: .5rem;
+  background-color: darkgrey;
 }
-
-/* .wrapper .card {
-  min-width: 150px;
-} */
 </style>

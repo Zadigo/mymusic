@@ -3,8 +3,7 @@ import secrets
 
 def song_path(instance, name):
     new_name = secrets.token_hex(nbytes=10)
-    _, ext = name.split('.')
-    song_name, _ = name.split('.')
+    song_name, ext = name.split('.')
     song_name = name.replace('-', '').replace(' ', '_')
     return f'songs/{song_name}/{new_name}.{ext}'
 

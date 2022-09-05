@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore, storeToRefs } from 'pinia'
 import { usePlayer } from './player'
 import _, { toNumber } from 'lodash'
 
@@ -6,7 +6,7 @@ const usePlaylists = defineStore('playlists', {
   state: () => ({
     cursor: 0,
     playlists: [],
-    currentPlaylist: {},
+    currentPlaylist: { songs: [] },
     playAllSongs: false
   }),
   actions: {
@@ -51,11 +51,21 @@ const usePlaylists = defineStore('playlists', {
       // TODO: Some random number
       this.cursor = 0
       store.play(this.currentSong)
+    },
+    isPlaying () {
+      const store = usePlayer()
+      const { isPlaying } = storeToRefs(store)
+      return isPlaying
+    },
+    loadFromCache () {
+      if (Object.keys(this.currentPlaylist).length === 0) {
+        this.playlists = this.$session.retrieve('playlists')
+      }
     }
   },
   getters: {
     currentSong () {
-      return this.currentPlaylist.songs[this.cursor]
+      return this.currentPlaylist.songs[this.cursor] || {}
     },
     byGenre () {
       return []
