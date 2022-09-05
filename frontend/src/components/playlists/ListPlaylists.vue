@@ -14,7 +14,7 @@
       </article>
     </div>
 
-    <empty-iteration-vue v-else content="There are no playlists available" />
+    <empty-iteration-vue v-else class="py-5 my-5" content="There are no playlists available" />
   </div>
 </template>
 

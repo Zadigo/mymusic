@@ -2,13 +2,13 @@
   <div class="card bg-dark">
     <div class="card-body">
       <div class="d-flex justify-content-between">
-        <h2 class="h4 mb-3">Meilleurs résultats</h2>
+        <h2 class="h4 mb-3">{{ sectionTitle }}</h2>
         <router-link :to="linkParams" class="text-uppercase font-weight-bold text-muted">
           {{ $t('See all') }}
         </router-link>
       </div>
 
-      <component :is="componentName" />
+      <component :is="componentName" :songs="songs" :albums="albums" :artists="artists" />
     </div>
   </div> 
 </template>
@@ -26,9 +26,25 @@ export default {
     ListArtistsVue
   },
   props: {
+    sectionTitle: {
+      type: String,
+      required: true
+    },
     componentName: {
       type: String,
       required: true
+    },
+    songs: {
+      type: Array,
+      default: () => []
+    },
+    albums: {
+      type: Array,
+      default: () => []
+    },
+    artists: {
+      type: Array,
+      default: () => []
     }
   },
   computed: {

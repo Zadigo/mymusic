@@ -17,7 +17,7 @@ const routes = [
         component: loadView('SearchView')
       },
       {
-        path: '/search/:search(\\w+)',
+        path: '/search/all/:search(\\w+)',
         name: 'search_more_view',
         component: loadView('SearchView')
       },

@@ -1,6 +1,6 @@
 from rest_framework.serializers import Serializer
 from rest_framework import fields
-from artists.models import Artist
+from artists.models import Album, Artist, Song
 from django.db.models import Q
 
 
@@ -32,7 +32,7 @@ class SongSerializer(Serializer):
 class AlbumSerializer(Serializer):
     id = fields.IntegerField()
 
-    # artist = ArtistSerializer()
+    artist = ArtistSerializer()
 
     song_set = SongSerializer(many=True)
 
@@ -67,22 +67,28 @@ class ArtistDetailsSerializer(Serializer):
     created_on = fields.DateField()
 
 
+class SongSerializer2(SongSerializer):
+    album = AlbumSerializer()
+
+
 class SearchSerializer(Serializer):
-    name = fields.CharField(allow_null=True)
-    area = fields.ListField()
-    genre = fields.CharField(allow_null=True)
+    name = fields.CharField()
+    area = fields.ListField(required=False, allow_null=True)
+    year = fields.IntegerField(required=False, allow_null=True)
+    genre = fields.CharField(required=False, allow_null=True)
 
     def search(self):
-        if self.validated_data['name']:
-            queryset = Artist.objects.filter(
-                name__icontains=self.validated_data['name'])
-        else:
-            queryset = Artist.objects.all()
+        name = self.validated_data['name']
+        area = self.validated_data.get('area', [])
+        year = self.validated_data.get('year', None)
+        genre = self.validated_data.get('genre', None)
 
-        if self.validated_data['area']:
-            queryset = queryset.filter(area__in=self.validated_data['area'])
+        queryset = Song.objects.filter(album__artist__name__icontains=name)
 
-        if self.validated_data['genre']:
-            queryset = queryset.filter(
-                genre__iexact=self.validated_data['genre'])
-        return ArtistDetailsSerializer(instance=queryset[:4], many=True)
+        if area:
+            queryset = queryset.filter(area__in=area)
+
+        if genre is not None:
+            queryset = queryset.filter(genre__iexact=genre)
+
+        return SongSerializer2(instance=queryset[:4], many=True)

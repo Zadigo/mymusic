@@ -7,7 +7,7 @@
         </button>
       </div>
 
-      <div class="col-12 mt-4">
+      <div v-if="activeComponent === 'list-playlists-vue'" class="col-12 mt-4">
         <button type="button" class="btn btn-primary" @click="create">
           <font-awesome-icon icon="fa-solid fa-plus" class="me-2" />
           Create playlist
