@@ -20,10 +20,11 @@
 </template>
 
 <script>
+  import { usePlaylists } from '@/store/playlists'
+  
 import ListArtistsVue from '../components/playlists/ListArtists.vue'
 import ListAlbumsVue from '../components/playlists/ListAlbums.vue'
 import ListPlaylistsVue from '../components/playlists/ListPlaylists.vue'
-import { usePlaylists } from '@/store/playlists'
 
 export default {
   name: 'PlaylistsView',

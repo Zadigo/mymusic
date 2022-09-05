@@ -1,5 +1,6 @@
 <template>
   <div v-if="!byGenre" class="list-group">
+    <!-- TODO: Make this reusable componenent -->
     <a v-for="song in songs" :key="song.id" href class="list-group-item list-group-item-action d-flex justify-content-between bg-dark text-light align-items-center" @click.prevent>
       <div class="d-flex flex-column">
         <span>
@@ -34,8 +35,8 @@
 </template>
 
 <script>
-import { usePlayer } from '@/store/player';
-import { storeToRefs } from 'pinia';
+import { usePlayer } from '@/store/player'
+import { storeToRefs } from 'pinia'
 
 export default {
   name: 'BaseSongsListGroup',
