@@ -1,12 +1,12 @@
 <template>
-  <base-detail-page-vue class="text-light position-relative">
+  <base-detail-page-vue :image="mediaUrl(store.currentAlbum.cover_image)" class="text-light position-relative">
     <template #default>
       <div class="d-flex justify-content-start">
-        <img :src="require('@/assets/cover.jpg')" class="img-fluid rounded shadow" width="250" alt="">
+        <img :src="mediaUrl(store.currentAlbum.cover_image_thumbnail)" class="img-fluid rounded shadow" width="250" alt="">
 
         <div class="ms-3">
-          <h1 class="display-4 fw-bold">Album name</h1>
-  
+          <h1 class="display-4 fw-bold">{{ store.currentAlbum.name }}</h1>
+
           <div class="btn-group shadow-none">
             <button type="button" class="btn btn-light">
               <font-awesome-icon icon="fa-solid fa-play"></font-awesome-icon>
@@ -31,6 +31,9 @@
 </template>
 
 <script>
+import { useSearch } from '@/store/search'
+import { useUrls } from '@/composables/utils'
+
 import BaseDetailPageVue from '@/layouts/BaseDetailPage.vue'
 import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
 
@@ -39,6 +42,14 @@ export default {
   components: {
     BaseDetailPageVue,
     BaseSongsListGroupVue
+  },
+  setup () {
+    const store = useSearch()
+    const { mediaUrl } = useUrls()
+    return {
+      store,
+      mediaUrl
+    }
   }
 }
 </script>

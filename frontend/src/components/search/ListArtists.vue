@@ -1,15 +1,15 @@
 <template>
   <scrollable-cards-vue v-if="artists.length > 0">
     <template #default>
-      <article v-for="i in 14" :key="i" class="card bg-dark mx-2">
-        <router-link :to="{ name: 'artist_view', params: { id: '4AcFhqecUgQOUNmdcdngEq' } }" class="text-light">
-          <img :src="require('@/assets/avatar6.png')" alt="Jahlys" class="card-img-top">
+      <article v-for="artist in artists" :key="artist.id" class="card bg-dark mx-2">
+        <a href class="text-light" @click.prevent="goToPage(artist)">
+          <img :src="mediaUrl(artist.cover_image_thumbnail)" :alt="artist.name" class="card-img-top">
           <div class="card-body">
             <h6 class="card-title">
-              Jahlys
+              {{ artist.name }}
             </h6>
           </div>
-        </router-link>
+        </a>
       </article>
     </template>
   </scrollable-cards-vue>
@@ -18,7 +18,9 @@
 </template>
 
 <script>
+import { useUrls } from '@/composables/utils'
 import ScrollableCardsVue from '@/layouts/ScrollableCards.vue'
+import { useSearch } from '@/store/search'
 import EmptyIterationVue from '../EmptyIteration.vue'
 
 export default {
@@ -32,6 +34,20 @@ export default {
       default: () => []
     }
   },
+  setup () {
+    const store = useSearch()
+    const { mediaUrl } = useUrls()
+    return {
+      store,
+      mediaUrl
+    }
+  },
+  methods: {
+    goToPage (artist) {
+      this.store.currentArtist = artist
+      this.$router.push({ name: 'artist_view', params: { id: '4AcFhqecUgQOUNmdcdngEq' } })
+    }
+  }
 }
 </script>
 

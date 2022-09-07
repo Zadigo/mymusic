@@ -1,8 +1,8 @@
 <template>
-  <base-detail-page-vue class="text-light position-relative">
+  <base-detail-page-vue :image="currentArtist.cover_image" class="text-light position-relative">
     <template #default>
       <div class="d-flex flex-column w-50 justify-content-start">
-        <h1 class="display-2 fw-bold">Jahlys</h1>
+        <h1 class="display-2 fw-bold">{{ currentArtist.name }}</h1>
         <p>34.4k abonnés</p>
 
         <div class="rounded">
@@ -75,11 +75,15 @@
 </template>
 
 <script>
+import { storeToRefs } from 'pinia'
+import { usePlaylists } from '@/store/playlists'
+import { useSearch } from '@/store/search'
+import { useUrls } from '@/composables/utils'
+
 import BaseDetailPageVue from '@/layouts/BaseDetailPage.vue'
-import BaseSectionVue from '@/layouts/BaseSection.vue';
+import BaseSectionVue from '@/layouts/BaseSection.vue'
 import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
 
-import { usePlaylists } from '@/store/playlists';
 
 export default {
   name: 'ArtistView',
@@ -90,8 +94,28 @@ export default {
   },
   setup () {
     const playlists = usePlaylists()
+    const store = useSearch()
+    const { currentArtist } = storeToRefs(store)
+    const { mediaUrl } = useUrls()
     return {
-      playlists
+      store,
+      currentArtist,
+      playlists,
+      mediaUrl
+    }
+  },
+  created () {
+    this.getArtist()
+  },
+  mounted () {
+    this.store.currentArtist = this.sessionStorage.currentArtist
+  },
+  beforeUnmount () {
+    this.$session.create('currentArtist', this.currentArtist)
+  },
+  methods: {
+    async getArtist () {
+
     }
   }
 }

@@ -16,23 +16,30 @@
 </template>
 
 <script>
+import { useUrls } from '@/composables/utils'
+
 export default {
   name: 'BaseDetailPage',
-  // props: {
-  //   image: {
-  //     type: String,
-  //     default: '@/assets/cover3.jpg',
-  //     required: false
-  //   }
-  // },
+  props: {
+    image: {
+      type: String,
+      required: true
+    }
+  },
+  setup () {
+    const { mediaUrl } = useUrls()
+    return {
+      mediaUrl
+    }
+  },
   mounted () {
-    // this.$refs.link.style.backgroundImage = `background-image: url(${require(this.image)})`
+    const url = this.mediaUrl(this.image)
+    this.$refs.link.style.backgroundImage = `url(${url})`
   }
 }
 </script>
 
 <style scoped>
-
 .bg-image {
   background-position: center;
   background-repeat: no-repeat;
