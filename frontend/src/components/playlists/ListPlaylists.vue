@@ -1,7 +1,7 @@
 <template>
   <div class="col-12 my-3">
     <div v-if="store.playlists.length > 0" class="row">
-      <article v-for="playlist in store.playlists" :key="playlist.id" class="col-4">
+      <article v-for="playlist in store.playlists" :key="playlist.id" class="col-sm-12 col-md-4">
         <router-link :to="navigateToPlaylist(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
           <div class="card my-2">
             <img :src="mediaUrl(playlist.cover_image)" :alt="playlist.name" class="card-img-top">

@@ -10,7 +10,7 @@
 
 <script>
 import BaseSongsListGroup from '@/layouts/BaseSongsListGroup.vue'
-import EmptyIterationVue from '../EmptyIteration.vue';
+import EmptyIterationVue from '../EmptyIteration.vue'
 
 export default {
   name: 'ListSongs',
@@ -18,9 +18,8 @@ export default {
     BaseSongsListGroup,
     EmptyIterationVue
   },
-  props: {
+  inject: {
     songs: {
-      type: Array,
       default: () => []
     }
   }

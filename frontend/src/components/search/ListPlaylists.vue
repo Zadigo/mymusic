@@ -20,7 +20,7 @@
 import ScrollableCardsVue from '@/layouts/ScrollableCards.vue'
 
 export default {
-  name: 'ListAlbums',
+  name: 'ListPlaylists',
   components: {
     ScrollableCardsVue
   }

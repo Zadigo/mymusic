@@ -30,7 +30,7 @@
         </h2>
 
         <div class="row">
-          <article v-for="genre in genres" :key="genre.id" :aria-label="genre.name" class="col-4">
+          <article v-for="genre in genres" :key="genre.id" :aria-label="genre.name" class="col-sm-12 col-md-4">
             <div class="card text-bg-primary">
               <router-link :key="genre.id" :to="{ name: 'genre_view', params: { genre: genre.viewname } }" class="text-light">
                 <!-- <img :src="require('@/assets/cover.jpg')" alt="" class="card-img"> -->
@@ -51,13 +51,13 @@
 
       <div v-else>
         <!-- Songs -->
-        <search-section-vue section-title="Songs" class="mb-2" component-name="list-songs-vue" :songs="songs" />
+        <search-section-vue section-title="Songs" class="mb-2" component-name="list-songs-vue" />
 
         <!-- Artists -->
-        <search-section-vue section-title="Artists" class="mb-2" component-name="list-artists-vue" :artists="artists" />
+        <search-section-vue section-title="Artists" class="mb-2" component-name="list-artists-vue" />
 
         <!-- Albums -->
-        <search-section-vue section-title="Albums" component-name="list-albums-vue" :albums="albums" />
+        <search-section-vue section-title="Albums" component-name="list-albums-vue" />
       </div>
     </div>
   </section>
@@ -70,10 +70,19 @@ import SearchSectionVue from '@/components/search/SearchSection.vue'
 
 // TEST
 import genresData from '@/data/genres.json'
+// import { provide } from 'vue'
+import { computed } from '@vue/reactivity'
 
 export default {
-  name: 'SearchSection',
+  name: 'SearchView',
   components: { SearchSectionVue },
+  provide () {
+    return {
+      songs: computed(() => (this.songs)),
+      albums: computed(() => this.albums),
+      artists: computed(() => this.artists)
+    }
+  },
   setup () {
     return {
       genresData

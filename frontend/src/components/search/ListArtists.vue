@@ -1,5 +1,5 @@
 <template>
-  <scrollable-cards-vue>
+  <scrollable-cards-vue v-if="artists.length > 0">
     <template #default>
       <article v-for="i in 14" :key="i" class="card bg-dark mx-2">
         <router-link :to="{ name: 'artist_view', params: { id: '4AcFhqecUgQOUNmdcdngEq' } }" class="text-light">
@@ -13,16 +13,25 @@
       </article>
     </template>
   </scrollable-cards-vue>
+
+  <empty-iteration-vue v-else content="No artists" />
 </template>
 
 <script>
 import ScrollableCardsVue from '@/layouts/ScrollableCards.vue'
+import EmptyIterationVue from '../EmptyIteration.vue'
 
 export default {
-  name: 'ListAlbums',
+  name: 'ListArtists',
   components: {
-    ScrollableCardsVue
-  }
+    ScrollableCardsVue,
+    EmptyIterationVue
+  },
+  inject: {
+    artists: {
+      default: () => []
+    }
+  },
 }
 </script>
 

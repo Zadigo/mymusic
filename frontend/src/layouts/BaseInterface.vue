@@ -1,7 +1,7 @@
 <template>
   <section class="main-interface">
     <!-- Left -->
-    <div class="left d-flex flex-column justify-content-between">
+    <div class="left">
       <transition name="general">
         <div v-if="$route.name === 'profile'" id="app-navigation">
           <router-link v-for="(profileNavButton, index) in profileNavButtons" :key="index" :to="{ name: profileNavButton.name }" class="nav-button">
@@ -104,38 +104,72 @@ export default {
 </script>
 
 <style scoped>
+@media only screen and (max-width: 576px) {
+  .main-interface {
+    /* display: block; */
+    position: relative;
+    width: 100%;
+    height: 100vh;
+  }
 
+  .left {
+    display: none;
+    background-color: rgba(0, 0, 0, .8);
+  }
 
-.main-interface {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  align-items: left;
-  height: 100vh;
-  width: 100%;
+  .center {
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+
+  .right {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
 }
 
-.left {
-  position: sticky;
-  width: 25%;
-  padding: 1rem;
-  /* overflow-y: scroll; */
-  background-color: rgba(0, 0, 0, .8);
-}
+@media only screen and (min-width: 577px) {
+  .main-interface {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: left;
+    height: 100vh;
+    width: 100%;
+  }
 
-.center {
-  width: 100%;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  background-color: rgba(0, 0, 0, 0.9);
-}
-
-.right {
-  position: sticky;
-  width: 25%;
-  padding: 1rem;
-  overflow: hidden;
-  background-color: rgba(0, 0, 0, 0.8);
+  .left {
+    position: sticky;
+    width: 25%;
+    padding: 1rem;
+    /* overflow-y: scroll; */
+    background-color: rgba(0, 0, 0, .8);
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+  }
+  
+  .center {
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  
+  .right {
+    position: sticky;
+    width: 25%;
+    padding: 1rem;
+    overflow: hidden;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
 }
 
 .right.minimize {

@@ -13,7 +13,7 @@
 
 <script>
 export default {
-  name: 'GenreView',
+  name: 'BaseSection',
   props: {
     name: {
       type: String,

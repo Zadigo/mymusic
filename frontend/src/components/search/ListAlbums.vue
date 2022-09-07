@@ -1,5 +1,5 @@
 <template>
-  <scrollable-cards-vue>
+  <scrollable-cards-vue v-if="albums.length > 0">
     <template #default>
       <article v-for="album in albums" :key="album.id" class="card bg-dark mx-2">
         <router-link :to="{ name: 'album_view', params: { id: '4AcFhqecUgQOUNmdcdngEq' } }" class="text-light">
@@ -14,20 +14,24 @@
       </article>
     </template>
   </scrollable-cards-vue>
+
+  <empty-iteration-vue v-else content="No albums" />
 </template>
 
 <script>
 import { useUrls } from '@/composables/utils'
+
 import ScrollableCardsVue from '@/layouts/ScrollableCards.vue'
+import EmptyIterationVue from '../EmptyIteration.vue'
 
 export default {
   name: 'ListAlbums',
   components: {
-    ScrollableCardsVue
+    ScrollableCardsVue,
+    EmptyIterationVue
   },
-  props: {
+  inject: {
     albums: {
-      type: Array,
       default: () => []
     }
   },

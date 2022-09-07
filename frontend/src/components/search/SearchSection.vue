@@ -8,7 +8,7 @@
         </router-link>
       </div>
 
-      <component :is="componentName" :songs="songs" :albums="albums" :artists="artists" />
+      <component :is="componentName" />
     </div>
   </div> 
 </template>
@@ -19,7 +19,7 @@ import ListArtistsVue from './ListArtists.vue'
 import ListSongsVue from './ListSongs.vue'
 
 export default {
-  name: 'SearchView',
+  name: 'SearchSection',
   components: {
     ListAlbumsVue,
     ListSongsVue,
@@ -33,18 +33,6 @@ export default {
     componentName: {
       type: String,
       required: true
-    },
-    songs: {
-      type: Array,
-      default: () => []
-    },
-    albums: {
-      type: Array,
-      default: () => []
-    },
-    artists: {
-      type: Array,
-      default: () => []
     }
   },
   computed: {

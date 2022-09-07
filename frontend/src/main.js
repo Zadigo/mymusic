@@ -22,6 +22,9 @@ const session = createVueSession()
 const localstorage = createLocalStorage()
 const app = createApp(App)
 
+// Temporary until the next Vue update
+app.config.unwrapInjectedRef = true
+
 pinia.use(({ store }) => {
   store.$localStorage = markRaw(localstorage)
   store.$session = markRaw(session)

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!byGenre" class="list-group">
+  <div class="list-group">
     <!-- TODO: Make this reusable componenent -->
     <a v-for="song in songs" :key="song.id" href class="list-group-item list-group-item-action d-flex justify-content-between bg-dark text-light align-items-center" @click.prevent>
       <div class="d-flex flex-column">
@@ -41,10 +41,6 @@ import { storeToRefs } from 'pinia'
 export default {
   name: 'BaseSongsListGroup',
   props: {
-    byGenre: {
-      type: Boolean,
-      default: false
-    },
     songs: {
       type: Array,
       default: () => []

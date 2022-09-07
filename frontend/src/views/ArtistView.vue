@@ -82,7 +82,7 @@ import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
 import { usePlaylists } from '@/store/playlists';
 
 export default {
-  name: 'BaseDetailPage',
+  name: 'ArtistView',
   components: {
     BaseDetailPageVue,
     BaseSectionVue,
