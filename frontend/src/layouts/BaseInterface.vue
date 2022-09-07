@@ -33,9 +33,9 @@
 
     <!-- Center -->
     <div class="center">
-      <teleport to="body">
+      <!-- <teleport to="body">
         <vue-basic-alert ref="alert" :duration="300" />
-      </teleport>
+      </teleport> -->
 
       <router-view v-slot="{ Component }">
         <transition name="opacity" mode="in-out">
@@ -47,9 +47,9 @@
     <!-- Right -->
     <div class="right">
       <img v-if="Object.keys(player.currentSong).length > 0" :src="mediaUrl(player.currentSong.album.cover_image_thumbnail)" :alt="player.currentSong.album.artist.name" class="img-fluid rounded shadow-sm mb-3">
-      <keep-alive>
-        <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
-      </keep-alive>
+      <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
+      <!-- <keep-alive>
+      </keep-alive> -->
     </div>
   </section>
 </template>
@@ -59,13 +59,13 @@ import { useUrls } from '@/composables/utils'
 import { usePlayer } from '../store/player'
 
 import BaseMusicPlayerVue from './BaseMusicPlayer.vue'
-import VueBasicAlert from 'vue-basic-alert'
+// import VueBasicAlert from 'vue-basic-alert'
 
 export default {
   name: 'BaseInterface',
   components: {
-    BaseMusicPlayerVue,
-    VueBasicAlert
+    BaseMusicPlayerVue
+    // VueBasicAlert
   },
   setup () {
     const { mediaUrl } = useUrls()

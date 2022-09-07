@@ -27,15 +27,39 @@ import EmptyIterationVue from '../EmptyIteration.vue'
 export default {
   name: 'ListPlaylists',
   components: { EmptyIterationVue },
-    setup () {
+  inject: {
+    darkMode: ['darkMode']
+  },
+  setup () {
     const store = usePlaylists()
     const { mediaUrl } = useUrls()
     return {
       store,
       mediaUrl
-    };
+    }
+  },
+  created () {
+    this.getPlaylists()
   },
   methods: {
+    async getPlaylists () {
+      try {
+        if (!this.sessionStorage.hasPlaylists) {
+          const response = await this.$http.get('playlists')
+          this.store.$patch((state) => {
+            state.playlists = response.data
+  
+            this.$session.create('hasPlaylists', true)
+            this.$session.create('playlists', response.data)
+          })
+        } else {
+          this.store.playlists = this.sessionStorage.playlists
+        }
+      } catch (error) {
+        // this.$refs.alert.showAlert('error', error.message, 'PLA-RE')
+        console.error(error)
+      }
+    },
     navigateToPlaylist (playlist) {
       this.store.setPlaylist(playlist.id)
       return { name: 'playlist_view', params: { id: playlist.id } }

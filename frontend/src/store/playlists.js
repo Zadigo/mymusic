@@ -33,6 +33,7 @@ const usePlaylists = defineStore('playlists', {
     },
     stopPlaylist () {
       this.playAllSongs = false
+
       const store = usePlayer()
       store.pause()
     },
@@ -52,11 +53,6 @@ const usePlaylists = defineStore('playlists', {
       this.cursor = 0
       store.play(this.currentSong)
     },
-    isPlaying () {
-      const store = usePlayer()
-      const { isPlaying } = storeToRefs(store)
-      return isPlaying
-    },
     loadFromCache (forceUpdate = false) {
       if (forceUpdate) {
         this.playlists = this.$session.retrieve('playlists')
@@ -73,6 +69,11 @@ const usePlaylists = defineStore('playlists', {
     },
     byGenre () {
       return []
+    },
+    _isPlaying () {
+      const store = usePlayer()
+      const { isPlaying } = storeToRefs(store)
+      return isPlaying.value
     }
   }
 })

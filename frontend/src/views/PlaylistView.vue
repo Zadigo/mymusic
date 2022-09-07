@@ -6,12 +6,12 @@
         <p>34.4k abonnés</p>
 
         <div class="actions p-3 mt-1 bg-white text-center rounded shadow-sm">
-          <button v-if="store.isPlaying" type="button" class="btn btn-light shadow-none" @click="store.stopPlaylist">
-            <font-awesome-icon icon="fa-solid fa-pause"></font-awesome-icon>
+          <button v-if="store._isPlaying" type="button" class="btn btn-light shadow-none" @click="store.stopPlaylist">
+            <font-awesome-icon icon="fa-solid fa-pause" />
           </button>
 
           <button v-else type="button" class="btn btn-light shadow-none" @click="store.playAll">
-            <font-awesome-icon icon="fa-solid fa-play"></font-awesome-icon>
+            <font-awesome-icon icon="fa-solid fa-play" />
           </button>
 
 

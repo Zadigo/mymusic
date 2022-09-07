@@ -3,7 +3,7 @@
     <div class="card-body position-relative">
       <audio ref="link" preload="auto" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner = true" @canplay="showSpinner = false">
         <!-- <source :src="require('../assets/music1.wav')" type="audio/mpeg"> -->
-        <source :src="src" type="audio/mpeg">
+        <source :src="checkSrc(src)" type="audio/mpeg">
       </audio>
 
       <div class="audio-controls">
@@ -25,23 +25,25 @@
     </div>
 
     <div class="card-footer text-center">
-      <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="handleSkipPrevious">
-        <span class="mdi mdi-skip-previous" />
-      </button>
+      <div class="btn-group shadow-sm">
+        <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary" @click="handleSkipPrevious">
+          <font-awesome-icon icon="fa-solid fa-backward-step" />
+        </button>
 
-      <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="toggleAudioPlay">
-        <font-awesome-icon v-if="togglePlay" icon="fa-solid fa-pause"></font-awesome-icon>
-        <font-awesome-icon v-else icon="fa-solid fa-play"></font-awesome-icon>
-      </button>
+        <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary" @click="toggleAudioPlay">
+          <font-awesome-icon v-if="togglePlay" icon="fa-solid fa-pause"></font-awesome-icon>
+          <font-awesome-icon v-else icon="fa-solid fa-play"></font-awesome-icon>
+        </button>
 
-      <button :disabled="!canPlay" type="button" class="btn btn-primary btn-block shadow-sm" @click="handleSkipNext">
-        <span class="mdi mdi-skip-next" />
-      </button>
+        <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary" @click="handleSkipNext">
+          <font-awesome-icon icon="fa-solid fa-forward-step" />
+        </button>
+      </div>
 
-      <button :disabled="!canPlay" type="button" class="btn btn-info btn-block shadow-sm">
+      <button type="button" class="btn btn-info shadow-sm mt-1">
         <!-- <span class="mdi mdi-volume-high"></span> -->
         <!-- <span class="mdi mdi-volume-low"></span> -->
-        <span class="mdi mdi-volume-medium" />
+        <font-awesome-icon icon="fa-solid fa-volume-up" />
       </button>
     </div>
   </div>
@@ -86,17 +88,22 @@ export default {
       return this.formatTime(this.currentTime)
     },
     progressPercentage () {
-      return (this.currentTime / this.duration) * 100
+      if (this.currentTime === 0 && this.duration === 0) {
+        return 0
+      } else {
+        return (this.currentTime / this.duration) * 100
+      }
     },
     canPlay () {
-      return this.src !== null
+      return this.checkSrc(this.src) !== null
     }
   },
   watch: {
     src (current, previous) {
       if (current !== previous) {
-        this.$refs.link.src = current
+        this.$refs.link.src = this.checkSrc(current)
         this.updateAudioDetails()
+        this.toggleAudioPlay()
       }
     },
     togglePlay () {
@@ -109,6 +116,18 @@ export default {
     }
   },
   methods: {
+    checkSrc (src) {
+      if (!src) {
+        return null
+      } else {
+        // When there is no active song, the player
+        // sends an "http://127.0.0.1:8000/undefined"
+        // request to the backend. This protects
+        // against that
+        const url = new URL(src)
+        return url.pathname === '/undefined' ? null : url.toString()
+      }
+    },
     toggleAudioPlay () {
       try {
         if (this.$refs.link.paused) {
@@ -121,26 +140,13 @@ export default {
           this.$emit('paused', this.currentTime)
         }
       } catch (error) {
-        // console.error(error)
         // this.$refs.alert.showAlert()
         this.$emit('player-error', 'Could not start track')
       }
     },
     updateAudioDetails () {
-      try {
-        this.duration = this.$refs.link.duration
-        this.currentTime = this.$refs.link.currentTime
-        
-        // if (this.$refs.link.paused) {
-        //   this.isPlaying = false
-        //   this.$refs.link.pause()
-        // } else {
-        //   this.isPlaying = true
-        //   this.$refs.link.play()
-        // }
-      } catch (error) {
-        console.log(error)
-      }
+      this.duration = this.$refs.link.duration
+      this.currentTime = this.$refs.link.currentTime
     },
     handleSkipPrevious () {
       try {
