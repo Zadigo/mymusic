@@ -3,11 +3,11 @@ from api.views import create_response
 from artists.models import Song
 from django.contrib.auth import get_user_model
 from django.db.models import Count
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 
-from playlists.models import UserPlaylist
+from playlists.models import OfficialPlaylist, UserPlaylist
 from playlists.serializers import PlaylistSerializer, SortPlaylistSerializer
 
 USER_MODEL = get_user_model()
@@ -111,3 +111,10 @@ def playlist_details_view(request, pk, **kwargs):
         **playlist.followers.aggregate(count=Count('id'))
     }
     return create_response(data=return_response)
+
+
+@api_view(['get'])
+def official_playlist_details_view(request, genre, **kwargs):
+    queryset = OfficialPlaylist.objects.filter(name__icontains=genre)
+    queryset = queryset.annotate(followers=Count('followers__id'))
+    return create_response(data=[])

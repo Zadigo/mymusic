@@ -3,14 +3,14 @@
     <div class="row">
       <div class="col-12">
         <button v-for="(choice, i) in displayChoices" :key="i" :class="[choice.component === activeComponent ? 'active' : null, { 'mx-2': i > 0 }]" type="button" class="btn btn-light" @click="activeComponent = choice.component">
-          {{ choice.name }}
+          {{ $t(choice.name) }}
         </button>
       </div>
 
       <div v-if="activeComponent === 'list-playlists-vue'" class="col-12 mt-4">
         <button type="button" class="btn btn-primary" @click="create">
           <font-awesome-icon icon="fa-solid fa-plus" class="me-2" />
-          Create playlist
+          {{ $t('Create playlist') }}
         </button>
       </div>
 
@@ -44,9 +44,9 @@ export default {
   },
   data: () => ({
     displayChoices: [
-      { name: 'playlists', component: 'list-playlists-vue' },
-      { name: 'artists', component: 'list-artists-vue' },
-      { name: 'albums', component: 'list-albums-vue' }
+      { name: 'Playlists', component: 'list-playlists-vue' },
+      { name: 'Artists', component: 'list-artists-vue' },
+      { name: 'Albums', component: 'list-albums-vue' }
     ],
     activeComponent: 'list-playlists-vue'
   }),

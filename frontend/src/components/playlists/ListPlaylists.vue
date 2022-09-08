@@ -1,5 +1,8 @@
 <template>
   <div class="col-12 my-3">
+    <!-- TODO: Make this independent from the store so that
+    any component can require an iteration of playlists from
+    any source -->
     <div v-if="store.playlists.length > 0" class="row">
       <article v-for="playlist in store.playlists" :key="playlist.id" class="col-sm-12 col-md-4">
         <router-link :to="navigateToPlaylist(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
@@ -7,7 +10,7 @@
             <img :src="mediaUrl(playlist.cover_image)" :alt="playlist.name" class="card-img-top">
             <div class="card-body">
               <h4 class="fw-bold card-title">{{ playlist.name }}</h4>
-              <p class="card-text text-muted m-0">Created by {{ playlist.author.username }}</p>
+              <p class="card-text text-muted m-0">{{ $t('Created by', { user: playlist.author.username }) }}</p>
             </div>
           </div>
         </router-link>

@@ -126,7 +126,7 @@ class Song(models.Model):
         choices=Genres.choices,
         default=Genres.DANCEHALL
     )
-    duration = models.DurationField(blank=True, null=True)
+    duration = models.PositiveIntegerField(default=0)
     bitrate = models.PositiveIntegerField(default=0)
     added_on = models.DateField(auto_now_add=True)
 
@@ -141,9 +141,9 @@ class Song(models.Model):
     def __str__(self):
         return self.name
 
-    # def clean(self):
-    #     if self.song_file.path is not None:
-    #         instance = MP3(self.song_file.path)
-    #         self.bitrate = instance.info.bitrate
-    #         duration_in_minutes = instance.info.length / 60
-    #         self.duration = duration_in_minutes
+    def clean(self):
+        if self.song_file.path is not None:
+            instance = MP3(self.song_file.path)
+            self.bitrate = instance.info.bitrate
+            duration_in_minutes = instance.info.length / 60
+            self.duration = duration_in_minutes

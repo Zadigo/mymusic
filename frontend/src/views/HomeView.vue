@@ -4,7 +4,7 @@
       <div class="row">
         <!-- User Playlists -->
         <div class="col-12">
-          <base-section-vue :to="{ name: 'home_view' }" name="Your playlists">
+          <base-section-vue :to="{ name: 'home_view' }" :name="$t('Your playlists')">
             <list-playlists-vue />
           </base-section-vue>
         </div>

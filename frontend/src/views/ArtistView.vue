@@ -3,21 +3,21 @@
     <template #default>
       <div class="d-flex flex-column w-50 justify-content-start">
         <h1 class="display-2 fw-bold">{{ currentArtist.name }}</h1>
-        <p>34.4k abonnés</p>
+        <p>{{ $t('k subscribers', { count: 34.4 }) }}</p>
 
         <div class="rounded">
           <div class="btn-group shadow-none">
             <button type="button" class="btn btn-light" @click="playlists.playAll">
-              <font-awesome-icon icon="fa-solid fa-play"></font-awesome-icon>
+              <font-awesome-icon icon="fa-solid fa-play" />
             </button>
 
             <button type="button" class="btn btn-light">
-              <font-awesome-icon icon="fa-solid fa-heart-circle-check"></font-awesome-icon>
-              <!-- <font-awesome-icon icon="fa-solid fa-heart-circle-minus"></font-awesome-icon> -->
+              <font-awesome-icon icon="fa-solid fa-heart-circle-check" />
+              <!-- <font-awesome-icon icon="fa-solid fa-heart-circle-minus" /> -->
             </button>
 
             <button type="button" class="btn btn-light">
-              <font-awesome-icon icon="fa-solid fa-circle-info"></font-awesome-icon>
+              <font-awesome-icon icon="fa-solid fa-circle-info" />
             </button>
           </div>
         </div>
@@ -29,7 +29,7 @@
         <div class="col-12 mb-2">
           <div class="card bg-dark text-light">
             <div class="card-body">
-              <input type="text" class="form-control p-2" placeholder="Search 154 songs...">
+              <input :placeholder="$t('Search x songs...', { count: 154 })" type="text" class="form-control p-2">
             </div>
           </div>
         </div>
@@ -39,23 +39,23 @@
         </div>
 
         <div class="col-12">
-          <base-section-vue name="Discography" class="mt-5">
+          <base-section-vue :name="$t('Discography')" class="mt-5">
             <template #default>
               <ul class="nav nav-pills">
                 <li class="nav-item">
-                  <a class="nav-link active" href>Albums</a>
+                  <a class="nav-link active" href>{{ $t('Albums') }}</a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href>Singles</a>
+                  <a class="nav-link" href>{{ $t('Singles') }}</a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href>Mixtapes</a>
+                  <a class="nav-link" href>{{ $t('Mixtapes') }}</a>
                 </li>
 
                 <li class="nav-item">
-                  <a class="nav-link" href>Riddims</a>
+                  <a class="nav-link" href>{{ $t('Riddims') }}</a>
                 </li>
               </ul>
             </template>
@@ -63,7 +63,7 @@
         </div>
 
         <div class="col-12">
-          <base-section-vue name="With Jahlys" class="mt-2">
+          <base-section-vue :name="$t('With', { artist: currentArtist.name })" class="mt-2">
             <template #default>
 
             </template>

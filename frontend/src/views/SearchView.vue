@@ -4,7 +4,7 @@
       <div class="col-12">
         <input v-model="searchedItem.name" :placeholder="$t('Search')" type="search" class="form-control p-2 mb-3">
         <!-- NOTE: For testing -->
-        <button type="button" @click="search">Search</button>
+        <button type="button" @click="search">{{ $t('Search') }}</button>
 
         <a href @click.prevent="showAdvancedSearch = !showAdvancedSearch">
           {{ $t('Advanced search') }}
@@ -14,7 +14,7 @@
           <div class="card-body">
             <input v-model="searchedItem.genre" :placeholder="$t('Search')" type="search" class="form-control p-2">
             <div>
-              <label for="year-selection" class="form-label text-light my-3">Choose a year</label>
+              <label for="year-selection" class="form-label text-light my-3">{{ $t('Choose a year') }}</label>
               <input id="year-selection" v-model.number="searchedItem.year" :max="currentYear" min="2000" step="1" type="range" class="form-range">
             </div>
           </div>
@@ -51,13 +51,13 @@
 
       <div v-else>
         <!-- Songs -->
-        <search-section-vue section-title="Songs" class="mb-2" component-name="list-songs-vue" />
+        <search-section-vue :section-title="$t('Songs')" class="mb-2" component-name="list-songs-vue" />
 
         <!-- Artists -->
-        <search-section-vue section-title="Artists" class="mb-2" component-name="list-artists-vue" />
+        <search-section-vue :section-title="$t('Artists')" class="mb-2" component-name="list-artists-vue" />
 
         <!-- Albums -->
-        <search-section-vue section-title="Albums" component-name="list-albums-vue" />
+        <search-section-vue :section-title="$t('Albums')" component-name="list-albums-vue" />
       </div>
     </div>
   </section>

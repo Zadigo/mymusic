@@ -3,7 +3,7 @@
     <template #default>
       <div class="d-flex flex-column justify-content-start">
         <h1 class="display-2 fw-bold">{{ currentPlaylist.name }}</h1>
-        <p>34.4k abonnés</p>
+        <p>{{ $t('k subscribers', { count: 34.4 }) }}</p>
 
         <div class="actions p-3 mt-1 bg-white text-center rounded shadow-sm">
           <button v-if="store._isPlaying" type="button" class="btn btn-light shadow-none" @click="store.stopPlaylist">
@@ -37,7 +37,7 @@
               <div class="form-check form-switch">
                 <input id="by-genre" v-model="displayByGenre" class="form-check-input" type="checkbox" role="switch">
                 <label class="form-check-label" for="by-genre">
-                  Display by genre
+                  {{ $t('Display by genre') }}
                 </label>
               </div>
             </div>

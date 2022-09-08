@@ -12,7 +12,7 @@
 
         <div class="col-12">
           <base-section-vue name="Playlists">
-            Google
+            <list-playlists-vue :playlists="playlists" />
           </base-section-vue>
 
           <base-section-vue name="Novelties" class="my-2">
@@ -26,12 +26,32 @@
 
 
 <script>
-import BaseSectionVue from "@/layouts/BaseSection.vue"
+import BaseSectionVue from '@/layouts/BaseSection.vue'
+import ListPlaylistsVue from '@/components/playlists/ListPlaylists.vue'
 
 export default {
   name: 'GenreView',
   components: {
-    BaseSectionVue
+    BaseSectionVue,
+    ListPlaylistsVue
+  },
+  data () {
+    return {
+      playlists: []
+    }
+  },
+  created () {
+    this.getPlaylists()
+  },
+  methods: {
+    async getPlaylists () {
+      try {
+        const response = await this.$http.get(`playlists/official/${this.$route.params.genre}`)
+        this.playlists = response.data
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
 }
 </script>

@@ -5,12 +5,12 @@ function setLanguage (locale) {
   html.setAttribute('lang', locale)
 }
 
-async function loadLocaleMessages () {
+function loadLocaleMessages () {
   const messages = {}
   const locales = require.context('./', true, /[A-Za-z0-9-_,\s]+\.json$/i)
 
   locales.keys().forEach(key => {
-    const matched = key.match(/([A-Za-z0-9-_]+)\./i)
+    const matched = key.match(/([a-zA-Z0-9-_]+)\./i)
     if (matched && matched.length > 1) {
       const locale = matched[1]
       messages[locale] = locales(key)
@@ -38,7 +38,8 @@ const numberFormats = {
 }
 
 const i18n = createI18n({
-  locale: 'en',
+  // locale: 'en',
+  locale: 'fr',
   fallbackLocale: 'en',
   messages: loadLocaleMessages(),
   numberFormats

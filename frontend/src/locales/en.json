@@ -1,3 +1,23 @@
 {
-    "welcome": "Welcome"
+    "Home": "Home",
+    "Search": "Search",
+    "Playlists": "Playlists",
+    "Profile": "Profile",
+    "Advanced search": "Advanced search",
+    "Explore all genres": "Explore all genres",
+    "Create playlist": "Create playlist",
+    "Created by": "Created by {user}",
+    "k subscribers": "{count} subscriber | {count} subscribers",
+    "Display by genre": "Display by genre",
+    "Albums": "Albums",
+    "Singles": "Singles",
+    "Mixtapes": "Mixtapes",
+    "Riddims": "Riddims",
+    "With": "With {artist}",
+    "Discography": "Discography",
+    "Search x songs...": "Search {count} songs",
+    "Your playlists": "Your playlists",
+    "See all": "See all",
+    "Songs": "Songs",
+    "Artists": "Artists"
 }
