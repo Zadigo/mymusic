@@ -132,6 +132,7 @@ node_modules
 
 media/
 cache/
+fixture/
 
 # Project setup
 project.ini

@@ -1,3 +1,4 @@
+from winreg import CreateKeyEx
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Count, Index, UniqueConstraint
@@ -181,14 +182,6 @@ class Song(models.Model):
     def __str__(self):
         return self.name
 
-    def clean(self):
-        if self.song_file.path is not None:
-            instance = MP3(self.song_file.path)
-            
-            self.bitrate = instance.info.bitrate
-            duration_in_minutes = instance.info.length / 60
-            self.duration = duration_in_minutes
-
 
 class Listener(models.Model):
     user = None
@@ -200,6 +193,20 @@ class Listener(models.Model):
 
     def __str__(self):
         return self.song
+
+
+@receiver(post_save, sender=Song)
+def get_file_metadata(instance, created, **kwargs):
+    if created:
+        if instance.song_file.path is not None:
+            instance = MP3(instance.song_file.path)
+            
+            instance.bitrate = instance.info.bitrate
+            duration_in_minutes = instance.info.length / 60
+            instance.duration = duration_in_minutes
+
+            instance.save()
+
 
 
 # @receiver(post_save, sender=Song)
