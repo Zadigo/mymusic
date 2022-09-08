@@ -1,6 +1,7 @@
 from artists.models import Song
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.db.models import Count
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.functional import cached_property
@@ -8,7 +9,7 @@ from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from mymusic.utils import dominant_image_color
 
-from playlists.choices import UserCustomsort
+from playlists.choices import UserCustomSort
 from playlists.utils import playlists_cover_image_path
 
 USER_MODEL = get_user_model()
@@ -55,12 +56,16 @@ class AbstractPlaylist(models.Model):
     def number_of_songs(self):
         return self.songs.count()
 
+    @cached_property
+    def listening_total_time(self):
+        return self.songs.aggregate(Count('duration'))
+
 
 class UserPlaylist(AbstractPlaylist):
     user_sort = models.CharField(
         max_length=50,
-        choices=UserCustomsort.choices,
-        default=UserCustomsort.ALBUM_NAME
+        choices=UserCustomSort.choices,
+        default=UserCustomSort.ALBUM_NAME
     )
     followers = models.ManyToManyField(
         USER_MODEL,

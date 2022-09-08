@@ -9,21 +9,22 @@ from artists.models import Album, Artist, Song
 class ArtistsAdmin(admin.ModelAdmin):
     list_display = ['name', 'genre', 'created_on']
     search_fields = ['name', 'genre']
+    list_per_page = 100
     date_hiearchy = 'created_on'
 
 
 @admin.register(Album)
 class AlbumsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'artist', 'is_single', 'active']
+    list_display = ['name', 'artist', 'release_year', 'producer', 'is_single', 'is_active']
     date_hiearchy = 'created_on'
-    search_fields = ['name', 'artist__name']
+    search_fields = ['name', 'artist__name', 'producer']
 
 
 @admin.register(Song)
 class SongsAdmin(admin.ModelAdmin):
     list_display = ['name', 'album', 'genre', 'duration']
     date_hiearchy = 'added_on'
-    search_fields = ['name', 'album__name', 'genre']
+    search_fields = ['name', 'album__name', 'genre', 'album__producer']
     actions = ['get_file_metadata']
     
     def get_file_metadata(self, request, queryset):

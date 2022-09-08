@@ -1,11 +1,11 @@
 import secrets
-
+from django.utils.crypto import get_random_string
 
 def song_path(instance, name):
-    new_name = secrets.token_hex(nbytes=10)
+    new_file_name = get_random_string(length=30)
     song_name, ext = name.split('.')
-    song_name = name.replace('-', '').replace(' ', '_')
-    return f'songs/{song_name}/{new_name}.{ext}'
+    song_name = name.replace('-', '').replace(' ', '_').lower()
+    return f'songs/{song_name}/{new_file_name}.{ext}'
 
 
 def cover_image_path(instance, name):

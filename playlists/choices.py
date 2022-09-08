@@ -1,6 +1,7 @@
 from django.db.models import Choices
 
-class UserCustomsort(Choices):
+
+class UserCustomSort(Choices):
     SONG_NAME = 'Song name'
     ALBUM_NAME = 'Album name'
     ARTIST_NAME = 'Artist name'

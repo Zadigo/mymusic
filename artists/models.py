@@ -1,15 +1,19 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Count, Index
+from django.db.models import Count, Index, UniqueConstraint
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
+from mutagen import id3
 from mutagen.mp3 import MP3
 
 from artists.choices import Genres, GeographicAreas, Nationalities
 from artists.managers import AlbumManager, SongManager
 from artists.utils import artist_cover_image_path, cover_image_path, song_path
-from artists.validators import song_file_validator
+from artists.validators import song_file_validator, validate_date_of_birth
 
 USER_MODEL = get_user_model()
 
@@ -20,6 +24,16 @@ class Artist(models.Model):
         unique=True,
         blank=False,
         null=False
+    )
+    fullname = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True
+    )
+    presentation = models.TextField(
+        max_length=1000,
+        blank=True,
+        null=True
     )
     area = models.CharField(
         max_length=100,
@@ -32,17 +46,15 @@ class Artist(models.Model):
         default=Nationalities.JAMAICAN
     )
     date_of_birth = models.DateField(
-        default=None,
+        validators=[validate_date_of_birth],
         blank=True,
         null=True
     )
-
     genre = models.CharField(
         max_length=100,
         choices=Genres.choices,
         default=Genres.DANCEHALL
     )
-
     cover_image = models.ImageField(upload_to=artist_cover_image_path)
     cover_image_thumbnail = ImageSpecField(
         source='cover_image',
@@ -54,7 +66,6 @@ class Artist(models.Model):
         USER_MODEL,
         blank=True
     )
-
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
 
@@ -73,7 +84,10 @@ class Artist(models.Model):
 
 
 class Album(models.Model):
-    artist = models.ForeignKey(Artist, on_delete=models.CASCADE)
+    artist = models.ForeignKey(
+        Artist,
+        on_delete=models.CASCADE
+    )
     name = models.CharField(
         max_length=100,
         blank=False,
@@ -91,10 +105,13 @@ class Album(models.Model):
         format='JPEG',
         options={'quality': 90}
     )
+    producer = models.CharField(max_length=100)
+    # number_of_plays = models.PositiveIntegerField(default=0)
+    
     is_single = models.BooleanField(default=False)
-    number_of_plays = models.PositiveIntegerField(default=0)
-    active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True)
 
+    release_date = models.DateField(default=now)
     modified_on = models.DateField(auto_now=True)
     created_on = models.DateField(auto_now_add=True)
 
@@ -112,11 +129,25 @@ class Album(models.Model):
     @property
     def number_of_songs(self):
         return self.song_set.all().aggregate(Count('id'))['id__count']
+    
+    @property
+    def release_year(self):
+        return self.release_date.year()
+
+    @cached_property
+    def listening_total_time(self):
+        return self.song_set.aggregate(Count('duration'))
 
 
 class Song(models.Model):
-    album = models.ForeignKey(Album, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    album = models.ForeignKey(
+        Album,
+        on_delete=models.CASCADE
+    )
+    name = models.CharField(
+        max_length=100,
+        help_text='Song name'
+    )
     song_file = models.FileField(
         upload_to=song_path,
         validators=[song_file_validator]
@@ -126,8 +157,14 @@ class Song(models.Model):
         choices=Genres.choices,
         default=Genres.DANCEHALL
     )
+    featuring_artists = models.ManyToManyField(
+        Artist,
+        blank=True,
+        help_text='Artists who have featured in the song'
+    )
     duration = models.PositiveIntegerField(default=0)
     bitrate = models.PositiveIntegerField(default=0)
+    is_explicit = models.BooleanField(default=False)
     added_on = models.DateField(auto_now_add=True)
 
     objects = SongManager()
@@ -137,6 +174,9 @@ class Song(models.Model):
         indexes = [
             Index(fields=['name', 'genre', 'album'])
         ]
+        # constraints = [
+        #     UniqueConstraint(fields=['name', 'album'], name='unique_song_per_album')
+        # ]
 
     def __str__(self):
         return self.name
@@ -144,6 +184,54 @@ class Song(models.Model):
     def clean(self):
         if self.song_file.path is not None:
             instance = MP3(self.song_file.path)
+            
             self.bitrate = instance.info.bitrate
             duration_in_minutes = instance.info.length / 60
             self.duration = duration_in_minutes
+
+
+class Listener(models.Model):
+    user = None
+    song = models.ForeignKey(
+        Song,
+        on_delete=models.CASCADE
+    )
+    created_on = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.song
+
+
+# @receiver(post_save, sender=Song)
+# def song_file_metadata(instance, created, **kwargs):
+#     # https://mutagen.readthedocs.io/en/latest/user/filelike.html
+#     # https://code.activestate.com/recipes/577138-embed-lyrics-into-mp3-files-using-mutagen-uslt-tag/
+#     # https://stackoverflow.com/questions/59993139/how-to-add-syltsynced-lyrics-tag-on-id3v2-mp3-file-using-python
+#     # https://id3.org/id3v2.3.0#Synchronised_lyrics.2Ftext
+#     if created:
+#         file = MP3(instance.song_file.path)
+
+#         try:
+#             tags = id3.ID3(file)
+#         except id3.ID3NoHeaderError:
+#             tags = id3.ID3()
+#         else:
+#             lyrics = tags.getall(u"USLT::'en'")
+#             if len(lyrics) != 0:
+#                 tags.delall(u"USLT::'en'")
+#                 tags.save()
+
+#             tags[u"SYLT::'en'"] = id3.SYLT(
+#                 encoding=3, 
+#                 lang=u'eng',
+#                 desc=u'desc', 
+#                 text=''
+#             )
+
+#             tags['TIT2'] = id3.TIT2(encoding=3, text=instance.name)
+#             tags['TALB'] = id3.TALB(encoding=3, text=instance.album.name)
+#             tags['TPE1'] = id3.TPE1(encoding=3, text=instance.album.artist.name)
+#             tags['TCON'] = id3.TCON(encoding=3, genres=[])
+#             tags['TPRO'] = id3.TPRO(encoding=3, text=instance.album.producer)
+
+#             tags.save(instance.song_file.path)

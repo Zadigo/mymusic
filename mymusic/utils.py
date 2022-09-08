@@ -1,11 +1,7 @@
 import binascii
-import datetime
-import struct
 
 import numpy as np
 import scipy
-import scipy.cluster
-import scipy.misc
 from PIL import Image
 
 
