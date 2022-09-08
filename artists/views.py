@@ -4,20 +4,20 @@ from django.core.cache import cache
 from rest_framework.decorators import api_view
 
 from artists.models import Album, Artist
-from artists.serializers import AlbumSerializer, ArtistDetailsSerializer, SearchSerializer
+from artists.serializers import AlbumSerializer, ArtistSerializer2, SearchValidator
 
 
 @api_view(['post'])
 def artist_view(request, reference):
     artist = Artist.objects.filter(name='Jahlys')
-    serializer = ArtistDetailsSerializer(instance=artist)
+    serializer = ArtistSerializer2(instance=artist)
     return create_response(serializer=serializer)
 
 
 @api_view(['post'])
 def search_albums_view(request, **kwargs):
     """Search all albums on the website"""
-    serializer = SearchSerializer(data=request.data)
+    serializer = SearchValidator(data=request.data)
     serializer.is_valid(raise_exception=True)
     results_serializer = serializer.search()
     return create_response(serializer=results_serializer)

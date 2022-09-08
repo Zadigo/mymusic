@@ -1,6 +1,7 @@
-import secrets
+from django.utils.crypto import get_random_string
+
 
 def playlists_cover_image_path(instance, name):
-    new_name = secrets.token_hex(nbytes=10)
+    new_name = get_random_string(10)
     _, ext = name.split('.')
-    return f'playlists/{instance.artist.name}/{new_name}.{ext}'
+    return f'playlists/cover_{new_name}.{ext}'

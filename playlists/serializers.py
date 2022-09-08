@@ -8,30 +8,26 @@ from playlists.choices import UserCustomSort
 
 class PlaylistSongSerializer(Serializer):
     id = fields.IntegerField()
-
     album = AlbumSerializer()
-
     name = fields.CharField()
     song_file = fields.FileField()
     genre = fields.CharField()
-    duration = fields.DurationField()
+    # duration = fields.IntegerField()
     bitrate = fields.IntegerField()
 
 
 class PlaylistSerializer(Serializer):
     id = fields.IntegerField()
     name = fields.CharField()
-
     author = UserSerializer()
     songs = PlaylistSongSerializer(many=True)
-
     cover_image = fields.ImageField()
     background_color = fields.CharField()
     number_of_followers = fields.IntegerField()
     created_on = fields.DateField()
 
 
-class SortPlaylistSerializer(Serializer):
+class SortPlaylistValidator(Serializer):
     user_sort = fields.ChoiceField(
         choices=UserCustomSort.choices,
         default=UserCustomSort.ALBUM_NAME
@@ -50,7 +46,7 @@ class SortPlaylistSerializer(Serializer):
         elif method == str(UserCustomSort.GENRE):
             songs = songs.order_by('genre')
         elif method == str(UserCustomSort.ADDED):
-            pass
+            songs = songs.order_by('album__release_date')
         elif method == str(UserCustomSort.DURATION):
             songs = songs.order_by('duration')
 

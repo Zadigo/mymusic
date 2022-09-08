@@ -4,14 +4,11 @@ from rest_framework import fields
 class ArtistSerializer(Serializer):
     id = fields.IntegerField()
     name = fields.CharField()
-    
     area = fields.CharField()
-    
     date_of_birth = fields.DateField()
     genre = fields.DateField()
     cover_image = fields.ImageField()
     cover_image_thumbnail = fields.FileField()
-    
     number_of_followers = fields.IntegerField()
     created_on = fields.DateField()
 

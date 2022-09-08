@@ -133,11 +133,11 @@ class Album(models.Model):
     
     @property
     def release_year(self):
-        return self.release_date.year()
+        return self.release_date.year
 
     @cached_property
     def listening_total_time(self):
-        return self.song_set.aggregate(Count('duration'))
+        return self.song_set.aggregate(Count('duration'))['duration__count']
 
 
 class Song(models.Model):
@@ -163,7 +163,10 @@ class Song(models.Model):
         blank=True,
         help_text='Artists who have featured in the song'
     )
-    duration = models.PositiveIntegerField(default=0)
+    duration = models.FloatField(
+        default=0,
+        help_text='Duration in seconds'
+    )
     bitrate = models.PositiveIntegerField(default=0)
     is_explicit = models.BooleanField(default=False)
     added_on = models.DateField(auto_now_add=True)
@@ -182,6 +185,10 @@ class Song(models.Model):
     def __str__(self):
         return self.name
 
+    @cached_property
+    def fomatted_duration(self):
+        return round(self.duration / 60, 3)
+
 
 class Listener(models.Model):
     user = None
@@ -196,15 +203,15 @@ class Listener(models.Model):
 
 
 @receiver(post_save, sender=Song)
-def get_file_metadata(instance, created, **kwargs):
+def create_file_metadata(instance, created, **kwargs):
     if created:
         if instance.song_file.path is not None:
-            instance = MP3(instance.song_file.path)
+            mp3_file = MP3(instance.song_file.path)
             
-            instance.bitrate = instance.info.bitrate
-            duration_in_minutes = instance.info.length / 60
-            instance.duration = duration_in_minutes
-
+            instance.bitrate = mp3_file.info.bitrate
+            # duration_in_minutes = mp3_file.info.length / 60
+            # instance.duration = duration_in_minutes
+            instance.duration = round(mp3_file.info.length, 5)
             instance.save()
 
 

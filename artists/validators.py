@@ -8,8 +8,6 @@ def song_file_validator(instance):
         message='File extension is not valid'
     )
     validator(instance)
-    # if not instance.name.endswith('mp3'):
-    #     raise ValidationError('This is not a valid file extension')
 
 
 def validate_date_of_birth(value):

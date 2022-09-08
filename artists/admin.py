@@ -1,4 +1,3 @@
-import datetime
 from django.contrib import admin
 from mutagen.mp3 import MP3
 
@@ -22,7 +21,7 @@ class AlbumsAdmin(admin.ModelAdmin):
 
 @admin.register(Song)
 class SongsAdmin(admin.ModelAdmin):
-    list_display = ['name', 'album', 'genre', 'duration']
+    list_display = ['name', 'album', 'genre', 'bitrate', 'duration']
     date_hiearchy = 'added_on'
     search_fields = ['name', 'album__name', 'genre', 'album__producer']
     actions = ['get_file_metadata']
@@ -30,10 +29,11 @@ class SongsAdmin(admin.ModelAdmin):
     def get_file_metadata(self, request, queryset):
         for song in queryset:
             instance = MP3(song.song_file.path)
-            duration = str(instance.info.length)
-            minutes, seconds = duration.split('.')
-            seconds = round(int(seconds), 3)
-            duration = datetime.timedelta(minutes=int(minutes), seconds=seconds)
-            song.duration = duration
+            song.duration = round(instance.info.length, 5)
             song.bitrate = instance.info.bitrate
             song.save()
+
+            # minutes, seconds = duration.split('.')
+            # seconds = round(int(seconds), 3)
+            # duration = datetime.timedelta(minutes=int(minutes), seconds=seconds)
+            # song.duration = duration

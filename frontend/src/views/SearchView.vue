@@ -2,9 +2,9 @@
   <section id="search" class="p-5">
     <div class="row">
       <div class="col-12">
-        <input v-model="searchedItem.name" :placeholder="$t('Search')" type="search" class="form-control p-2 mb-3">
+        <input v-model="searchedItem.name" :placeholder="$t('Search')" type="search" class="form-control p-2 mb-3" @keyup="search">
         <!-- NOTE: For testing -->
-        <button type="button" @click="search">{{ $t('Search') }}</button>
+        <!-- <button type="button" @click="search">{{ $t('Search') }}</button> -->
 
         <a href @click.prevent="showAdvancedSearch = !showAdvancedSearch">
           {{ $t('Advanced search') }}
@@ -66,12 +66,10 @@
 <script>
 import _ from 'lodash'
 import dayjs from '@/plugins/dayjs'
-import SearchSectionVue from '@/components/search/SearchSection.vue'
-
-// TEST
-import genresData from '@/data/genres.json'
-// import { provide } from 'vue'
 import { computed } from '@vue/reactivity'
+import { asyncTimeout } from '@/composables/utils'
+
+import SearchSectionVue from '@/components/search/SearchSection.vue'
 
 export default {
   name: 'SearchView',
@@ -85,7 +83,7 @@ export default {
   },
   setup () {
     return {
-      genresData
+      asyncTimeout
     }
   },
   data () {
@@ -138,11 +136,12 @@ export default {
     async search () {
       try {
         const response = await this.$http.post('/artists/search', this.searchedItem)
+        await this.asyncTimeout(1000)
         this.cachedSearch = response.data
       } catch (error) {
         console.log(error)
       }
-    } 
+    }
   }
 }
 </script>

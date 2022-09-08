@@ -1,11 +1,19 @@
 import binascii
+import pathlib
+from io import BytesIO
 
 import numpy as np
+import requests
 import scipy
 from PIL import Image
 
 
-def dominant_image_color(instance):
+def get_image(url):
+    response = requests.get(url)
+    return Image.open(BytesIO(response.content)) 
+
+
+def dominant_image_color(instance, is_url=False):
     """Get the most common color in an image
     and return it in hexadecimal. Note that
     this only returns the numbers/letters"""
@@ -13,13 +21,13 @@ def dominant_image_color(instance):
     
     # Just return black if there's no
     # path associated with the instance
-    image = getattr(instance, '_file', None)
-    if image is None:
+    image_path = getattr(instance, 'path', None)
+    if image_path is None:
         return '000000'
 
     # print('reading image')
     # im = Image.open('D:/coding/websites/mymusic/media/cover/bouyon_patrimoine/c7dfae3baf2d5838261c.jpg')
-    im = Image.open(instance.path)
+    im = Image.open(image_path)
     im = im.resize((150, 150))      # optional, to reduce time
     ar = np.asarray(im)
     shape = ar.shape

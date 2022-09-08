@@ -1,5 +1,6 @@
-from api.serializers.albums import SongSerializer
 from api.views import create_response
+from artists.serializers import SongSerializer2
+from playlists.serializers import PlaylistSerializer
 from artists.models import Song
 from django.contrib.auth import get_user_model
 from django.db.models import Count
@@ -8,7 +9,7 @@ from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 
 from playlists.models import OfficialPlaylist, UserPlaylist
-from playlists.serializers import PlaylistSerializer, SortPlaylistSerializer
+from playlists.serializers import PlaylistSerializer, SortPlaylistValidator
 
 USER_MODEL = get_user_model()
 
@@ -27,30 +28,11 @@ def update_sorting_view(request, pk, **kwargs):
     regards to the incoming sorting method"""
     playlist = get_object_or_404(UserPlaylist, id=pk)
 
-    serializer = SortPlaylistSerializer(data=request.data)
+    serializer = SortPlaylistValidator(data=request.data)
     serializer.is_valid(raise_exception=False)
-
-    # songs = playlist.songs.all()
-    # method = serializer.validated_data['user_sort']
-
-    # if method == str(UserCustomsort.ALBUM_NAME):
-    #     songs = songs.order_by('album__name')
-    # elif method == str(UserCustomsort.NAME):
-    #     songs = songs.order_by('name')
-    # elif method == str(UserCustomsort.ARTIST_NAME):
-    #     songs = songs.order_by('album__artist__name')
-    # elif method == str(UserCustomsort.GENRE):
-    #     songs = songs.order_by('genre')
-    # elif method == str(UserCustomsort.ADDED):
-    #     pass
-    # elif method == str(UserCustomsort.DURATION):
-    #     songs = songs.order_by('duration')
-
-    # playlist.user_sort = serializer.validated_data['user_sort']
-    # playlist.save()
     songs = serializer.sort_items(playlist)
-    serialized_songs = SongSerializer(instance=songs, many=True)
-    return create_response(data={'id': playlist.id, 'songs': serialized_songs.data})
+    serialized_songs = SongSerializer2(instance=songs, many=True)
+    return create_response(serializer=serialized_songs)
 
 
 @api_view(['post'])
@@ -96,12 +78,12 @@ def delete_playlist_view(request, pk, **kwargs):
     return create_response(data={'id': playlist.id})
 
 
-@api_view(['get'])
-def explore_genre_view(request, genre, **kwargs):
-    # TODO: Find a way to get a playlist by genre
-    playlists = UserPlaylist.objects.filter(name__icontains=genre)
-    serializer = PlaylistSerializer(instance=playlists, many=True)
-    return create_response(serializer=serializer)
+# @api_view(['get'])
+# def explore_genre_view(request, genre, **kwargs):
+#     # TODO: Find a way to get a playlist by genre
+#     playlists = UserPlaylist.objects.filter(name__icontains=genre)
+#     serializer = PlaylistSerializer(instance=playlists, many=True)
+#     return create_response(serializer=serializer)
 
 
 @api_view(['get'])

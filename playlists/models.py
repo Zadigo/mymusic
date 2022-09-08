@@ -24,6 +24,7 @@ class AbstractPlaylist(models.Model):
     songs = models.ManyToManyField(Song, blank=True)
     cover_image = ProcessedImageField(
         format='JPEG',
+        upload_to=playlists_cover_image_path,
         processors=[ResizeToFill(width=300, height=300)],
         options={'quality': 90},
         blank=True,
@@ -84,5 +85,14 @@ class OfficialPlaylist(AbstractPlaylist):
 
 
 @receiver(post_save, sender=UserPlaylist)
-def get_most_common_color(instance, **kwargs):
-    instance.background_color = dominant_image_color(instance.cover_image)
+def get_most_common_color(instance, created, **kwargs):
+    if created:
+        instance.background_color = dominant_image_color(instance.cover_image)
+        instance.save()
+
+
+@receiver(post_save, sender=OfficialPlaylist)
+def get_most_common_color(instance, created, **kwargs):
+    if created:
+        instance.background_color = dominant_image_color(instance.cover_image)
+        instance.save()

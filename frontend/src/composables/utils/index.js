@@ -21,6 +21,10 @@ export function scrollToTop () {
   window.scroll(0, 0)
 }
 
+export function asyncTimeout (ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
 export function useUtilities () {
   function hasNull (items) {
     let itemsValues = []

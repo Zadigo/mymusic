@@ -1,5 +1,5 @@
 <template>
-  <base-detail-page-vue class="text-light position-relative">
+  <base-detail-page-vue :image="currentPlaylist.cover_image" class="text-light position-relative">
     <template #default>
       <div class="d-flex flex-column justify-content-start">
         <h1 class="display-2 fw-bold">{{ currentPlaylist.name }}</h1>

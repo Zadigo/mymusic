@@ -15,6 +15,8 @@ declare function loadLayout (name: string): Promise<any>
 declare function loadComponent (name: string): Promise<any>
 /** Scroll to the top of a page */
 declare function scrollToTop (): void
+/** Timeout for async functions */
+declare function asyncTimeout (ms: number): Promise<any>
 
 /** Utilities for sockets */ 
 declare function useSocket (): {
