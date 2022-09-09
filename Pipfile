@@ -16,6 +16,7 @@ django-filter = "*"
 pillow = "*"
 numpy = "*"
 scipy = "*"
+autopep8 = "*"
 
 [dev-packages]
 

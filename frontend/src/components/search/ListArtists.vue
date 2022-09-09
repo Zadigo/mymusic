@@ -45,7 +45,7 @@ export default {
   methods: {
     goToPage (artist) {
       this.store.currentArtist = artist
-      this.$router.push({ name: 'artist_view', params: { id: '4AcFhqecUgQOUNmdcdngEq' } })
+      this.$router.push({ name: 'artist_view', params: { id: artist.id } })
     }
   }
 }

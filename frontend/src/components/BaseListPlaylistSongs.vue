@@ -8,7 +8,8 @@
           </button>
 
           <button v-else class="btn btn-sm btn-primary" type="button" @click="playSong(song)">
-            <span class="mdi mdi-play" />
+            <!-- <span class="mdi mdi-play" /> -->
+            
           </button>
         </div>
 

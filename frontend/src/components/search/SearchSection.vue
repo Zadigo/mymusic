@@ -1,11 +1,11 @@
 <template>
-  <div class="card bg-dark">
+  <div class="card bg-dark">    
     <div class="card-body">
       <div class="d-flex justify-content-between">
         <h2 class="h4 mb-3">{{ sectionTitle }}</h2>
-        <router-link :to="linkParams" class="text-uppercase font-weight-bold text-muted">
+        <a href class="text-uppercase font-weight-bold text-muted" @click.prevent="$emit('show-all', 'a')">
           {{ $t('See all') }}
-        </router-link>
+        </a>
       </div>
 
       <component :is="componentName" />
@@ -35,6 +35,14 @@ export default {
       required: true
     }
   },
+  emits: {
+    'show-all': () => true
+  },
+  data () {
+    return {
+      showAll: false
+    }
+  },
   computed: {
     linkParams () {
       let search = 'songs'
@@ -51,8 +59,8 @@ export default {
         default:
           break
       }
-
-      return { name: 'search_more_view', params: { search: search } }
+      return search
+      // return { name: 'search_more_view', params: { search: search } }
     }
   }
 }

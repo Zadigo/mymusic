@@ -4,12 +4,13 @@ from django.core.cache import cache
 from rest_framework.decorators import api_view
 
 from artists.models import Album, Artist
+from django.shortcuts import get_object_or_404
 from artists.serializers import AlbumSerializer, ArtistSerializer2, SearchValidator
 
 
 @api_view(['post'])
 def artist_view(request, reference):
-    artist = Artist.objects.filter(name='Jahlys')
+    artist = get_object_or_404(Artist, id=reference)
     serializer = ArtistSerializer2(instance=artist)
     return create_response(serializer=serializer)
 

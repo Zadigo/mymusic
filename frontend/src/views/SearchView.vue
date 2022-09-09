@@ -51,13 +51,28 @@
 
       <div v-else>
         <!-- Songs -->
-        <search-section-vue :section-title="$t('Songs')" class="mb-2" component-name="list-songs-vue" />
+        <search-section-vue :section-title="$t('Songs')" class="mb-2" component-name="list-songs-vue" @show-all="showAll = !showAll" />
 
         <!-- Artists -->
-        <search-section-vue :section-title="$t('Artists')" class="mb-2" component-name="list-artists-vue" />
+        <search-section-vue :section-title="$t('Artists')" class="mb-2" component-name="list-artists-vue" @show-all="showAll = !showAll" />
 
         <!-- Albums -->
-        <search-section-vue :section-title="$t('Albums')" component-name="list-albums-vue" />
+        <search-section-vue :section-title="$t('Albums')" component-name="list-albums-vue" @show-all="showAll = !showAll" />
+
+        <!-- All -->
+        <transition name="opacity">
+          <div v-if="showAll" class="wrapper">
+            <div class="card bg-dark">
+              <div class="card-header">
+                <button type="button" class="btn-close mx-auto" @click="showAll = false"></button>
+              </div>
+              
+              <div class="card-body">
+                <base-songs-list-group :songs="songs" />
+              </div>
+            </div>
+          </div>
+        </transition>
       </div>
     </div>
   </section>
@@ -69,11 +84,12 @@ import dayjs from '@/plugins/dayjs'
 import { computed } from '@vue/reactivity'
 import { asyncTimeout } from '@/composables/utils'
 
+import BaseSongsListGroup from '@/layouts/BaseSongsListGroup.vue'
 import SearchSectionVue from '@/components/search/SearchSection.vue'
 
 export default {
   name: 'SearchView',
-  components: { SearchSectionVue },
+  components: { SearchSectionVue, BaseSongsListGroup },
   provide () {
     return {
       songs: computed(() => (this.songs)),
@@ -97,6 +113,7 @@ export default {
         year: null,
         area: []
       },
+      showAll: false
     }
   },
   computed: {
@@ -145,3 +162,28 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+#search {
+  position: relative;
+}
+
+.wrapper {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  padding: 1rem;
+  z-index: 1055;
+}
+
+.wrapper::before {
+  content: "";
+  filter: blur(3px);
+}
+
+.wrapper .card {
+  height: 100%;
+}
+</style>

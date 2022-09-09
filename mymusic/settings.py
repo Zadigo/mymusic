@@ -4,7 +4,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-FRONT_DIR = Path.joinpath(BASE_DIR, 'front')
+FRONT_DIR = Path.joinpath(BASE_DIR, 'frontend')
 
 
 # Quick-start development settings - unsuitable for production
@@ -129,16 +129,16 @@ LANGUAGE = 'en'
 
 STATIC_URL = 'static/'
 
-STATIC_ROOT = Path.joinpath(BASE_DIR, 'staticfiles')
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATIC_FILES_DIRS = [
-    Path.joinpath(BASE_DIR, 'static'),
-    Path.joinpath(FRONT_DIR, 'static')
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+    FRONT_DIR / 'dist/static'
 ]
 
 MEDIA_URL = 'media/'
 
-MEDIA_ROOT = Path.joinpath(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 # Default primary key field type
@@ -154,20 +154,20 @@ INTERNAL_IPS = ['127.0.0.1']
 
 # Cors
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ORIGIN_REGEX_WHITELIST = [
-    r'^https?\:\/\/localhost\:3000$',
-    r'^https?\:\/\/localhost\:808\d{1}$',
-    r'^https?\:\/\/192\.168\.0\.\d{3}\:8080$'
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r'^https?\:\/\/localhost\:8080$',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8080',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:3000',
-    'http://localhost:8080',
-    'http://192.168.0.105:8080'
+    'http://localhost:8080'
 ]
 
 
@@ -202,6 +202,6 @@ EMAIL_USE_LOCALTIME = True
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'cache'),
+        'LOCATION': BASE_DIR / 'cache',
     }
 }
