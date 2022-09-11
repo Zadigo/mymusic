@@ -3,14 +3,15 @@
     <!-- TODO: Make this independent from the store so that
     any component can require an iteration of playlists from
     any source -->
-    <div v-if="store.playlists.length > 0" class="row">
-      <article v-for="playlist in store.playlists" :key="playlist.id" class="col-sm-12 col-md-4">
+    <div v-if="playlists.length > 0" class="row">
+      <article v-for="playlist in playlists" :key="playlist.id" class="col-sm-12 col-md-4">
         <router-link :to="navigateToPlaylist(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
           <div class="card my-2">
             <img :src="mediaUrl(playlist.cover_image)" :alt="playlist.name" class="card-img-top">
             <div class="card-body">
               <h4 class="fw-bold card-title">{{ playlist.name }}</h4>
-              <p class="card-text text-muted m-0">{{ $t('Created by', { user: playlist.author.username }) }}</p>
+              <p v-if="userPlaylists" class="card-text text-muted m-0">{{ $t('Created by', { user: playlist.author.username }) }}</p>
+              <p v-else class="card-text text-muted m-0">{{ $t('Created by', { user: 'spotify' }) }}</p>
             </div>
           </div>
         </router-link>
@@ -33,6 +34,15 @@ export default {
   inject: {
     darkMode: ['darkMode']
   },
+  props: {
+    userPlaylists: {
+      type: Boolean
+    },
+    otherPlaylist: {
+      type: Array,
+      default: () => []
+    }
+  },
   setup () {
     const store = usePlaylists()
     const { mediaUrl } = useUrls()
@@ -41,11 +51,18 @@ export default {
       mediaUrl
     }
   },
+  computed: {
+    playlists () {
+      return this.userPlaylists ? this.store.playlists : this.otherPlaylist
+    }
+  },
   created () {
-    this.getPlaylists()
+    if (this.userPlaylists) {
+      this.getUserPlaylists()
+    }
   },
   methods: {
-    async getPlaylists () {
+    async getUserPlaylists () {
       try {
         if (!this.sessionStorage.hasPlaylists) {
           const response = await this.$http.get('playlists')

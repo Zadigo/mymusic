@@ -1,15 +1,15 @@
-from operator import ge
-from api.views import create_response, map_list
 from django.core.cache import cache
+from django.shortcuts import get_object_or_404
+from mymusic.utils import create_response, map_list
 from rest_framework.decorators import api_view
 
 from artists.models import Album, Artist
-from django.shortcuts import get_object_or_404
-from artists.serializers import AlbumSerializer, ArtistSerializer2, SearchValidator
+from artists.serializers import ArtistSerializer2, SearchValidator
 
 
 @api_view(['post'])
-def artist_view(request, reference):
+def artist_details_view(request, reference):
+    """Return the detail of a given arti"""
     artist = get_object_or_404(Artist, id=reference)
     serializer = ArtistSerializer2(instance=artist)
     return create_response(serializer=serializer)
@@ -24,18 +24,20 @@ def search_albums_view(request, **kwargs):
     return create_response(serializer=results_serializer)
 
 
-@api_view(['get'])
-def albums_view(request, **kwargs):
-    queryset = cache.get('albums')
-    if not queryset:
-        queryset = Album.objects.prefetch_related('song_set')
-        cache.set('albums', queryset, 3600)
-    serializer = AlbumSerializer(instance=queryset, many=True)
-    return create_response(serializer=serializer)
+# @api_view(['get'])
+# def albums_view(request, **kwargs):
+#     queryset = cache.get('albums')
+#     if not queryset:
+#         queryset = Album.objects.prefetch_related('song_set')
+#         cache.set('albums', queryset, 3600)
+#     serializer = AlbumSerializer(instance=queryset, many=True)
+#     return create_response(serializer=serializer)
 
 
 @api_view(['get'])
 def genres_view(request, **kwargs):
+    """Return all available genre on
+    the plateform"""
     genres = cache.get('genres', [])
     if not genres:
         genres = Album.objects.genres()

@@ -1,3 +1,8 @@
+import math
+from typing import Any, Generator
+from rest_framework.serializers import BaseSerializer, Serializer
+from rest_framework.response import Response
+from rest_framework import status
 import binascii
 import pathlib
 from io import BytesIO
@@ -48,3 +53,32 @@ def dominant_image_color(instance, is_url=False):
     colour = binascii.hexlify(bytearray(int(c) for c in peak)).decode('ascii')
     # print('most frequent is %s (#%s)' % (peak, colour))
     return colour
+
+
+def create_response(data: Any = None, serializer: Serializer = None):
+    attrs = {'data': None, 'status': status.HTTP_200_OK}
+    if serializer is not None:
+        attrs.update(data=serializer.data)
+    elif data is not None:
+        if isinstance(data, (Generator)):
+            data = list(data)
+
+        if not isinstance(data, (list, dict)):
+            raise ValueError('Data should be a list of a dict')
+
+        attrs.update(data=data)
+    return Response(**attrs)
+
+
+def map_list(dataset: list):
+    for i, item in enumerate(dataset):
+        yield {'id': i, 'name': item, 'viewname': item.lower()}
+
+
+def variance(values):
+    average = sum(values) / len(values)
+    return ((value - average) ^ 2 for value in values)
+
+
+def standard_deviation(values):
+    return math.sqrt(variance(values))

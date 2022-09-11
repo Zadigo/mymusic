@@ -5,7 +5,7 @@
         <!-- User Playlists -->
         <div class="col-12">
           <base-section-vue :to="{ name: 'home_view' }" :name="$t('Your playlists')">
-            <list-playlists-vue />
+            <list-playlists-vue :user-playlists="true" />
           </base-section-vue>
         </div>
       </div>

@@ -12,11 +12,11 @@
 
         <div class="col-12">
           <base-section-vue name="Playlists">
-            <list-playlists-vue :playlists="playlists" />
+            <list-playlists-vue :other-playlist="playlists.top" />
           </base-section-vue>
-
+          
           <base-section-vue name="Novelties" class="my-2">
-            Google
+            <list-playlists-vue :other-playlist="playlists.newest" />
           </base-section-vue>
         </div>
       </div>
@@ -46,12 +46,12 @@ export default {
   methods: {
     async getPlaylists () {
       try {
-        const response = await this.$http.get(`playlists/official/${this.$route.params.genre}`)
+        const response = await this.$http.get(`playlists/${this.$route.params.genre}`)
         this.playlists = response.data
       } catch (error) {
         console.error(error)
       }
-    }
+    },
   }
 }
 </script>

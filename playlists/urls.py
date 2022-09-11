@@ -12,7 +12,8 @@ urlpatterns = [
     re_path(r'^(?P<pk>\d+)/delete$', views.delete_playlist_view),
     # re_path(r'^(?P<genre>\w+)', views.explore_genre_view),
     re_path(r'^(?P<pk>\d+)$', views.playlist_details_view),
-    re_path(r'^official/(?P<genre>\w+)$', views.official_playlist_details_view),
+    re_path(r'^(?P<genre>\w+)$', views.official_playlist_details_view),
     re_path(r'^create', views.create_playlist_view),
+    # re_path(r'^explore$', views.explore_view),
     re_path(r'^$', views.user_playslists_view),
 ]

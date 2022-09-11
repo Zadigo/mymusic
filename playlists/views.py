@@ -1,15 +1,19 @@
-from api.views import create_response
-from artists.serializers import SongSerializer2
-from playlists.serializers import PlaylistSerializer
+import datetime
+
 from artists.models import Song
+from artists.serializers import SongSerializer2
 from django.contrib.auth import get_user_model
-from django.db.models import Count
-from django.shortcuts import get_object_or_404, get_list_or_404
+from django.core.cache import cache
+from django.db.models import Avg, Count, StdDev
+from django.shortcuts import get_object_or_404
+from django.utils.timezone import now
+from mymusic.utils import create_response
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
 
 from playlists.models import OfficialPlaylist, UserPlaylist
-from playlists.serializers import PlaylistSerializer, SortPlaylistValidator
+from playlists.serializers import (OfficialPlaylistSerializer,
+                                   PlaylistSerializer, SortPlaylistValidator)
 
 USER_MODEL = get_user_model()
 
@@ -18,8 +22,8 @@ USER_MODEL = get_user_model()
 def user_playslists_view(request, **kwargs):
     queryset = UserPlaylist.objects.filter(author__username='zadigo')
     queryset = queryset.annotate(number_of_followers=Count('followers__id'))
-    serializers = PlaylistSerializer(instance=queryset, many=True)
-    return create_response(serializer=serializers)
+    serializer = PlaylistSerializer(instance=queryset, many=True)
+    return create_response(serializer=serializer)
 
 
 @api_view(['post'])
@@ -78,12 +82,20 @@ def delete_playlist_view(request, pk, **kwargs):
     return create_response(data={'id': playlist.id})
 
 
-# @api_view(['get'])
-# def explore_genre_view(request, genre, **kwargs):
-#     # TODO: Find a way to get a playlist by genre
-#     playlists = UserPlaylist.objects.filter(name__icontains=genre)
-#     serializer = PlaylistSerializer(instance=playlists, many=True)
-#     return create_response(serializer=serializer)
+@api_view(['get'])
+def explore_view(request, **kwargs):
+    playlists = OfficialPlaylist.objects.filter(genre__iexact=None)
+
+    # Top
+
+    # New releases
+    new_releases = OfficialPlaylistSerializer(instance=playlists, many=True)
+
+    return_reponse = {
+        'top': [],
+        'new_releases': new_releases.data
+    }
+    return create_response(data=return_reponse)
 
 
 @api_view(['get'])
@@ -97,6 +109,25 @@ def playlist_details_view(request, pk, **kwargs):
 
 @api_view(['get'])
 def official_playlist_details_view(request, genre, **kwargs):
-    queryset = OfficialPlaylist.objects.filter(name__icontains=genre)
-    queryset = queryset.annotate(followers=Count('followers__id'))
-    return create_response(data=[])
+    """how the uer the top, newet and themed oriented playlit"""
+    queryset = OfficialPlaylist.objects.filter(name__icontains=genre).order_by('created_on')
+    queryset = queryset.annotate(number_of_followers=Count('followers__id'))
+
+    # Top
+    statistics = queryset.aggregate(Avg('number_of_followers'), StdDev('number_of_followers'))
+    average = statistics['number_of_followers__avg'] or 0
+    stddev = statistics['number_of_followers__stddev'] or 0
+    plus_one = average + stddev
+    top_playlists = queryset.filter(number_of_followers__gte=average, number_of_followers__lte=plus_one)
+
+    # New
+    fifteen_days_ago = now() - datetime.timedelta(days=15)
+    newest_playlists = queryset.filter(created_on__gte=fifteen_days_ago.date(), created_on__lte=now())
+
+    top_playlists_serializer = OfficialPlaylistSerializer(instance=top_playlists, many=True)
+    newest_playlists_serializer = OfficialPlaylistSerializer(instance=newest_playlists, many=True)
+    return_response = {
+        'top': top_playlists_serializer.data,
+        'newest': newest_playlists_serializer.data
+    }
+    return create_response(data=return_response)

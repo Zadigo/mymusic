@@ -66,8 +66,9 @@ class SearchValidator(Serializer):
             Q(album__name__icontains=name)
         )
 
-        if area:
-            queryset = queryset.filter(album__artist__area__in=area)
+        valid_areas = [value for value in area if value != '']
+        if valid_areas:
+            queryset = queryset.filter(album__artist__area__in=valid_areas)
 
         if genre is not None:
             queryset = queryset.filter(genre__iexact=genre)

@@ -14,7 +14,7 @@
         </button>
       </div>
 
-      <component :is="activeComponent" />
+      <component :is="activeComponent" :user-playlists="true" />
     </div>
   </section>
 </template>

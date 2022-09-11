@@ -1,18 +1,19 @@
-from api.serializers.albums import AlbumSerializer
+# TODO: DELETE
 from api.serializers.auth import UserSerializer
+from artists.serializers import AlbumSerializer
 from rest_framework import fields
 from rest_framework.serializers import Serializer
 
 from playlists.choices import UserCustomSort
 
 
-class PlaylistSongSerializer(Serializer):
+class _PlaylistSongSerializer(Serializer):
     id = fields.IntegerField()
     album = AlbumSerializer()
     name = fields.CharField()
     song_file = fields.FileField()
     genre = fields.CharField()
-    # duration = fields.IntegerField()
+    duration = fields.FloatField()
     bitrate = fields.IntegerField()
 
 
@@ -20,11 +21,15 @@ class PlaylistSerializer(Serializer):
     id = fields.IntegerField()
     name = fields.CharField()
     author = UserSerializer()
-    songs = PlaylistSongSerializer(many=True)
+    songs = _PlaylistSongSerializer(many=True)
     cover_image = fields.ImageField()
     background_color = fields.CharField()
     number_of_followers = fields.IntegerField()
     created_on = fields.DateField()
+
+
+class OfficialPlaylistSerializer(PlaylistSerializer):
+    author = None
 
 
 class SortPlaylistValidator(Serializer):
