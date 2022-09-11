@@ -10,9 +10,9 @@
           {{ $t('Advanced search') }}
         </a>
 
-        <div v-if="showAdvancedSearch" class="card my-4 bg-transparent border">
+        <div v-if="showAdvancedSearch" class="card my-4 bg-light">
           <div class="card-body">
-            <input v-model="searchedItem.genre" :placeholder="$t('Search')" type="search" class="form-control p-2">
+            <input v-model="searchedItem.genre" :placeholder="$t('Search an area')" type="search" class="form-control p-2" @keyup="search">
             <div>
               <label for="year-selection" class="form-label text-light my-3">{{ $t('Choose a year') }}</label>
               <input id="year-selection" v-model.number="searchedItem.year" :max="currentYear" min="2000" step="1" type="range" class="form-range">
