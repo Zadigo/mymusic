@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { ref, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 
 function raiseError (functionName, message) {
   throw new Error(`${functionName} - ${message}`)
@@ -285,5 +285,28 @@ export function useUrls () {
     getPageFromParams,
     mediaUrl,
     rebuildPath
+  }
+}
+
+export function useSearch (key, values, searchValue) {
+  const searchKey = key
+  const items = ref(values)
+  const search = ref(searchValue)
+
+  const searchedValues = computed(() =>  {
+    if (!search.value || search.value === "") {
+      return items
+    } else {
+      const searchLowerCase = search.value.toLowerCase()
+      return _.filter(items.value, (item) => {
+        const value = item[searchKey]
+        return value === searchKey || value.includes(searchKey) || value === searchLowerCase || value.includes(searchLowerCase)
+      })
+    }
+  })
+
+  return {
+    search,
+    searchedValues
   }
 }

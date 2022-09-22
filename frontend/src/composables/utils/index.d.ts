@@ -1,4 +1,4 @@
-import { Ref } from 'vue'
+import { Ref, ComputedRef } from 'vue'
 
 declare interface listenerOptions {
     onopen?: (e: Event) => void
@@ -71,13 +71,21 @@ declare function useUrls(): {
     buildLimitOffset (url: string, limit?: number, offset?: number): string
     /** Returns page number as url parameters */
     getPageFromParams (url: string, page?: number): string
+}
+
+declare function useSearch(key: string, values: object[], searchValue: string): {
+    /** The string to search */
+    search: Ref<string>
+    /** The items to search */
+    searchedValues: ComputedRef<object[]>
 } 
 
-/** Compasable for adding extra functionnalities to Vue */
+/** Composable for adding extra functionnalities to Vue */
 export declare module index {
     return {
         useSocket,
         useUtilities,
+        useSearch,
         useUrls,
         loadView,
         loadLayout,

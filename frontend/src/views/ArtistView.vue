@@ -29,35 +29,18 @@
         <div class="col-12 mb-2">
           <div class="card bg-dark text-light">
             <div class="card-body">
-              <input :placeholder="$t('Search x songs...', { count: 154 })" type="text" class="form-control p-2">
+              <input v-model="search" :placeholder="$t('Search x songs...', { count: 0 })" type="text" class="form-control p-2">
             </div>
           </div>
         </div>
-
-        <div class="col-12">
-          <base-songs-list-group-vue />
-        </div>
-
+        
         <div class="col-12">
           <base-section-vue :name="$t('Discography')" class="mt-5">
             <template #default>
-              <ul class="nav nav-pills">
-                <li class="nav-item">
-                  <a class="nav-link active" href>{{ $t('Albums') }}</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href>{{ $t('Singles') }}</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href>{{ $t('Mixtapes') }}</a>
-                </li>
-
-                <li class="nav-item">
-                  <a class="nav-link" href>{{ $t('Riddims') }}</a>
-                </li>
-              </ul>
+              <!-- Pills -->
+              <base-nav-pills :pills="filters" @pill-click="selectFilter" />
+              <!-- Albums -->
+              <base-albums-songs-list-group :albums="currentArtist.album_set" :search="search" :filter-by="selectedFilter" class="mt-3" />
             </template>
           </base-section-vue>
         </div>
@@ -82,7 +65,9 @@ import { useUrls } from '@/composables/utils'
 
 import BaseDetailPageVue from '@/layouts/BaseDetailPage.vue'
 import BaseSectionVue from '@/layouts/BaseSection.vue'
-import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
+// import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
+import BaseAlbumsSongsListGroup from '@/layouts/BaseAlbumsSongsListGroup.vue'
+import BaseNavPills from '../layouts/BaseNavPills.vue'
 
 
 export default {
@@ -90,8 +75,10 @@ export default {
   components: {
     BaseDetailPageVue,
     BaseSectionVue,
-    BaseSongsListGroupVue
-  },
+    // BaseSongsListGroupVue,
+    BaseAlbumsSongsListGroup,
+    BaseNavPills
+},
   setup () {
     const playlists = usePlaylists()
     const store = useSearch()
@@ -104,18 +91,33 @@ export default {
       mediaUrl
     }
   },
+  data () {
+    return {
+      search: null,
+      selectedFilter: null,
+      filters: ['All', 'Albums', 'Singles', 'Mixtapes', 'Riddims']
+    }
+  },
   created () {
     this.getArtist()
   },
   mounted () {
     this.store.currentArtist = this.sessionStorage.currentArtist
   },
-  beforeUnmount () {
-    this.$session.create('currentArtist', this.currentArtist)
-  },
+  // beforeUnmount () {
+  //   this.$session.create('currentArtist', this.currentArtist)
+  // },
   methods: {
     async getArtist () {
-
+      try {
+        const response = await this.$http.post('artists/1')
+        this.$session.create('currentArtist', response.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    selectFilter (value) {
+      this.selectedFilter = value
     }
   }
 }
