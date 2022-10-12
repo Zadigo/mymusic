@@ -26,9 +26,10 @@
           <font-awesome-icon icon="fa-solid fa-heart"></font-awesome-icon>
         </button>
 
-        <button type="button" class="btn btn-primary btn-sm">
+        <!-- <button type="button" class="btn btn-primary btn-sm">
           <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"></font-awesome-icon>
-        </button>
+        </button> -->
+        <base-dropdown-button id="options" :items="[{ name: 'Google' }]" size="sm" />
       </div>
     </a>
   </div>
@@ -38,8 +39,13 @@
 import { usePlayer } from '@/store/player'
 import { storeToRefs } from 'pinia'
 
+import BaseDropdownButton from '@/layouts/bootstrap/BaseDropdownButton.vue'
+
 export default {
   name: 'BaseSongsListGroup',
+  components: {
+    BaseDropdownButton
+  },
   props: {
     songs: {
       type: Array,

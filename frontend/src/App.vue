@@ -30,7 +30,7 @@ export default {
       valueLight: 'light',
     })
     const toggleDark = useToggle(darkMode)
-    provide('darkMode', darkMode)
+    provide('darkMode', true)
 
     return {
       toggleDark
