@@ -1,18 +1,18 @@
 <template>
-  <section class="main-interface">
+  <section :class="mainInterfaceClasses" class="main-interface">
     <div class="left">
       <transition name="general">
         <div v-if="$route.name === 'profile'" id="app-navigation">
           <router-link v-for="(profileNavButton, index) in profileNavButtons" :key="index" :to="{ name: profileNavButton.name }" class="nav-button">
             <font-awesome-icon class="me-3" :icon="`fa-solid fa-${profileNavButton.icon}`" />
-            {{ profileNavButton.name }}
+            <span>{{ profileNavButton.name }}</span>
           </router-link>
         </div>
       
         <div v-else id="app-navigation">
           <router-link v-for="(navButton, index) in navButtons" :key="index" :to="{ name: navButton.to }" class="nav-button ripple-effect">
             <font-awesome-icon class="me-3" :icon="navButton.icon" />
-            {{ $t(navButton.name) }}
+            <span>{{ $t(navButton.name) }}</span>
           </router-link>
         </div>
       </transition>
@@ -20,12 +20,12 @@
       <div id="profile-navigation">
         <router-link v-if="$route.name == 'profile'" id="nav-button" class="profile-button" :to="{ name: 'home_view' }">
           <font-awesome-icon class="me-3" icon="arrow-left" />
-          {{ $t('Back to home') }}
+          <span>{{ $t('Back to home') }}</span>
         </router-link>
       
         <router-link v-else id="nav-button" class="nav-button profile" :to="{ name: 'profile_view' }">
           <font-awesome-icon class="me-3" icon="fa-solid fa-cog" />
-          {{ $t('Profile') }}
+          <span>{{ $t('Profile') }}</span>
         </router-link>
       </div>
     </div>
@@ -39,7 +39,11 @@
     </div>
 
     <div class="bottom">
-      <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
+      <div class="container">
+        <div class="px-5 mx-5">
+          <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -65,14 +69,25 @@ export default {
       player
     }
   },
-  data: () => ({
-    minimizeRight: false,
-    navButtons: [
-      { name: 'Home', to: 'home_view', icon: 'home' },
-      { name: 'Search', to: 'search_view', icon: 'magnifying-glass' },
-      { name: 'Playlists', to: 'playlists_view', icon: 'list' }
-    ]
-  }),
+  data () {
+    return {
+      minimizeLeft: false,
+      navButtons: [
+        { name: 'Home', to: 'home_view', icon: 'home' },
+        { name: 'Search', to: 'search_view', icon: 'magnifying-glass' },
+        { name: 'Playlists', to: 'playlists_view', icon: 'list' }
+      ]
+    }
+  },
+  computed: {
+    mainInterfaceClasses () {
+      return [
+        {
+          'minimize': this.minimizeLeft
+        }
+      ]
+    }
+  },
   beforeMount () {
     const currentSettings = this.localStorage.settings
     if (currentSettings) {
@@ -81,10 +96,11 @@ export default {
   },
   methods: {
     minimize () {
-      this.minimizeRight = !this.minimizeRight
+      this.minimizeLeft = !this.minimizeLeft
       let settings = this.$localstorage.retrieve('settings')
       settings = settings || {}
-      settings.minimized = this.minimizeRight
+      settings.minimized = this.minimizeLeft
+      this.$localstorage.create(settings)
     },
     displayAlert (type, title, content) {
       this.$refs.alert.showAlert(type, content, title)
@@ -106,6 +122,18 @@ export default {
   height: 100vh;
 }
 
+.main-interface.minimize {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "side body"
+    "side player";
+  grid-template-rows: 1fr max-content;
+  grid-template-columns: 6% 1fr;
+  width: 100%;
+  height: 100vh;
+}
+
 .main-interface .left {
   grid-area: side;
   position: sticky;
@@ -119,20 +147,20 @@ export default {
 .main-interface .right {
   grid-area: body;
   width: 100%;
-  /* height: 100vh; */
   overflow-y: scroll;
   background-color: rgba(0, 0, 0, 0.9);
 }
 
 .main-interface .bottom {
   grid-area: player;
-  /* position: fixed; */
-  /* left: 0; */
-  /* bottom: 0; */
   background-color: rgba(38, 38, 38, 1) !important;
   width: 100%;
   height: auto;
   z-index: 1000;
+}
+
+.main-interface.minimize .left a span {
+  display: none;
 }
 
 .right::-webkit-scrollbar {

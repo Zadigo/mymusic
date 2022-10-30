@@ -6,14 +6,14 @@
         <div v-if="$route.name === 'profile'" id="app-navigation">
           <router-link v-for="(profileNavButton, index) in profileNavButtons" :key="index" :to="{ name: profileNavButton.name }" class="nav-button">
             <font-awesome-icon class="me-3" :icon="`fa-solid fa-${profileNavButton.icon}`" />
-            {{ profileNavButton.name }}
+            <span>{{ profileNavButton.name }}</span>
           </router-link>
         </div>
 
         <div v-else id="app-navigation">
           <router-link v-for="(navButton, index) in navButtons" :key="index" :to="{ name: navButton.to }" class="nav-button ripple-effect">
             <font-awesome-icon class="me-3" :icon="navButton.icon" />
-            {{ $t(navButton.name) }}
+            <span>{{ $t(navButton.name) }}</span>
           </router-link>
         </div>
       </transition>
