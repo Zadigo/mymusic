@@ -66,6 +66,7 @@ class AbstractPlaylist(models.Model):
 
 
 class UserPlaylist(AbstractPlaylist):
+    """Playlist created by the user"""
     user_sort = models.CharField(
         max_length=50,
         choices=UserCustomSort.choices,
@@ -79,6 +80,7 @@ class UserPlaylist(AbstractPlaylist):
 
 
 class OfficialPlaylist(AbstractPlaylist):
+    """Playlist created by us"""
     author = None
     followers = models.ManyToManyField(
         USER_MODEL,

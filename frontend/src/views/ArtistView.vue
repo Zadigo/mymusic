@@ -99,18 +99,16 @@ export default {
     }
   },
   created () {
+    this.playlists.loadFromCache()
     this.getArtist()
   },
   mounted () {
     this.store.currentArtist = this.sessionStorage.currentArtist
   },
-  // beforeUnmount () {
-  //   this.$session.create('currentArtist', this.currentArtist)
-  // },
   methods: {
     async getArtist () {
       try {
-        const response = await this.$http.post('artists/1')
+        const response = await this.$http.post(`artists/${this.$route.params.id}`)
         this.$session.create('currentArtist', response.data)
       } catch (error) {
         console.error(error)

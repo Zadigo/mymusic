@@ -33,8 +33,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'artists',
-    'playlists',
-    'api'
+    'playlists'
 ]
 
 MIDDLEWARE = [

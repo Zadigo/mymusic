@@ -1,4 +1,3 @@
-from api import views
 from django.urls import re_path
 
 from playlists import views

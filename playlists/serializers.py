@@ -1,10 +1,13 @@
-# TODO: DELETE
-from api.serializers.auth import UserSerializer
 from artists.serializers import AlbumSerializer
 from rest_framework import fields
 from rest_framework.serializers import Serializer
 
 from playlists.choices import UserCustomSort
+
+# TODO:
+class UserSerializer(Serializer):
+    id = fields.IntegerField()
+    username = fields.CharField()
 
 
 class _PlaylistSongSerializer(Serializer):
