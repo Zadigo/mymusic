@@ -1,58 +1,55 @@
 <template>
-  <div class="card bg-transparent">
-    <div class="card-body position-relative">
-      <audio ref="link" preload="auto" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner = true" @canplay="showSpinner = false">
-        <!-- <source :src="require('../assets/music1.wav')" type="audio/mpeg"> -->
-        <source :src="checkSrc(src)" type="audio/mpeg">
-      </audio>
-
-      <div class="audio-controls">
-        <div class="music-control-progress-container">
-          <div ref="videoProgress" class="track" @click.stop.prevent="handleProgressBarClick($event)">
-            <div :style="{ width: `${progressPercentage}%` }" class="track-low"></div>
-            <div class="track-selection"></div>
-          </div>
-        
-          <div :style="{ left: `${progress}%` }" class="handle"></div>
-        </div>
-        <!-- <div class="progress-bar-container">
-          <div ref="progress" class="progress-bar" @click.prevent.stop="handleProgressBarClick">
-            <div :style="{ width: progressPercentage + '%' }" class="progress-bar-completed">
-              <div :style="{ left: progressPercentage + '%' }" class="progress-indicator" draggable @mousedown="handleDrag" />
-            </div>
-          </div>
-        </div> -->
-      </div>
-
-      <div class="row">
-        <div class="col-12 mt-3 d-flex justify-content-between">
-          <span>{{ formattedCurrentTime }}</span>
-          <span>{{ formattedDuration }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="card-footer text-center">
-      <div class="btn-group shadow-sm">
+  <div class="container">
+    <div class="py-1">
+      <div class="p-1 mb-3 text-center">
         <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary" @click="handleSkipPrevious">
           <font-awesome-icon icon="fa-solid fa-backward-step" />
         </button>
-
-        <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary" @click="toggleAudioPlay">
+      
+        <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary mx-1" @click="toggleAudioPlay">
           <font-awesome-icon v-if="togglePlay" icon="fa-solid fa-pause"></font-awesome-icon>
           <font-awesome-icon v-else icon="fa-solid fa-play"></font-awesome-icon>
         </button>
-
+      
         <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary" @click="handleSkipNext">
           <font-awesome-icon icon="fa-solid fa-forward-step" />
         </button>
+
+        <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary mx-1" @click.prevent>
+          <font-awesome-icon icon="fa-solid fa-repeat" />
+        </button>
+      
+        <button type="button" class="btn btn-info shadow-sm">
+          <!-- <span class="mdi mdi-volume-high"></span> -->
+          <!-- <span class="mdi mdi-volume-low"></span> -->
+          <font-awesome-icon icon="fa-solid fa-volume-up" />
+        </button>
       </div>
 
-      <button type="button" class="btn btn-info shadow-sm mt-1">
-        <!-- <span class="mdi mdi-volume-high"></span> -->
-        <!-- <span class="mdi mdi-volume-low"></span> -->
-        <font-awesome-icon icon="fa-solid fa-volume-up" />
-      </button>
+      <div>
+        <audio ref="link" preload="auto" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner = true" @canplay="showSpinner = false">
+          <!-- <source :src="require('../assets/music1.wav')" type="audio/mpeg"> -->
+          <source :src="checkSrc(src)" type="audio/mpeg">
+        </audio>
+  
+        <div class="audio-controls">
+          <div class="music-control-progress-container">
+            <div ref="videoProgress" class="track" @click.stop.prevent="handleProgressBarClick($event)">
+              <div :style="{ width: `${progressPercentage}%` }" class="track-low"></div>
+              <div class="track-selection"></div>
+            </div>
+          
+            <div :style="{ left: `${progress}%` }" class="handle"></div>
+          </div>
+        </div>
+  
+        <div class="row">
+          <div class="col-12 mt-1 d-flex justify-content-between">
+            <span>{{ formattedCurrentTime }}</span>
+            <span>{{ formattedDuration }}</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -262,7 +259,7 @@ export default {
   vertical-align: middle;
   width: 100% !important;
   height: 20px;
-  margin-bottom: 1rem;
+  margin-bottom: .5rem;
 }
 
 .music-control-progress-container .track {

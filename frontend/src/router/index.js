@@ -4,7 +4,7 @@ import { loadLayout, loadView } from '../utils'
 const routes = [
   {
     path: '',
-    component: loadLayout('BaseInterface'),
+    component: loadLayout('BaseInterface3'),
     children: [
       {
         path: '',

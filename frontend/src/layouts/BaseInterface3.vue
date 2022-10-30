@@ -1,6 +1,5 @@
 <template>
   <section class="main-interface">
-    <!-- Left -->
     <div class="left">
       <transition name="general">
         <div v-if="$route.name === 'profile'" id="app-navigation">
@@ -9,7 +8,7 @@
             {{ profileNavButton.name }}
           </router-link>
         </div>
-
+      
         <div v-else id="app-navigation">
           <router-link v-for="(navButton, index) in navButtons" :key="index" :to="{ name: navButton.to }" class="nav-button ripple-effect">
             <font-awesome-icon class="me-3" :icon="navButton.icon" />
@@ -17,13 +16,13 @@
           </router-link>
         </div>
       </transition>
-
+      
       <div id="profile-navigation">
         <router-link v-if="$route.name == 'profile'" id="nav-button" class="profile-button" :to="{ name: 'home_view' }">
           <font-awesome-icon class="me-3" icon="arrow-left" />
           {{ $t('Back to home') }}
         </router-link>
-
+      
         <router-link v-else id="nav-button" class="nav-button profile" :to="{ name: 'profile_view' }">
           <font-awesome-icon class="me-3" icon="fa-solid fa-cog" />
           {{ $t('Profile') }}
@@ -31,12 +30,7 @@
       </div>
     </div>
 
-    <!-- Center -->
-    <div class="center">
-      <!-- <teleport to="body">
-        <vue-basic-alert ref="alert" :duration="300" />
-      </teleport> -->
-
+    <div class="right">
       <router-view v-slot="{ Component }">
         <transition name="opacity" mode="in-out">
           <component :is="Component" @display-alert="displayAlert" />
@@ -44,11 +38,9 @@
       </router-view>
     </div>
 
-    <!-- Right -->
-    <!-- <div class="right">
-      <img v-if="Object.keys(player.currentSong).length > 0" :src="mediaUrl(player.currentSong.album.cover_image_thumbnail)" :alt="player.currentSong.album.artist.name" class="img-fluid rounded shadow-sm mb-3">
+    <div class="bottom">
       <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
-    </div> -->
+    </div>
   </section>
 </template>
 
@@ -102,89 +94,56 @@ export default {
 </script>
 
 <style scoped>
-@media only screen and (max-width: 576px) {
-  .main-interface {
-    /* display: block; */
-    position: relative;
-    width: 100%;
-    height: 100vh;
-  }
-
-  .left {
-    display: none;
-    background-color: rgba(0, 0, 0, .8);
-  }
-
-  .center {
-    width: 100%;
-    height: 100vh;
-    overflow-y: scroll;
-    background-color: rgba(0, 0, 0, 0.9);
-  }
-
-  .right {
-    display: block;
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: auto;
-    background-color: rgba(0, 0, 0, 0.8);
-  }
+.main-interface {
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    "side body"
+    "side player";
+  grid-template-rows: 1fr max-content;
+  grid-template-columns: 15% 1fr;
+  width: 100%;
+  height: 100vh;
 }
 
-@media only screen and (min-width: 577px) {
-  .main-interface {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: left;
-    height: 100vh;
-    width: 100%;
-  }
-
-  .left {
-    position: sticky;
-    width: 25%;
-    padding: 1rem;
-    /* overflow-y: scroll; */
-    background-color: rgba(0, 0, 0, .8);
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-  }
-  
-  .center {
-    width: 100%;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    background-color: rgba(0, 0, 0, 0.9);
-  }
-  
-  .right {
-    position: sticky;
-    width: 25%;
-    padding: 1rem;
-    overflow: hidden;
-    background-color: rgba(0, 0, 0, 0.8);
-  }
-}
-
-.right.minimize {
-  width: 15%;
-  text-align: center;
+.main-interface .left {
+  grid-area: side;
+  position: sticky;
   padding: 1rem;
+  background-color: rgba(0, 0, 0, .8);
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
-.center::-webkit-scrollbar {
+.main-interface .right {
+  grid-area: body;
+  width: 100%;
+  /* height: 100vh; */
+  overflow-y: scroll;
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.main-interface .bottom {
+  grid-area: player;
+  /* position: fixed; */
+  /* left: 0; */
+  /* bottom: 0; */
+  background-color: rgba(38, 38, 38, 1) !important;
+  width: 100%;
+  height: auto;
+  z-index: 1000;
+}
+
+.right::-webkit-scrollbar {
   width: .25em;
 }
 
-.center::-webkit-scrollbar-track {
+.right::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
 }
 
-.center::-webkit-scrollbar-thumb {
+.right::-webkit-scrollbar-thumb {
   background-color: darkgrey;
 }
 
@@ -216,35 +175,5 @@ export default {
 
 .nav-button.profile {
   background-color: rgba(41, 128, 185, .5);
-}
-
-.ripple-effect {
-  position: relative;
-  overflow: hidden;
-}
-.ink {
-  display: block;
-  position: absolute;
-  pointer-events: none;
-  border-radius: 50%;
-  transform: scale(0);
-}
-
-.ink {
-  background: #fff;
-  opacity: 1;
-}
-
-.ink.animate {
-  -webkit-animation: ripple-effect 0.5s linear;
-  -o-animation: ripple-effect 0.5s linear;
-  animation: ripple-effect 0.5s linear;
-}
-
-@keyframes ripple-effect {
-  100% {
-    opacity: 0;
-    transform: scale(2.5);
-  }
 }
 </style>
