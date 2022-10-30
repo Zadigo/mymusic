@@ -27,7 +27,7 @@
       </div>
 
       <div>
-        <audio ref="link" preload="auto" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner = true" @canplay="showSpinner = false">
+        <audio ref="link" preload="auto" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner=true" @canplay="showSpinner=false">
           <!-- <source :src="require('../assets/music1.wav')" type="audio/mpeg"> -->
           <source :src="checkSrc(src)" type="audio/mpeg">
         </audio>
@@ -90,14 +90,20 @@ export default {
     },
     'next-song' () { 
       return true
+    },
+    'count:view' () {
+      return true
     }
   },
-  data: () => ({
-    showSpinner: true,
-    duration: 0,
-    currentTime: 0,
-    isPlaying: false
-  }),
+  data () {
+    return {
+      showSpinner: true,
+      duration: 0,
+      currentTime: 0,
+      isPlaying: false,
+      countView: false
+    }
+  },
   // mounted() {
   //   this.getAudioDetails()
   // },
@@ -133,6 +139,14 @@ export default {
     currentTime (current) {
       if (this.isPlaying && current === this.duration) {
         this.$emit('completed')
+      }
+
+      if (!this.countView && current >= 30) {
+        // Emit an event when the user has
+        // listened to a track more than
+        // 30 seconds. This is extremely
+        // useful for streaming projects
+        this.$emit('count:view')
       }
     }
   },

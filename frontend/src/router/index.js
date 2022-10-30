@@ -49,7 +49,18 @@ const routes = [
       {
         path: '/profile',
         name: 'profile_view',
-        component: loadView('AlbumView')
+        meta: {
+          requiresAuthentication: true
+        },
+        component: loadView('ProfileView')
+      },
+      {
+        path: '/charts',
+        name: 'charts_view',
+        meta: {
+          requiresAuthentication: true
+        },
+        component: loadView('ChartsView')
       }
     ]
   }

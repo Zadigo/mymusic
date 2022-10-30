@@ -2,11 +2,11 @@
   <section :class="mainInterfaceClasses" class="main-interface">
     <div class="left">
       <transition name="general">
-        <div v-if="$route.name === 'profile'" id="app-navigation">
-          <router-link v-for="(profileNavButton, index) in profileNavButtons" :key="index" :to="{ name: profileNavButton.name }" class="nav-button">
+        <div v-if="$route.name === 'profile_view'" id="app-navigation">
+          <button v-for="(profileNavButton, index) in profileNavButtons" :key="index" :class="{ active: profileNavButton.component === store.profileComponentName }" type="button" class="nav-button" @click="store.profileComponentName=profileNavButton.component">
             <font-awesome-icon class="me-3" :icon="`fa-solid fa-${profileNavButton.icon}`" />
-            <span>{{ profileNavButton.name }}</span>
-          </router-link>
+            <span>{{ $t(profileNavButton.name) }}</span>
+          </button>
         </div>
       
         <div v-else id="app-navigation">
@@ -18,8 +18,8 @@
       </transition>
       
       <div id="profile-navigation">
-        <router-link v-if="$route.name == 'profile'" id="nav-button" class="profile-button" :to="{ name: 'home_view' }">
-          <font-awesome-icon class="me-3" icon="arrow-left" />
+        <router-link v-if="$route.name == 'profile_view'" class="nav-button profile-button" :to="{ name: 'home_view' }">
+          <font-awesome-icon class="me-3" icon="fa-solid fa-arrow-left" />
           <span>{{ $t('Back to home') }}</span>
         </router-link>
       
@@ -51,6 +51,7 @@
 <script>
 import { useUrls } from '@/composables/utils'
 import { usePlayer } from '../store/player'
+import { useAuthentication } from '@/store/authentication'
 
 import BaseMusicPlayerVue from './BaseMusicPlayer.vue'
 // import VueBasicAlert from 'vue-basic-alert'
@@ -62,9 +63,11 @@ export default {
     // VueBasicAlert
   },
   setup () {
+    const store = useAuthentication()
     const { mediaUrl } = useUrls()
     const player = usePlayer()
     return {
+      store,
       mediaUrl,
       player
     }
@@ -75,7 +78,20 @@ export default {
       navButtons: [
         { name: 'Home', to: 'home_view', icon: 'home' },
         { name: 'Search', to: 'search_view', icon: 'magnifying-glass' },
-        { name: 'Playlists', to: 'playlists_view', icon: 'list' }
+        { name: 'Playlists', to: 'playlists_view', icon: 'list' },
+        { name: 'Charts', to: 'charts_view', icon: 'chart-simple' }
+      ],
+      profileNavButtons: [
+        // { name: 'Home', to: 'home_view', icon: 'home'},
+        { name: 'Account', component: 'profile-overview', icon: 'home' },
+        { name: 'Notifications', component: 'notifications-choices', icon: 'bell' },
+        // { name: 'available_plans', icon: 'credit-card' },
+        // { name: 'password', icon: 'key' },
+        // { name: 'privacy_settings', icon: 'lock' },
+        // { name: 'recover_playlists', icon: 'redo-alt' },
+        // { name: 'receipts', icon: 'receipt' },
+        // { name: 'apps', icon: 'app'},
+        // { name: 'delete_account', icon: 'trash-alt'}s
       ]
     }
   },
