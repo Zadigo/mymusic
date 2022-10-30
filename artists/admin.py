@@ -1,7 +1,7 @@
 from django.contrib import admin
 from mutagen.mp3 import MP3
 
-from artists.models import Album, Artist, Song
+from artists.models import Album, Artist, Listener, Song
 
 
 @admin.register(Artist)
@@ -37,3 +37,8 @@ class SongsAdmin(admin.ModelAdmin):
             # seconds = round(int(seconds), 3)
             # duration = datetime.timedelta(minutes=int(minutes), seconds=seconds)
             # song.duration = duration
+
+
+@admin.register(Listener)
+class ListenerAdmin(admin.ModelAdmin):
+    list_display = ['song', 'was_seeked', 'created_on']

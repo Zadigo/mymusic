@@ -1,5 +1,9 @@
 import secrets
+from calendar import monthrange
+
 from django.utils.crypto import get_random_string
+from django.utils.timezone import now
+
 
 def to_snake_case(value):
     value = value.lower()
@@ -28,3 +32,8 @@ def artist_cover_image_path(instance, name):
     artist_name = instance.name
     artist_name = artist_name.replace(' ', '_').lower()
     return f'artists/{artist_name}/{new_name}.{ext}'
+
+
+def number_of_days_in_month():
+    current_date = now()
+    return monthrange(current_date.year, current_date.month)

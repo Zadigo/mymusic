@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { useUrls } from '@/composables/utils'
 
 const usePlayer = defineStore('player', {
   state: () => ({
@@ -15,6 +16,13 @@ const usePlayer = defineStore('player', {
     }
   },
   getters: {
+    getCurrentSongFile () {
+      if (Object.keys(this.currentSong).length === 0) {
+        return ''
+      }
+      const { mediaUrl } = useUrls()
+      return mediaUrl(this.currentSong.song_file)
+    },
     isCurrentSong () {
       return (song) => {
         return song.name === this.currentSong.name

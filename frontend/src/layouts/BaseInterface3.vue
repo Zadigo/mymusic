@@ -41,7 +41,8 @@
     <div class="bottom">
       <div class="container">
         <div class="px-5 mx-5">
-          <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
+          <!-- <base-music-player-vue :src="player.getCurrentSongFile" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" /> -->
+          <base-music-player-vue :src="player.getCurrentSongFile" :toggle-play="player.isPlaying" />
         </div>
       </div>
     </div>

@@ -1,4 +1,3 @@
-from winreg import CreateKeyEx
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Count, Index, UniqueConstraint
@@ -12,7 +11,7 @@ from mutagen import id3
 from mutagen.mp3 import MP3
 
 from artists.choices import Genres, GeographicAreas, Nationalities
-from artists.managers import AlbumManager, SongManager
+from artists.managers import AlbumManager, ListenerManager, SongManager
 from artists.utils import artist_cover_image_path, cover_image_path, song_path
 from artists.validators import song_file_validator, validate_date_of_birth
 
@@ -191,15 +190,26 @@ class Song(models.Model):
 
 
 class Listener(models.Model):
-    user = None
+    """Creates record for when a user has 
+    listened to a given track for at 
+    least 30 or more seconds"""
+    user = models.ForeignKey(
+        USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
     song = models.ForeignKey(
         Song,
         on_delete=models.CASCADE
     )
+    was_seeked = models.BooleanField(default=False)
+    seek_time = models.PositiveIntegerField(default=0)
     created_on = models.DateTimeField(auto_now=True)
 
+    objects = ListenerManager()
+
     def __str__(self):
-        return self.song
+        return str(self.song)
 
 
 @receiver(post_save, sender=Song)

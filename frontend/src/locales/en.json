@@ -15,7 +15,7 @@
     "Riddims": "Riddims",
     "With": "With {artist}",
     "Discography": "Discography",
-    "Search x songs...": "Search {count} songs",
+    "Search x songs...": "Search {count} song | Search {count} songs",
     "Your playlists": "Your playlists",
     "See all": "See all",
     "Songs": "Songs",
@@ -23,5 +23,8 @@
     "Search an area": "Search an area",
     "Novelties": "Novelties",
     "Back to home": "Back to home",
-    "Account": "Account"
+    "Account": "Account",
+    "Charts": "Charts",
+    "songs": "songs",
+    "singles": "singles"
 }

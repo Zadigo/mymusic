@@ -7,7 +7,7 @@
         </button>
       
         <button :class="[!canPlay ? 'disabled' : null]" type="button" class="btn btn-primary mx-1" @click="toggleAudioPlay">
-          <font-awesome-icon v-if="togglePlay" icon="fa-solid fa-pause"></font-awesome-icon>
+          <font-awesome-icon v-if="isPlaying" icon="fa-solid fa-pause"></font-awesome-icon>
           <font-awesome-icon v-else icon="fa-solid fa-play"></font-awesome-icon>
         </button>
       
@@ -27,9 +27,10 @@
       </div>
 
       <div>
-        <audio ref="link" preload="auto" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner=true" @canplay="showSpinner=false">
+        <audio ref="audioPlayer" preload="metadata" @loadedmetadata="updateAudioDetails" @timeupdate="updateAudioDetails" @waiting="showSpinner=true" @canplay="showSpinner=false">
           <!-- <source :src="require('../assets/music1.wav')" type="audio/mpeg"> -->
-          <source :src="checkSrc(src)" type="audio/mpeg">
+          <!-- <source :src="checkSrc(src)" type="audio/mpeg"> -->
+          <source :src="src" type="audio/mpeg">
         </audio>
   
         <div class="audio-controls">
@@ -39,7 +40,7 @@
               <div class="track-selection"></div>
             </div>
           
-            <div :style="{ left: `${progress}%` }" class="handle"></div>
+            <div :style="{ left: `${progressPercentage}%` }" class="handle"></div>
           </div>
         </div>
   
@@ -101,12 +102,12 @@ export default {
       duration: 0,
       currentTime: 0,
       isPlaying: false,
-      countView: false
+      
+      countView: false,
+      seekedTime: 0,
+      viewEmitLimit: 30
     }
   },
-  // mounted() {
-  //   this.getAudioDetails()
-  // },
   computed: {
     formattedDuration () {
       return this.formatTime(this.duration)
@@ -123,17 +124,25 @@ export default {
     },
     canPlay () {
       return this.checkSrc(this.src) !== null
+    },
+    wasSeeked () {
+      return this.seekedTime > 0
     }
   },
   watch: {
     src (current, previous) {
+      console.log(current, previous)
       if (current !== previous) {
-        this.$refs.link.src = this.checkSrc(current)
+        // NOTE: We have to manually set the source
+        // on the audio since once mounted, Vue does not
+        // automatically remount the tag with the source
+        this.$refs.audioPlayer.src = current
         this.updateAudioDetails()
-        this.toggleAudioPlay()
+        // this.toggleAudioPlay()
       }
     },
     togglePlay () {
+      // FIXME:
       this.toggleAudioPlay()
     },
     currentTime (current) {
@@ -141,7 +150,7 @@ export default {
         this.$emit('completed')
       }
 
-      if (!this.countView && current >= 30) {
+      if (!this.countView && current >= this.seekedTime) {
         // Emit an event when the user has
         // listened to a track more than
         // 30 seconds. This is extremely
@@ -164,14 +173,19 @@ export default {
       }
     },
     toggleAudioPlay () {
+      // FIXME:
       try {
-        if (this.$refs.link.paused) {
+        // if (!this.$refs?.audioPlayer.src || this.$refs?.audioPlayer.src === '') {
+        //   this.$refs?.audioPlayer.src = this.src
+        // }
+
+        if (this.$refs?.audioPlayer.paused) {
           this.isPlaying = true
-          this.$refs.link.play()
+          this.$refs.audioPlayer.play()
           this.$emit('playing')
         } else {
           this.isPlaying = false
-          this.$refs.link.pause()
+          this.$refs.audioPlayer.pause()
           this.$emit('paused', this.currentTime)
         }
       } catch (error) {
@@ -180,13 +194,13 @@ export default {
       }
     },
     updateAudioDetails () {
-      this.duration = this.$refs.link.duration
-      this.currentTime = this.$refs.link.currentTime
+      this.duration = this.$refs.audioPlayer.duration
+      this.currentTime = this.$refs.audioPlayer.currentTime
     },
     handleSkipPrevious () {
       try {
         this.$emit('skipped-backwards', this.formattedCurrentTime)
-        this.$refs.link.currentTime = 0
+        this.$refs.audioPlayer.currentTime = 0
       } catch (error) {
         console.error(error)
       }
@@ -196,36 +210,39 @@ export default {
       this.$emit('next-song')
     },
     handleProgressBarClick (e) {
-      // const previousTime = this.currentTime
-      // const currentTime = (this.duration * e.offsetX) / this.$refs.progress.offsetWidth
-
-      // this.currentTime = currentTime
-      // this.$refs.link.currentTime = currentTime
-      // this.$emit('skipped', [previousTime, this.currentTime])
+      // When the user seeks a time on the track
       const currentTime = (this.duration * e.offsetX) / this.$refs.videoProgress.offsetWidth
       this.currentTime = currentTime
-      this.$refs.videoPlayer.currentTime = currentTime
+      this.$refs.audioPlayer.currentTime = currentTime
+
+      // Facilitates the way in which an event
+      // is sent when the user has listened
+      // to at least 30s of the track
+      this.seekedTime = currentTime
+      this.viewEmitLimit = currentTime + 30
+      
       this.$emit('update:time', currentTime)
     },
     handleDrag (e) {
-      if (e.x !== 0 && e.y !== 0) {
-        const track = this.$refs.progress
-        if (track) {
-          let drag = 0
-          const left = e.pageX - track.getBoundingClientRect().left
-          drag = left
+      e
+      // if (e.x !== 0 && e.y !== 0) {
+      //   const track = this.$refs.progress
+      //   if (track) {
+      //     let drag = 0
+      //     const left = e.pageX - track.getBoundingClientRect().left
+      //     drag = left
 
-          if (left < 0) {
-            drag = 0
-          }
+      //     if (left < 0) {
+      //       drag = 0
+      //     }
 
-          if (left > track.offsetWidth) {
-            drag = track.offsetWidth
-          }
+      //     if (left > track.offsetWidth) {
+      //       drag = track.offsetWidth
+      //     }
 
-          console.log(this.duration * (drag / track.offsetWidth))
-        }
-      }
+      //     console.log(this.duration * (drag / track.offsetWidth))
+      //   }
+      // }
     },
     formatTime (value) {
       let hours = Math.floor(value / 3600)
