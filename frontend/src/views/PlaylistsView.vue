@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import { usePlaylists } from '@/store/playlists'
+import { usePlaylists } from '@/store/playlists'
   
 import ListArtistsVue from '../components/playlists/ListArtists.vue'
 import ListAlbumsVue from '../components/playlists/ListAlbums.vue'
@@ -42,14 +42,16 @@ export default {
       store
     }
   },
-  data: () => ({
-    displayChoices: [
-      { name: 'Playlists', component: 'list-playlists-vue' },
-      { name: 'Artists', component: 'list-artists-vue' },
-      { name: 'Albums', component: 'list-albums-vue' }
-    ],
-    activeComponent: 'list-playlists-vue'
-  }),
+  data () {
+    return {
+      displayChoices: [
+        { name: 'Playlists', component: 'list-playlists-vue' },
+        { name: 'Artists', component: 'list-artists-vue' },
+        { name: 'Albums', component: 'list-albums-vue' }
+      ],
+      activeComponent: 'list-playlists-vue'
+    }
+  },
   methods: {
     async create () {
       try {

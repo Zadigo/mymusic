@@ -11,6 +11,7 @@ const usePlaylists = defineStore('playlists', {
   }),
   actions: {
     setPlaylist (id) {
+      this.loadFromCache()
       const numberId = toNumber(id)
       this.currentPlaylist = _.find(this.playlists, ['id', numberId])
     },
@@ -57,7 +58,7 @@ const usePlaylists = defineStore('playlists', {
       if (forceUpdate) {
         this.playlists = this.$session.retrieve('playlists')
       } else {
-        if (Object.keys(this.currentPlaylist).length === 0) {
+        if (this.playlists.length === 0) {
           this.playlists = this.$session.retrieve('playlists')
         }
       }

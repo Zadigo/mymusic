@@ -3,12 +3,12 @@
     "Search": "Rechercher",
     "Playlists": "Playlists",
     "Profile": "Profil",
-    "Advanced search": "Recherche avancee",
-    "Explore all genres": "Explore all genres",
-    "Create playlist": "Creer une playlist",
-    "Created by": "Creee par {user}",
-    "k subscribers": "{count} abonne | {count} abonnes",
-    "Display by genre": "Display by genre",
+    "Advanced search": "Recherche avancée",
+    "Explore all genres": "Explorer tout les genres",
+    "Create playlist": "Créer une playlist",
+    "Created by": "Créée par {user}",
+    "k subscribers": "{count} abonné | {count} abonnés",
+    "Display by genre": "Grouper par genre",
     "Albums": "Albums",
     "Singles": "Singles",
     "Mixtapes": "Mixtapes",
@@ -19,5 +19,7 @@
     "Your playlists": "Vos playlists",
     "See all": "Voir tout",
     "Songs": "Morceaux",
-    "Artists": "Artistes"
+    "Artists": "Artistes",
+    "Search an area": "Rechercher une one",
+    "Novelties": "Nouveautés"
 }

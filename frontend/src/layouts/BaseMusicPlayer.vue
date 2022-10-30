@@ -7,13 +7,21 @@
       </audio>
 
       <div class="audio-controls">
-        <div class="progress-bar-container">
+        <div class="music-control-progress-container">
+          <div ref="videoProgress" class="track" @click.stop.prevent="handleProgressBarClick($event)">
+            <div :style="{ width: `${progressPercentage}%` }" class="track-low"></div>
+            <div class="track-selection"></div>
+          </div>
+        
+          <div :style="{ left: `${progress}%` }" class="handle"></div>
+        </div>
+        <!-- <div class="progress-bar-container">
           <div ref="progress" class="progress-bar" @click.prevent.stop="handleProgressBarClick">
             <div :style="{ width: progressPercentage + '%' }" class="progress-bar-completed">
               <div :style="{ left: progressPercentage + '%' }" class="progress-indicator" draggable @mousedown="handleDrag" />
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="row">
@@ -62,14 +70,30 @@ export default {
     }
   },
   emits: {
-    'player-error': () => true,
-    'player-ready': () => true,
-    'playing': () => true,
-    'completed': () => true,
-    'paused': () => true,
-    'skipped-backwards': () => true,
-    'skipped': () => true,
-    'next-song': () => true
+    'player-error' () { 
+      return true
+    },
+    'player-ready' () { 
+      return true
+    },
+    'playing' () { 
+      return true
+    },
+    'completed' () { 
+      return true
+    },
+    'paused' () { 
+      return true
+    },
+    'skipped-backwards' () { 
+      return true
+    },
+    'update:time' () { 
+      return true
+    },
+    'next-song' () { 
+      return true
+    }
   },
   data: () => ({
     showSpinner: true,
@@ -161,12 +185,16 @@ export default {
       this.$emit('next-song')
     },
     handleProgressBarClick (e) {
-      const previousTime = this.currentTime
-      const currentTime = (this.duration * e.offsetX) / this.$refs.progress.offsetWidth
+      // const previousTime = this.currentTime
+      // const currentTime = (this.duration * e.offsetX) / this.$refs.progress.offsetWidth
 
+      // this.currentTime = currentTime
+      // this.$refs.link.currentTime = currentTime
+      // this.$emit('skipped', [previousTime, this.currentTime])
+      const currentTime = (this.duration * e.offsetX) / this.$refs.videoProgress.offsetWidth
       this.currentTime = currentTime
-      this.$refs.link.currentTime = currentTime
-      this.$emit('skipped', [previousTime, this.currentTime])
+      this.$refs.videoPlayer.currentTime = currentTime
+      this.$emit('update:time', currentTime)
     },
     handleDrag (e) {
       if (e.x !== 0 && e.y !== 0) {
@@ -228,41 +256,51 @@ export default {
   background: #41b883;
 }
 
-.progress-bar {
+.music-control-progress-container {
   position: relative;
-  /* display: flex;
-  flex: 1;
-  align-items: center; */
-  height: 0.5rem;
-  border-radius: 6px;
-  background-color: #000;
-  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+  width: 100% !important;
+  height: 20px;
+  margin-bottom: 1rem;
 }
 
-.progress-indicator {
+.music-control-progress-container .track {
   position: absolute;
-  left: 0;
-  height: 1.3rem;
-  width: 1.3rem;
-  border-radius: 1.3rem;
-  background-color: #fff;
-  border: 1px solid #000;
-  bottom: -0.5rem;
-  /* box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important; */
   cursor: pointer;
-  transition: all .3s ease;
+  background-color: white;
+  background-repeat: repeat-x;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 10%);
+  border-radius: 4px;
+  height: 10px;
+  width: 100%;
+  margin-top: -5px;
+  top: 50%;
+  left: 0;
 }
 
-.progress-indicator:hover {
-  animation: wide .3s ease-in;
+.music-control-progress-container .track-low {
+  position: absolute;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  background: transparent;
+  box-sizing: border-box;
+  border-radius: 4px;
+  background-color: #0d6efd;
+  /* width: 50%; */
 }
 
-@keyframes wide {
-  0% {
-    transform: scale(1, 1);
-  }
-  99% {
-    transform: scale(1.1, 1.1);
-  }
+.music-control-progress-container .handle {
+  position: absolute;
+  background-color: #fff !important;
+  background-repeat: repeat-x;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  filter: none;
+  border: 0 solid transparent;
+  border-radius: 50%;
+  margin-left: -10px;
 }
 </style>

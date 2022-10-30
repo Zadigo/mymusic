@@ -1,3 +1,7 @@
+<doc>
+  List a set of songs 
+</doc>
+
 <template>
   <div class="list-group">
     <!-- TODO: Make this reusable componenent -->
@@ -8,22 +12,22 @@
           <font-awesome-icon icon="fa-solid fa-e" class="ms-3" />
         </span>
 
-        <router-link :to="{ name: 'artist_view', params: { id: 'nnoin' } }" class="text-muted text-decoration">
+        <router-link :to="{ name: 'artist_view', params: { id: song.album.artist.id } }" class="text-muted text-decoration">
           {{ song.album.artist.name }}
         </router-link>
       </div>
 
       <div class="btn-group">
         <button v-if="isPlaying && store.isCurrentSong(song)" type="button" class="btn btn-primary btn-sm" @click="store.pause">
-          <font-awesome-icon icon="fa-solid fa-pause"></font-awesome-icon>
+          <font-awesome-icon icon="fa-solid fa-pause" />
         </button>
 
         <button v-else type="button" class="btn btn-primary btn-sm" @click="store.play(song)">
-          <font-awesome-icon icon="fa-solid fa-play"></font-awesome-icon>
+          <font-awesome-icon icon="fa-solid fa-play" />
         </button>
 
         <button type="button" class="btn btn-primary btn-sm">
-          <font-awesome-icon icon="fa-solid fa-heart"></font-awesome-icon>
+          <font-awesome-icon icon="fa-solid fa-heart" />
         </button>
 
         <!-- <button type="button" class="btn btn-primary btn-sm">

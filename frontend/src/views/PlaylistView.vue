@@ -1,11 +1,15 @@
+<doc>
+  shows the user his playlists
+</doc>
+
 <template>
   <base-detail-page-vue :image="currentPlaylist.cover_image" class="text-light position-relative">
     <template #default>
-      <div class="d-flex flex-column justify-content-start">
+      <div class="d-flex flex-column justify-content-left">
         <h1 class="display-2 fw-bold">{{ currentPlaylist.name }}</h1>
         <p>{{ $t('k subscribers', { count: 34.4 }) }}</p>
 
-        <div class="actions p-3 mt-1 bg-white text-center rounded shadow-sm">
+        <div class="actions p-3 mt-1 bg-white text-center rounded shadow-sm w-25">
           <button v-if="store._isPlaying" type="button" class="btn btn-light shadow-none" @click="store.stopPlaylist">
             <font-awesome-icon icon="fa-solid fa-pause" />
           </button>
@@ -30,18 +34,18 @@
     <template #content>
       <div class="row my-5">
         <div class="col-12 mb-2">
-          <div class="card bg-dark text-light">
-            <div class="card-body">
-              <input v-model="song.attributes" :placeholder="`Search ${currentPlaylist.songs.length} songs...`" type="text" class="form-control p-2">
-
-              <div class="form-check form-switch">
+          <base-card>
+            <template #body>
+              <input v-model="song.attributes" :placeholder="$t('Search x songs...', { count: currentPlaylist.songs.length })" type="text" class="form-control p-2">
+    
+              <div class="form-check form-switch mt-4">
                 <input id="by-genre" v-model="displayByGenre" class="form-check-input" type="checkbox" role="switch">
                 <label class="form-check-label" for="by-genre">
                   {{ $t('Display by genre') }}
                 </label>
               </div>
-            </div>
-          </div>
+            </template>
+          </base-card>
         </div>
 
         <div class="col-12">
@@ -59,6 +63,7 @@ import _ from 'lodash'
 import { usePlaylists } from '@/store/playlists'
 import { storeToRefs } from 'pinia'
 
+import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseDetailPageVue from '@/layouts/BaseDetailPage.vue'
 import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
 import BaseCategorizedSongsListGroupVue from '@/layouts/BaseCategorizedSongsListGroup.vue'
@@ -66,6 +71,7 @@ import BaseCategorizedSongsListGroupVue from '@/layouts/BaseCategorizedSongsList
 export default {
   name: 'PlaylistView',
   components: {
+    BaseCard,
     BaseDetailPageVue,
     BaseCategorizedSongsListGroupVue,
     BaseSongsListGroupVue
@@ -96,7 +102,10 @@ export default {
         return (
           song.name.includes(this.song.attributes) ||
           song.album.name.includes(this.song.attributes) ||
-          song.album.artist.name.includes(this.song.attributes)
+          song.album.artist.name.includes(this.song.attributes) ||
+          song.name.toLowerCase().includes(this.song.attributes) ||
+          song.album.name.toLowerCase().includes(this.song.attributes) ||
+          song.album.artist.name.toLowerCase().includes(this.song.attributes)
         )
       })
     }

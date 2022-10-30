@@ -45,12 +45,10 @@
     </div>
 
     <!-- Right -->
-    <div class="right">
+    <!-- <div class="right">
       <img v-if="Object.keys(player.currentSong).length > 0" :src="mediaUrl(player.currentSong.album.cover_image_thumbnail)" :alt="player.currentSong.album.artist.name" class="img-fluid rounded shadow-sm mb-3">
       <base-music-player-vue :src="mediaUrl(player.currentSong.song_file)" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" />
-      <!-- <keep-alive>
-      </keep-alive> -->
-    </div>
+    </div> -->
   </section>
 </template>
 
