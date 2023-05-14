@@ -1,10 +1,14 @@
 from artists.serializers import AlbumSerializer
 from rest_framework import fields
 from rest_framework.serializers import Serializer
-
+from django.shortcuts import get_list_or_404, get_object_or_404
 from playlists.choices import UserCustomSort
+from artists.models import Song
+from playlists.models import UserPlaylist
 
 # TODO:
+
+
 class UserSerializer(Serializer):
     id = fields.IntegerField()
     username = fields.CharField()
@@ -40,7 +44,7 @@ class SortPlaylistValidator(Serializer):
         choices=UserCustomSort.choices,
         default=UserCustomSort.ALBUM_NAME
     )
-    
+
     def sort_items(self, playlist):
         songs = playlist.songs.all()
         method = self.validated_data['user_sort']
@@ -61,3 +65,17 @@ class SortPlaylistValidator(Serializer):
         playlist.user_sort = self.validated_data['user_sort']
         playlist.save()
         return songs
+
+
+class PlaylistFromSongs(Serializer):
+    """From a selection of songs, create
+    a new user playlist"""
+
+    songs = fields.ListField(required=True)
+
+    def create(self, validated_data):
+        playlist = get_object_or_404(UserPlaylist, id=1)
+        songs = get_list_or_404(Song, id__in=validated_data['songs'])
+        for song in songs:
+            playlist.songs.add(song)
+        return PlaylistSerializer(instance=playlist)

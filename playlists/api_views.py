@@ -179,4 +179,4 @@ def merge_playlists_view(request, **kwargs):
 
 @api_view(['post'])
 def create_playlist_from_songs(request, **kwargs):
-    pass
+    songs = None

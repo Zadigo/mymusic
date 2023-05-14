@@ -1,15 +1,15 @@
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
-from mymusic.utils import create_response, map_list
 from rest_framework.decorators import api_view
 
 from artists.models import Album, Artist
 from artists.serializers import ArtistSerializer2, SearchValidator
+from mymusic.utils import create_response, map_list
 
 
 @api_view(['post'])
 def artist_details_view(request, reference):
-    """Return the detail of a given arti"""
+    """Return the detail of a given artist"""
     artist = get_object_or_404(Artist, id=reference)
     serializer = ArtistSerializer2(instance=artist)
     return create_response(serializer=serializer)

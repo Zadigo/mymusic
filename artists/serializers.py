@@ -1,6 +1,6 @@
+from django.db.models import Q
 from rest_framework import fields
 from rest_framework.serializers import Serializer
-from django.db.models import Q
 
 from artists.models import Song
 
@@ -49,12 +49,17 @@ class AlbumSerializer(Serializer):
 
 
 class SearchValidator(Serializer):
+    """For searching the database"""
+
     name = fields.CharField()
     area = fields.ListField(required=False, allow_null=True)
     year = fields.IntegerField(required=False, allow_null=True)
     genre = fields.CharField(required=False, allow_null=True)
 
     def search(self):
+        """Returns the four first instances of
+        a search on a given artist, album or genre"""
+
         name = self.validated_data['name']
         area = self.validated_data.get('area', [])
         year = self.validated_data.get('year', None)
@@ -66,12 +71,16 @@ class SearchValidator(Serializer):
             Q(album__name__icontains=name)
         )
 
+        # valid_areas = list(filter(lambda x: x != '', area))
         valid_areas = [value for value in area if value != '']
         if valid_areas:
             queryset = queryset.filter(album__artist__area__in=valid_areas)
 
         if genre is not None:
             queryset = queryset.filter(genre__iexact=genre)
+
+        if year is not None:
+            queryset = queryset.filter(added_on__eq=year)
 
         return SongSerializer2(instance=queryset[:4], many=True)
 
