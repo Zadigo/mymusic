@@ -5,10 +5,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "My Music",
+            "name": "Django: My Music",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}\\manage.py",
+            "presentation": {
+                "hidden": false,
+                "group": "My Music",
+                "order": 1
+            },
             "args": [
                 "runserver"
             ],

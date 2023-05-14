@@ -1,13 +1,12 @@
 from django.contrib.auth import get_user_model
 from django.db import models
-from django.db.models import Count, Index, UniqueConstraint
+from django.db.models import Count, Index
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.functional import cached_property
-from django.utils.timezone import make_aware, now
+from django.utils.timezone import now
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
-from mutagen import id3
 from mutagen.mp3 import MP3
 
 from artists.choices import Genres, GeographicAreas, Nationalities
@@ -19,6 +18,8 @@ USER_MODEL = get_user_model()
 
 
 class Artist(models.Model):
+    """Represents an artist"""
+
     name = models.CharField(
         max_length=100,
         unique=True,
@@ -81,9 +82,20 @@ class Artist(models.Model):
     @property
     def number_of_followers(self):
         return self.followers.all().count()
+    
+    @cached_property
+    def age(self):
+        current_year = now().year
+        return current_year - self.date_of_birth.year
+
+    @property
+    def is_birthday(self):
+        current_date = now()
+        return current_date.day == self.date_of_birth.day
 
 
 class Album(models.Model):
+    """Represents an album"""
     artist = models.ForeignKey(
         Artist,
         on_delete=models.CASCADE
@@ -106,8 +118,8 @@ class Album(models.Model):
         options={'quality': 90}
     )
     producer = models.CharField(max_length=100)
-    # number_of_plays = models.PositiveIntegerField(default=0)
-    
+    number_of_plays = models.PositiveIntegerField(default=0)
+
     is_single = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
 
@@ -122,14 +134,20 @@ class Album(models.Model):
         indexes = [
             Index(fields=['artist', 'name', 'genre'])
         ]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['name', 'artist'],
+                name='unique_album_name_per_artist'
+            )
+        ]
 
     def __str__(self):
-        return self.name
+        return f'Album: {self.name}'
 
     @property
     def number_of_songs(self):
         return self.song_set.all().aggregate(Count('id'))['id__count']
-    
+
     @property
     def release_year(self):
         return self.release_date.year
@@ -140,6 +158,8 @@ class Album(models.Model):
 
 
 class Song(models.Model):
+    """Represents a song in an
+    album"""
     album = models.ForeignKey(
         Album,
         on_delete=models.CASCADE
@@ -178,11 +198,14 @@ class Song(models.Model):
             Index(fields=['name', 'genre', 'album'])
         ]
         # constraints = [
-        #     UniqueConstraint(fields=['name', 'album'], name='unique_song_per_album')
+        #     UniqueConstraint(
+        #         fields=['name', 'album'],
+        #         name='unique_song_per_album'
+        #     )
         # ]
 
     def __str__(self):
-        return self.name
+        return f'Song n°{self.pk}: {self.album}'
 
     @cached_property
     def fomatted_duration(self):
@@ -190,9 +213,10 @@ class Song(models.Model):
 
 
 class Listener(models.Model):
-    """Creates record for when a user has 
-    listened to a given track for at 
-    least 30 or more seconds"""
+    """Represents a user who has listened
+    to a track for at least 30 or 
+    more seconds"""
+
     user = models.ForeignKey(
         USER_MODEL,
         on_delete=models.SET_NULL,
@@ -209,7 +233,7 @@ class Listener(models.Model):
     objects = ListenerManager()
 
     def __str__(self):
-        return str(self.song)
+        return f'Listner n°{self.pk}: {self.song}'
 
 
 @receiver(post_save, sender=Song)
@@ -217,13 +241,12 @@ def create_file_metadata(instance, created, **kwargs):
     if created:
         if instance.song_file.path is not None:
             mp3_file = MP3(instance.song_file.path)
-            
+
             instance.bitrate = mp3_file.info.bitrate
             # duration_in_minutes = mp3_file.info.length / 60
             # instance.duration = duration_in_minutes
             instance.duration = round(mp3_file.info.length, 5)
             instance.save()
-
 
 
 # @receiver(post_save, sender=Song)
@@ -246,9 +269,9 @@ def create_file_metadata(instance, created, **kwargs):
 #                 tags.save()
 
 #             tags[u"SYLT::'en'"] = id3.SYLT(
-#                 encoding=3, 
+#                 encoding=3,
 #                 lang=u'eng',
-#                 desc=u'desc', 
+#                 desc=u'desc',
 #                 text=''
 #             )
 
