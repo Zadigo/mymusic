@@ -42,7 +42,7 @@
       <div class="container">
         <div class="px-5 mx-5">
           <!-- <base-music-player-vue :src="player.getCurrentSongFile" :toggle-play="player.isPlaying" @playing="player.play(player.currentSong)" @paused="player.pause()" /> -->
-          <base-music-player-vue :src="player.getCurrentSongFile" :toggle-play="player.isPlaying" />
+          <base-music-player-vue :src="player.getCurrentSongFile" :toggle-play="player.isPlaying" @count:view="handleCountView" @paused="player.pause()" @playing="player.resume()" />
         </div>
       </div>
     </div>
@@ -93,7 +93,8 @@ export default {
         // { name: 'receipts', icon: 'receipt' },
         // { name: 'apps', icon: 'app'},
         // { name: 'delete_account', icon: 'trash-alt'}s
-      ]
+      ],
+      countViewSent: false
     }
   },
   computed: {
@@ -121,6 +122,17 @@ export default {
     },
     displayAlert (type, title, content) {
       this.$refs.alert.showAlert(type, content, title)
+    },
+    async handleCountView () {
+      // Sends a view when the user has listened
+      // to at least 30 seconds of a song
+      // try {
+      //   const response = await this.$http.post('artists/view')
+      //   this.countViewSent = true
+      //   console.log(response.data)
+      // } catch (e) {
+      //   console.log(e)
+      // }
     }
   }
 }

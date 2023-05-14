@@ -13,6 +13,12 @@ const usePlayer = defineStore('player', {
     },
     pause () {
       this.isPlaying = false
+    },
+    resume () {
+      // Resume a current song
+      if (this.hasSong) {
+        this.isPlaying = true
+      }
     }
   },
   getters: {
@@ -27,6 +33,11 @@ const usePlayer = defineStore('player', {
       return (song) => {
         return song.name === this.currentSong.name
       }
+    },
+    hasSong () {
+      // Whether the player has a loaded song
+      const keys = Object.keys(this.currentSong)
+      return keys.length > 0
     }
   }
 })

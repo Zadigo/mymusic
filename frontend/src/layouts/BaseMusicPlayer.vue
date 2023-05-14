@@ -173,7 +173,8 @@ export default {
       }
     },
     toggleAudioPlay () {
-      // FIXME:
+      // FIXME: Apparently this section creates a recursive
+      // update of itself. This needs to be fixed
       try {
         // if (!this.$refs?.audioPlayer.src || this.$refs?.audioPlayer.src === '') {
         //   this.$refs?.audioPlayer.src = this.src
@@ -219,7 +220,17 @@ export default {
       // is sent when the user has listened
       // to at least 30s of the track
       this.seekedTime = currentTime
-      this.viewEmitLimit = currentTime + 30
+
+      const viewEmitLimit = currentTime + 30
+      if (viewEmitLimit > this.duration) {
+        // TODO: If the difference between the seeked
+        // time and the duration of the track is less
+        // than 30s then we should consider the track
+        // to not be listened to?
+        this.viewEmitLimit = this.duration
+      } else {
+        this.viewEmitLimit = viewEmitLimit
+      }
       
       this.$emit('update:time', currentTime)
     },
@@ -254,7 +265,6 @@ export default {
       seconds = seconds < 10 ? '0' + seconds : seconds
 
       if (hours > 0) {
-        // pass
         return ':'
       } else {
         return `${minutes}:${seconds}`

@@ -21,15 +21,15 @@
                   <h4 class="fw-bold">{{ item.name }}</h4>
                   <p>{{ $tc('k listeners', { count: item.listeners }) }} / 15 auditeur/mois</p>
                   <div class="btn-group">
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary btn-rounded shadow-none">
                       <!-- v-if="isPlaying" -->
                       <font-awesome-icon icon="fa-solid fa-heart" />
                       <!-- <font-awesome-icon v-else icon="fa-solid fa-play"></font-awesome-icon> -->
                     </button>
                     
-                    <button type="button" class="btn btn-primary">
+                    <button type="button" class="btn btn-primary btn-rounded shadow-none">
                       <!-- v-if="isPlaying" -->
-                      <font-awesome-icon icon="fa-solid fa-pause" />
+                      <font-awesome-icon icon="fa-solid fa-play" />
                       <!-- <font-awesome-icon v-else icon="fa-solid fa-play"></font-awesome-icon> -->
                     </button>
                   </div>

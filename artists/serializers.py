@@ -123,4 +123,5 @@ class ChartSerializer(Serializer):
     id = fields.IntegerField()
     name = fields.CharField()
     album = SimpleAlbumSerializer()
+    song_file = fields.FileField()
     listeners = fields.IntegerField()
