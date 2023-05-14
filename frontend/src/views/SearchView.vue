@@ -1,8 +1,13 @@
+<doc>
+  User searches for an album or an artist
+</doc>
+
 <template>
   <section id="search" class="p-5">
+    <!-- Search -->
     <div class="row">
       <div class="col-12">
-        <input v-model="searchedItem.name" :placeholder="$t('Search')" type="search" class="form-control p-2 mb-3" @keyup="search">
+        <input v-model="searchedItem.name" :placeholder="$t('Search')" type="search" class="form-control p-2 mb-3 bg-dark text-light" @keyup="search">
         <!-- NOTE: For testing -->
         <!-- <button type="button" @click="search">{{ $t('Search') }}</button> -->
 
@@ -10,6 +15,7 @@
           {{ $t('Advanced search') }}
         </a>
         
+        <!-- Advanced search -->
         <base-card-vue v-if="showAdvancedSearch" class="my-4">
           <template #body>
             <input v-model="searchedItem.genre" :placeholder="$t('Search an area')" type="search" class="form-control p-2" @keyup="search">
@@ -23,6 +29,7 @@
     </div>
     
     <div class="row mt-4">
+      <!-- Explore genres -->
       <div v-if="searchedItem.name === null || searchedItem.name === ''" class="col-12">
         <h2 class="text-light display-5 mb-5">
           {{ $t('Explore all genres') }}
@@ -48,6 +55,7 @@
         </div>
       </div>
 
+      <!-- Search results -->
       <div v-else>
         <!-- Songs -->
         <search-section-vue :section-title="$t('Songs')" class="mb-2" component-name="list-songs-vue" @show-all="showAll = !showAll" />
@@ -58,7 +66,7 @@
         <!-- Albums -->
         <search-section-vue :section-title="$t('Albums')" component-name="list-albums-vue" @show-all="showAll = !showAll" />
 
-        <!-- All -->
+        <!-- Show all -->
         <transition name="opacity">
           <div v-if="showAll" class="wrapper">
             <div class="card bg-dark">
@@ -67,6 +75,8 @@
               </div>
               
               <div class="card-body">
+                <!-- FIXME: When clicking on play in this component, the song does not play plus
+                there is a confusion between play and pause -->
                 <base-songs-list-group :songs="songs" />
               </div>
             </div>
@@ -92,9 +102,9 @@ export default {
   name: 'SearchView',
   components: { 
     BaseCardVue,
+    BaseSongsListGroup,
     BaseTemplateCardVue,
-    SearchSectionVue,
-    BaseSongsListGroup
+    SearchSectionVue
   },
   provide () {
     return {
@@ -124,12 +134,16 @@ export default {
   },
   computed: {
     currentYear () {
+      // Returns the current year
       return dayjs().year()
     },
     songs () {
+      // 
       return this.cachedSearch
     },
     albums () {
+      // From each song, get the album
+      // details in a unique list
       const items = []
       _.forEach(this.songs, (item) => {
         items.push(item.album)
@@ -137,6 +151,8 @@ export default {
       return _.uniqBy(items, 'name')
     },
     artists () {
+      // For each album definition,
+      // get the artist in a unique list
       const items = []
       _.forEach(this.albums, (item) => {
         items.push(item.artist)
@@ -149,6 +165,8 @@ export default {
   },
   methods: {
     async getGenres () {
+      // Returns the current genres present
+      // in the database
       try {
         const response = await this.$http.get('/artists/genres')
         this.genres = response.data
@@ -157,6 +175,8 @@ export default {
       }
     },
     async search () {
+      // Search an artist or an album
+      // in the database
       try {
         const response = await this.$http.post('/artists/search', this.searchedItem)
         await this.asyncTimeout(1000)

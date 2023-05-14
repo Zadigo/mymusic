@@ -70,7 +70,7 @@ def create_response(data: Any = None, serializer: Serializer = None):
     return Response(**attrs)
 
 
-def map_list(dataset: list):
+def map_list(dataset):
     for i, item in enumerate(dataset):
         yield {'id': i, 'name': item, 'viewname': item.lower()}
 

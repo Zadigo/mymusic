@@ -82,7 +82,9 @@ class SongSerializer2(_SongSerializer):
 
 
 class ArtistSerializer2(Serializer):
-    """For showing artist information"""
+    """For showing pieces of information
+    about a given artist"""
+
     id = fields.IntegerField()
     name = fields.CharField()
     album_set = AlbumSerializer(many=True)
@@ -93,6 +95,3 @@ class ArtistSerializer2(Serializer):
     cover_image_thumbnail = fields.FileField()
     number_of_followers = fields.IntegerField()
     created_on = fields.DateField()
-
-
-
