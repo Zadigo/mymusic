@@ -11,7 +11,7 @@
               <font-awesome-icon icon="fa-solid fa-play" />
             </button>
 
-            <button type="button" class="btn btn-light">
+            <button type="button" class="btn btn-light" @click="followArtist(currentArtist.id)">
               <font-awesome-icon icon="fa-solid fa-heart-circle-check" />
               <!-- <font-awesome-icon icon="fa-solid fa-heart-circle-minus" /> -->
             </button>
@@ -34,11 +34,13 @@
           </div>
         </div>
         
+        <!-- Songs, Albums -->
         <div class="col-12">
           <base-section-vue :name="$t('Discography')" class="mt-5">
             <template #default>
               <!-- Pills -->
               <base-nav-pills :pills="filters" @pill-click="selectFilter" />
+              
               <!-- Albums -->
               <base-albums-songs-list-group :albums="currentArtist.album_set" :search="search" :filter-by="selectedFilter" class="mt-3" />
             </template>
@@ -48,7 +50,7 @@
         <div class="col-12">
           <base-section-vue :name="$t('With', { artist: currentArtist.name })" class="mt-2">
             <template #default>
-
+              <!-- TODO: Add something here -->
             </template>
           </base-section-vue>
         </div>
@@ -62,12 +64,14 @@ import { storeToRefs } from 'pinia'
 import { usePlaylists } from '@/store/playlists'
 import { useSearch } from '@/store/search'
 import { useUrls } from '@/composables/utils'
+import { useArtistComposable } from '@/composables/artist'
 
 import BaseDetailPageVue from '@/layouts/BaseDetailPage.vue'
 import BaseSectionVue from '@/layouts/BaseSection.vue'
 // import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
 import BaseAlbumsSongsListGroup from '@/layouts/BaseAlbumsSongsListGroup.vue'
 import BaseNavPills from '../layouts/BaseNavPills.vue'
+import { getCurrentInstance } from 'vue'
 
 
 export default {
@@ -80,14 +84,17 @@ export default {
     BaseNavPills
 },
   setup () {
+    const app = getCurrentInstance()
     const playlists = usePlaylists()
     const store = useSearch()
     const { currentArtist } = storeToRefs(store)
     const { mediaUrl } = useUrls()
+    const { followArtist } = useArtistComposable(app)
     return {
       store,
       currentArtist,
       playlists,
+      followArtist,
       mediaUrl
     }
   },

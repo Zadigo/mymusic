@@ -1,3 +1,4 @@
+from django.core.files.base import File, ContentFile
 import math
 from typing import Any, Generator
 from rest_framework.serializers import BaseSerializer, Serializer
@@ -9,13 +10,14 @@ from io import BytesIO
 
 import numpy as np
 import requests
+from django.conf import settings
 import scipy
 from PIL import Image
 
 
 def get_image(url):
     response = requests.get(url)
-    return Image.open(BytesIO(response.content)) 
+    return Image.open(BytesIO(response.content))
 
 
 def dominant_image_color(instance, is_url=False):
@@ -23,7 +25,7 @@ def dominant_image_color(instance, is_url=False):
     and return it in hexadecimal. Note that
     this only returns the numbers/letters"""
     NUM_CLUSTERS = 5
-    
+
     # Just return black if there's no
     # path associated with the instance
     image_path = getattr(instance, 'path', None)
@@ -82,3 +84,21 @@ def variance(values):
 
 def standard_deviation(values):
     return math.sqrt(variance(values))
+
+
+def get_image_template(name='cover1.jpg'):
+    """Returns an image template from the
+    media folder"""
+    media_path = settings.MEDIA_ROOT
+    path = media_path / f'templates/{name}'
+
+    if not path.exists():
+        raise
+
+    if not path.is_file():
+        raise
+
+    f = open(path, mode='rb')
+    instance = ContentFile(f.read(), name=name)
+    f.close()
+    return instance

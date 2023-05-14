@@ -1,3 +1,7 @@
+<doc>
+  Shows the user the playlists that he created
+</doc>
+
 <template>
   <section id="playlists" class="p-5">
     <div class="row">

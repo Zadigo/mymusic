@@ -104,3 +104,23 @@ class ArtistSerializer2(Serializer):
     cover_image_thumbnail = fields.FileField()
     number_of_followers = fields.IntegerField()
     created_on = fields.DateField()
+
+
+class SimpleArtistSerializer(Serializer):
+    id = fields.IntegerField()
+    name = fields.CharField()
+    cover_image = fields.ImageField()
+
+
+class SimpleAlbumSerializer(Serializer):
+    id = fields.IntegerField()
+    artist = SimpleArtistSerializer()
+    cover_image = fields.ImageField()
+    name = fields.CharField()
+
+
+class ChartSerializer(Serializer):
+    id = fields.IntegerField()
+    name = fields.CharField()
+    album = SimpleAlbumSerializer()
+    listeners = fields.IntegerField()

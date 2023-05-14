@@ -12,6 +12,7 @@
 <script>
 import { useDark, useToggle } from '@vueuse/core'
 import { provide } from 'vue'
+import { useAuthentication } from './store/authentication'
 
 // import VueBasicAlert from 'vue-basic-alert'
 // import BaseMessages from './components/BaseMessages.vue'
@@ -32,9 +33,15 @@ export default {
     const toggleDark = useToggle(darkMode)
     provide('darkMode', true)
 
+    const { loadUserSession } = useAuthentication()
+
     return {
-      toggleDark
+      toggleDark,
+      loadUserSession
     }
+  },
+  mounted () {
+    this.loadUserSession()
   }
 }
 </script>

@@ -26,5 +26,6 @@
     "Account": "Account",
     "Charts": "Charts",
     "songs": "songs",
-    "singles": "singles"
+    "singles": "singles",
+    "k listeners": "{count} listener | {count} listeners"
 }

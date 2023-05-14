@@ -21,8 +21,9 @@ const useAuthentication = defineStore('authentication', {
       this.token = data.token
     },
     loadUserSession () {
-      const session = this.session.retrieve('auth')
-      const data = session || { email: null, token: null }
+      const session = this.$session.retrieve('auth')
+      // TODO: Remove test token
+      const data = session || { email: null, token: 'c4ddf648feaed3d2ef2796769d4e6386ed4f076d' }
       this.loginUser(data)
     }
   },

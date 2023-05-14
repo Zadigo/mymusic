@@ -1,7 +1,13 @@
+<doc>
+  A section for listing multiple songs from different albums
+</doc>
+
 <template>
   <div class="list-group">
-    <div v-for="album in filterAlbumsBy" :key="album.id" class="list-group-items">
+    <div v-for="(album, x) in filterAlbumsBy" :key="album.id" :class="{ 'mt-4': x >= 1 }" class="list-group-items">
       <h3 class="list-group-item-heading">{{ album.name }}</h3>
+
+      <!-- Songs -->
       <a v-for="song in searchedSongs(album)" :key="song.id" href class="list-group-item list-group-item-action d-flex justify-content-between bg-dark text-light align-items-center" @click.prevent>
         <div class="d-flex flex-column">
           <span>
@@ -108,6 +114,7 @@ export default {
   }, 
   methods: {
     searchedSongs (album) {
+      // Search songs within all albums
       if (!this.search) {
         return album.song_set
       } else {

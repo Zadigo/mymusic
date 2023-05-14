@@ -1,3 +1,5 @@
+from django.db import transaction
+from mymusic.utils import get_image_template
 import datetime
 
 from django.contrib.auth import get_user_model
@@ -7,7 +9,6 @@ from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
-
 from artists.models import Song
 from artists.serializers import SongSerializer2
 from mymusic.utils import create_response
@@ -71,7 +72,11 @@ def create_playlist_view(request, **kwargs):
     last_playlist = UserPlaylist.objects.last()
 
     name = f'Playlist n°{last_playlist.id + 1}'
-    playlist = UserPlaylist.objects.create(author=user, name=name)
+    playlist = UserPlaylist.objects.create(
+        author=user,
+        name=name,
+        cover_image=get_image_template()
+    )
     serialized_playlist = PlaylistSerializer(instance=playlist)
 
     return create_response(serializer=serialized_playlist)
@@ -159,11 +164,11 @@ def official_playlist_details_view(request, genre, **kwargs):
 def merge_playlists_view(request, **kwargs):
     """Merge the songs of two playlists"""
     playlist_to_merge = get_object_or_404(
-        UserPlaylist, 
+        UserPlaylist,
         pk=request.data.get('playlist_to_merge', None)
     )
     playlist_to_update = get_object_or_404(
-        UserPlaylist, 
+        UserPlaylist,
         pk=request.data.get('playlist_to_update', None)
     )
     for song in playlist_to_merge.songs:

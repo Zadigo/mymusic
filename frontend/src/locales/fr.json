@@ -26,5 +26,6 @@
     "Account": "Compte",
     "Charts": "Top 100",
     "songs": "morceaux",
-    "singles": "singles"
+    "singles": "singles",
+    "k listeners": "{count} écoute | {count} écoutes"
 }

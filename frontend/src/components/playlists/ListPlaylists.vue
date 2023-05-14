@@ -4,6 +4,8 @@
     any component can require an iteration of playlists from
     any source -->
     <div v-if="playlists.length > 0" class="row">
+      <!-- <article></article> -->
+
       <article v-for="playlist in playlists" :key="playlist.id" class="col-sm-12 col-md-4">
         <router-link :to="navigateToPlaylist(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
           <div class="card my-2">
@@ -63,6 +65,7 @@ export default {
   },
   methods: {
     async getUserPlaylists () {
+      // Return the user's playlists
       try {
         if (!this.sessionStorage.hasPlaylists) {
           const response = await this.$http.get('playlists')
