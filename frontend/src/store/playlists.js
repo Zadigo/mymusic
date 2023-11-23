@@ -1,10 +1,14 @@
+import _, { toNumber } from 'lodash'
+
 import { defineStore, storeToRefs } from 'pinia'
 import { usePlayer } from './player'
-import _, { toNumber } from 'lodash'
+
+// import userPlaylists from  '../data/user_playlists.json'
 
 const usePlaylists = defineStore('playlists', {
   state: () => ({
     cursor: 0,
+    // playlists: userPlaylists,
     playlists: [],
     currentPlaylist: { songs: [] },
     playAllSongs: false
@@ -62,6 +66,11 @@ const usePlaylists = defineStore('playlists', {
           this.playlists = this.$session.retrieve('playlists')
         }
       }
+    },
+    hasPlaylists () {
+      // Whether there are playlists loaded
+      // in the store
+      return this.playlists.length > 0
     }
   },
   getters: {

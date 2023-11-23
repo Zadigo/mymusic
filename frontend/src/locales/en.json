@@ -27,5 +27,8 @@
     "Charts": "Charts",
     "songs": "songs",
     "singles": "singles",
-    "k listeners": "{count} listener | {count} listeners"
+    "k listeners": "{count} listener | {count} listeners",
+    "Display by year": "Display by year",
+    "Display by area": "Display by area",
+    "Display by country": "Display by country"
 }

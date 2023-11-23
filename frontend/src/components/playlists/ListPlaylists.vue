@@ -4,23 +4,41 @@
     any component can require an iteration of playlists from
     any source -->
     <div v-if="playlists.length > 0" class="row">
-      <!-- <article></article> -->
-
       <article v-for="playlist in playlists" :key="playlist.id" class="col-sm-12 col-md-4">
-        <router-link :to="navigateToPlaylist(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
-          <div class="card my-2">
+        <div class="card my-2">
+          <router-link :to="handlePlaylistLink(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
             <img :src="mediaUrl(playlist.cover_image)" :alt="playlist.name" class="card-img-top">
-            <div class="card-body">
-              <h4 class="fw-bold card-title">{{ playlist.name }}</h4>
-              <p v-if="userPlaylists" class="card-text text-muted m-0">{{ $t('Created by', { user: playlist.author.username }) }}</p>
-              <p v-else class="card-text text-muted m-0">{{ $t('Created by', { user: 'spotify' }) }}</p>
+          </router-link>
+
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <router-link :to="handlePlaylistLink(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
+                <h4 class="fw-bold card-title mb-1">{{ playlist.name }}</h4>
+              </router-link>
+  
+              <v-menu>
+                <template v-slot:activator="{ props }">
+                  <v-btn id="btn-playlist-actions" class="mb-1" variant="tonal" color="light" density="compact" rounded v-bind="props">
+                    <font-awesome-icon :icon="['fas', 'plus']" />
+                  </v-btn>
+                </template>
+  
+                <v-list>
+                  <v-list-item v-for="(item, i) in menuItems" :key="i" :value="index" @click="handleMenuSelection(item, i)">
+                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
             </div>
+
+            <p v-if="userPlaylists" class="card-text text-body-secondary m-0">{{ $t('Created by', { user: playlist.author.username }) }}</p>
+            <p v-else class="card-text text-body-secondary m-0">{{ $t('Created by', { user: 'spotify' }) }}</p>
           </div>
-        </router-link>
+        </div>
       </article>
     </div>
 
-    <empty-iteration-vue v-else class="py-5 my-5" content="There are no playlists available" />
+    <empty-iteration v-else class="py-5 my-5" content="There are no playlists available" />
   </div>
 </template>
 
@@ -28,11 +46,13 @@
 import { useUrls } from '@/composables/utils'
 import { usePlaylists } from '../../store/playlists'
 
-import EmptyIterationVue from '../EmptyIteration.vue'
+import EmptyIteration from '../EmptyIteration.vue'
 
 export default {
   name: 'ListPlaylists',
-  components: { EmptyIterationVue },
+  components: {
+    EmptyIteration
+  },
   inject: {
     darkMode: ['darkMode']
   },
@@ -48,14 +68,29 @@ export default {
   setup () {
     const store = usePlaylists()
     const { mediaUrl } = useUrls()
+    const menuItems = [
+      'Save',
+      'Share',
+      'Play all',
+      'Recommend',
+      'Mash',
+      'Delete'
+    ]
+
     return {
       store,
+      menuItems,
       mediaUrl
     }
   },
   computed: {
     playlists () {
-      return this.userPlaylists ? this.store.playlists : this.otherPlaylist
+      // return this.userPlaylists ? this.store.playlists : this.otherPlaylist
+      if (this.store.hasPlaylists) {
+        return this.store.playlists
+      } else {
+        return this.otherPlaylist
+      }
     }
   },
   created () {
@@ -65,13 +100,15 @@ export default {
   },
   methods: {
     async getUserPlaylists () {
-      // Return the user's playlists
+      // Returns all the playlists of the
+      // current user
+      // TODO: Reactivate
       try {
         if (!this.sessionStorage.hasPlaylists) {
           const response = await this.$http.get('playlists')
           this.store.$patch((state) => {
             state.playlists = response.data
-  
+
             this.$session.create('hasPlaylists', true)
             this.$session.create('playlists', response.data)
           })
@@ -83,7 +120,12 @@ export default {
         console.error(error)
       }
     },
-    navigateToPlaylist (playlist) {
+    handleMenuSelection (name, index) {
+      name
+      index
+    },
+    handlePlaylistLink (playlist) {
+      // Navigate to the given playlist
       this.store.setPlaylist(playlist.id)
       return { name: 'playlist_view', params: { id: playlist.id } }
     }

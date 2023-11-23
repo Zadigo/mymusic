@@ -1,5 +1,6 @@
 <template>
   <section :class="mainInterfaceClasses" class="main-interface">
+    <!-- Left -->
     <div class="left">
       <transition name="general">
         <div v-if="$route.name === 'profile_view'" id="app-navigation">
@@ -30,6 +31,7 @@
       </div>
     </div>
 
+    <!-- Right -->
     <div class="right">
       <router-view v-slot="{ Component }">
         <transition name="opacity" mode="in-out">
@@ -38,6 +40,7 @@
       </router-view>
     </div>
 
+    <!-- Bottom -->
     <div class="bottom">
       <div class="container">
         <div class="px-5 mx-5">
@@ -55,13 +58,11 @@ import { usePlayer } from '../store/player'
 import { useAuthentication } from '@/store/authentication'
 
 import BaseMusicPlayerVue from './BaseMusicPlayer.vue'
-// import VueBasicAlert from 'vue-basic-alert'
 
 export default {
   name: 'BaseInterface',
   components: {
     BaseMusicPlayerVue
-    // VueBasicAlert
   },
   setup () {
     const store = useAuthentication()
@@ -114,6 +115,7 @@ export default {
   },
   methods: {
     minimize () {
+      // Minimizes the left hand panel
       this.minimizeLeft = !this.minimizeLeft
       let settings = this.$localstorage.retrieve('settings')
       settings = settings || {}

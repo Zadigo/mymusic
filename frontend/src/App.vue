@@ -1,28 +1,20 @@
 <template>
-  <!-- Messages -->
-  <!-- <base-messages /> -->
-  <!-- <vue-basic-alert ref="alert" :duration="300" /> -->
-  <router-view v-slot="{ Component }">
-    <transition :key="$route.name" name="opacity" mode="in-out">
-      <component :is="Component" />
-    </transition>
-  </router-view>
+  <v-app>
+    <router-view v-slot="{ Component }">
+      <transition :key="$route.name" name="opacity" mode="in-out">
+        <component :is="Component" />
+      </transition>
+    </router-view>
+  </v-app>
 </template>
 
 <script>
-import { useDark, useToggle } from '@vueuse/core'
 import { provide } from 'vue'
+import { useDark, useToggle } from '@vueuse/core'
 import { useAuthentication } from './store/authentication'
-
-// import VueBasicAlert from 'vue-basic-alert'
-// import BaseMessages from './components/BaseMessages.vue'
 
 export default {
   name: 'App',
-  components: {
-    // VueBasicAlert
-    // BaseMessages
-  },
   setup () {
     const darkMode = useDark({
       selector: 'body',

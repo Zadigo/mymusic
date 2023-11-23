@@ -5,20 +5,46 @@
 <template>
   <div class="list-group">
     <!-- TODO: Make this reusable componenent -->
-    <a v-for="song in songs" :key="song.id" href class="list-group-item list-group-item-action d-flex justify-content-between bg-dark text-light align-items-center" @click.prevent>
+    <div v-for="song in songs" :key="song.id" href class="list-group-item list-group-item-action d-flex justify-content-between bg-dark text-light align-items-center p-3" @click.prevent>
       <div class="d-flex flex-column">
         <span>
           {{ song.name }}
           <font-awesome-icon icon="fa-solid fa-e" class="ms-3" />
         </span>
 
-        <router-link :to="{ name: 'artist_view', params: { id: song.album.artist.id } }" class="text-muted text-decoration">
+        <router-link :to="{ name: 'artist_view', params: { id: song.album.artist.id } }" class="text-body-secondary text-decoration">
           {{ song.album.artist.name }}
         </router-link>
       </div>
 
       <div class="btn-group">
-        <button v-if="isPlaying && store.isCurrentSong(song)" type="button" class="btn btn-primary btn-sm" @click="store.pause">
+        <v-btn v-if="isPlaying && store.isCurrentSong(song)" variant="tonal" color="light" rounded @click="store.pause">
+          <font-awesome-icon icon="fa-solid fa-pause" />
+        </v-btn>
+
+        <v-btn v-else variant="tonal" color="light" rounded @click="store.play(song)">
+          <font-awesome-icon icon="fa-solid fa-play" />
+        </v-btn>
+
+        <v-btn class="ms-2" variant="tonal" color="light" rounded>
+          <font-awesome-icon :icon="['fas', 'heart']" />
+        </v-btn>
+
+        <v-menu>
+          <template v-slot:activator="{ props }">
+            <v-btn class="ms-2" variant="tonal" color="light" rounded v-bind="props">
+              <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
+            </v-btn>
+          </template>
+
+          <v-list>
+            <v-list-item v-for="(item, i) in menuItems" :key="i" :value="item" @click="handlePlaylistMenu(item, i)">
+              <v-list-item-title>{{ item }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <!-- <button v-if="isPlaying && store.isCurrentSong(song)" type="button" class="btn btn-primary btn-sm" @click="store.pause">
           <font-awesome-icon icon="fa-solid fa-pause" />
         </button>
 
@@ -28,14 +54,14 @@
 
         <button type="button" class="btn btn-primary btn-sm">
           <font-awesome-icon icon="fa-solid fa-heart" />
-        </button>
+        </button> -->
 
         <!-- <button type="button" class="btn btn-primary btn-sm">
           <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"></font-awesome-icon>
         </button> -->
-        <base-dropdown-button id="options" :items="[{ name: 'Google' }]" size="sm" />
+        <!-- <base-dropdown-button id="options" :items="[{ name: 'Google' }]" size="sm" /> -->
       </div>
-    </a>
+    </div>
   </div>
 </template>
 
@@ -43,12 +69,12 @@
 import { usePlayer } from '@/store/player'
 import { storeToRefs } from 'pinia'
 
-import BaseDropdownButton from '@/layouts/bootstrap/BaseDropdownButton.vue'
+// import BaseDropdownButton from '@/layouts/bootstrap/BaseDropdownButton.vue'
 
 export default {
   name: 'BaseSongsListGroup',
   components: {
-    BaseDropdownButton
+    // BaseDropdownButton
   },
   props: {
     songs: {
@@ -59,8 +85,17 @@ export default {
   setup () {
     const store = usePlayer()
     const { isPlaying } = storeToRefs(store)
+    const menuItems = [
+      'Save',
+      'Remove',
+      'Share',
+      'Like',
+      'Recommend'
+    ]
+
     return {
       store,
+      menuItems,
       isPlaying
     }
   }

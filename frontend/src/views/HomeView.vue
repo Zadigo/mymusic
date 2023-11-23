@@ -4,9 +4,9 @@
       <div class="row">
         <!-- User Playlists -->
         <div class="col-12">
-          <base-section-vue :to="{ name: 'home_view' }" :name="$t('Your playlists')">
-            <list-playlists-vue :user-playlists="true" />
-          </base-section-vue>
+          <base-section :to="{ name: 'home_view' }" :name="$t('Your playlists')">
+            <list-playlists :user-playlists="true" />
+          </base-section>
         </div>
       </div>
     </div>
@@ -14,14 +14,14 @@
 </template>
 
 <script>
-import BaseSectionVue from '@/layouts/BaseSection.vue'
-import ListPlaylistsVue from '../components/playlists/ListPlaylists.vue'
+import BaseSection from '@/layouts/BaseSection.vue'
+import ListPlaylists from '../components/playlists/ListPlaylists.vue'
 
 export default {
   name: 'HomeView',
   components: {
-    BaseSectionVue,
-    ListPlaylistsVue
+    BaseSection,
+    ListPlaylists
   }
 }
 </script>

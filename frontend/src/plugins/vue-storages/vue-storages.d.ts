@@ -1,73 +1,252 @@
-import { createLocalStorage, VueLocalStorage } from "./local-storage";
 import { App, ComponentCustomProperties, Ref } from 'vue'
-import { VueSession, createVueSession } from './session-storage'
 
-declare type DictionnaryKey = string
+declare type DictionnaryKey = {
+    key: string
+}
 
-/**
- * Creates a VueLocalStorage instance
- */
-export declare function createLocalStorage(): VueLocalStorage
+/** Creates a VueLocalStorage instance that can be used by a Vue app */
+export declare function createLocalStorage(options?: BaseOptions): VueLocalStorage
 
-/**
- * Creates a VueSessionStorage instance
- */
-export declare function createVueSession(): CreateVueSession
+/** Creates a VueSession instance that can be used by a Vue app */
+export declare function createVueSession(options?: VueSessionOptions): VueSession
 
-/**
- * VueLocalStorage instance
+export declare interface BaseOptions {
+    /** The default session key (default: vue-session) */
+    sessionKey?: number
+    /** Initial values with which to initialize the storage */
+    initial?: object
+}
+
+/** 
+ * VueLocalStorage allows serializing and deserializing
+ * data in the base Window locale storage
  */
 export declare interface VueLocalStorage {
+    /** The default session key (defaults: vue-session) */
+    readonly DEFAULT_KEY_NAME: string
     /**
-     * @internal
+     * Returns all items saved in the localStorage
+     *
+     * @returns dictionnary
      */
-    DEFAULT_KEY_NAME: string
-    storage: Ref<localStorage>
+    readonly data: object
 
-    get data(): any
-    _save(data: any): void
-    retrieve(key: DictionnaryKey): Object
-    create(key: DictionnaryKey, value: any): void
+    constructor(options?: BaseOptions): void
+    /**
+     * Returns the value store under a given key
+     *
+     * @param key - key to use
+     * @returns an object, a number or an array
+     */
+    retrieve (key: DictionnaryKey): object | string | number
+    /**
+     * Creates a new record under the given key
+     *
+     * @param key - key under which to save the element
+     * @param value - number, array or dictionnary
+     * @returns null
+     */
+    create(key: DictionnaryKey, value: unknown): void
+    /**
+     * Checks if a value exists in a dictionnary
+     * 
+     * @param key - key under which to save the element
+     * @returns boolean
+     */ 
+    exists(key: DictionnaryKey): boolean
+    /**
+     * Gets a value and immediately deletes it
+     * 
+     * @param key - key under which to save the element
+     * @returns any
+     */
+    getDelete(key: DictionnaryKey): any
+    /**
+     * Increment a value by one
+     * 
+     * @param key - key under which to increment the element
+     * @returns null
+     */
+    increment (key: DictionnaryKey): void
+    /**
+     * Decrement a value by one
+     * 
+     *  @param key - key under which to decrement the element
+     *  @returns null
+     */
+    decrement (key: DictionnaryKey): void
+    /**
+     * Removes an element stored under a given key
+     *
+     * @param key key of the element to remove
+     * @returns null
+     */
     remove(key: DictionnaryKey): void
-    save(key: DictionnaryKey, value: any): void
-    getValue(key: DictionnaryKey): any
+    /**
+     * Increment a value by a certain quantity
+     * 
+     * @param key - key under which to increment the element
+     * @param k - value to increment by
+     * @returns null
+     */
+    incrementBy (key: DictionnaryKey, k: number = 1): void
+    /**
+     * Decrement a value by a certain quantity
+     * 
+     * @param key - key under which to increment the element
+     * @param k - value to decrement by
+     * @returns null
+     */
+    decrementBy (key: DictionnaryKey, k: number = 1): void
+    /**
+     * Gets or creates a new value if it does not exist
+     *
+     * @param key - key under which to save the element
+     * @param value - number, array or dictionnary
+     * @returns any
+     */
+    getOrCreate (key: DictionnaryKey, value: any): any
+    /**
+     * Pushes a value in a list
+     *
+     * @param key - key under which to save the element
+     * @param value - number, array or dictionnary
+     * @returns null
+     */
+    listPush (key: DictionnaryKey, value: any): void
+    /**
+     * Like listPush but will create a new list if it
+     * does not exist
+     *
+     * @param key - key under which to save the element
+     * @param value - number, array or dictionnary
+     * @returns null
+     */
+    defaultList (key: DictionnaryKey, value: any): void
+    /**
+     * Merges two lists under a given key
+     *
+     * @param key - key under which to merge the elements
+     * @param values - array to merge
+     * @returns null
+     */
+    listMerge (key: DictionnaryKey, values: object): void
+    /**
+     * Counts the number of items under a given list
+     *
+     * @param key - key under which to merge the elements
+     * @returns number
+     */
+    listCount (key: DictionnaryKey): number
+    /**
+     * Toggles a value under a given key
+     *
+     * @param key - key under which to save the element
+     * @returns null
+     */
+    toggle(key: DictionnaryKey): void
+    
     install(app: App): void
 }
 
-export interface ComponentCustomProperties {
-    /**
-     * {@link VueLocalStorage} instance used by the application
-     */
-    $localstorage: VueLocalStorage
+/** Possible options for VueSession */
+export declare interface VueSessionOptions extends BaseOptions {
+    /** Persist the data in the local storage */
+    persistent?: boolean
 }
 
-/**
- * VueSessionStorage instance
+/** 
+ * VueSession allows serializing and deserializing
+ * data easily in the base Window session storage
  */
-export declare interface VueSessionStorage {
+export declare interface VueSession {
+    /** The default session key (defaults: vue-session) */
+    readonly DEFAULT_KEY_NAME: string
     /**
-     * @internal
+     * Returns all items saved in the storage
+     *
+     * @returns dictionnary
      */
-    VUE_SESSION_KEY: string
-    storage: Ref<sessionStorage>
+    readonly data: object
 
-    get data(): any
-    _save(data: any): void
-    create(key: DictionnaryKey, value: any): void
-    retrieve(key: DictionnaryKey): Object
+    constructor(options?: VueSessionOptions): void
+    /**
+     * Creates a new record under the given global key
+     *
+     * @param key - key under which to save the element
+     * @param value - number, array or dictionnary
+     * @returns null
+     */
+    create(key: DictionnaryKey, value: unknown): void
+    /**
+     * Returns the value store under a given key
+     *
+     * @param key - key to use
+     * @returns an object, a number or an array
+     */
+    retrieve(key: DictionnaryKey): number | string | number[] | string[]
+    /**
+     * Removes an element stored under a given key
+     *
+     * @param key key of the element to remove
+     * @returns null
+     */
     remove(key: DictionnaryKey): void
+    /**
+     * Renews the session key
+     */
     renew(): void
+    /**
+     * Clears all data stored under the global key
+     */
     clear(): void
-    contains(key: DictionnaryKey): Boolean
-    destroy(): any
-    getOrCreate(key: DictionnaryKey, defaultValue: any): any
+    /**
+     * Checks whether a key exists in the storage
+     *
+     * @param key key of the element to remove
+     * @returns Boolean
+     */
+    contains(key: DictionnaryKey): boolean
+    /**
+     * Destroys the session
+     */
+    destroy(): void
+    /**
+     * Tries to get a key and eventually creates
+     * a new record with the given value if it
+     * does not exist
+     *
+     * @param key - key of the element to remove
+     * @param defaultValue - key of the element to remove
+     */
+    getOrCreate(key: DictionnaryKey, defaultValue: unknown): number | object
+    /**
+     * Tries to push the incoming element to an 
+     * array stored under the given key
+     *
+     * @param key - key of the element to remove
+     * @param value - value to add
+     */
+    updateArray(key: DictionnaryKey, value: unknown): void
+    /**
+     * Toggle a boolean stored under a given key
+     * 
+     * @param key - key of the element to toggle
+     */
+    toggle(key: DictionnaryKey): void
+
     install(app: App): void
 }
 
-export interface ComponentCustomProperties {
-    /**
-     * {@link VueSession} instance used by the application
-     */
-    $session: VueSession
+declare module '@vue/runtime-core' {
+    export interface ComponentCustomProperties {
+        /** Current data saved under the VUE_SESSION_KEY */
+        localStorage: object
+        /** Current data saved under VUE_SESSION_KEY */
+        sessionStorage: object
+        /** The VueLocalStorage instance */
+        $localstorage: VueLocalStorage
+        /** The VueSession instance */
+        $session: VueSession
+    }
 }
-

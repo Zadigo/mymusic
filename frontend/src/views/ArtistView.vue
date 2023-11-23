@@ -29,7 +29,7 @@
         <div class="col-12 mb-2">
           <div class="card bg-dark text-light">
             <div class="card-body">
-              <input v-model="search" :placeholder="$t('Search x songs...', { count: 0 })" type="text" class="form-control p-2">
+              <v-text-field v-model="search" :placeholder="$t('Search x songs...', { count: 0 })" variant="outlined" />
             </div>
           </div>
         </div>

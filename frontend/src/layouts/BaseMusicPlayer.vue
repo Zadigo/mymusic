@@ -142,7 +142,8 @@ export default {
       }
     },
     togglePlay () {
-      // FIXME:
+      // FIXME: This might be the source
+      // of a recursive self update
       this.toggleAudioPlay()
     },
     currentTime (current) {

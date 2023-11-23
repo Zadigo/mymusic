@@ -17,6 +17,7 @@
               <div class="d-flex justify-content-left">
                 <h3 class="me-3">{{ `#${i + 1}` }}</h3>
                 <img :src="mediaUrl(item.album.cover_image)" :alt="item.name" width="100" height="100" class="img-fluid">
+                
                 <div class="ms-4">
                   <h4 class="fw-bold">{{ item.name }}</h4>
                   <p>{{ $tc('k listeners', { count: item.listeners }) }} / 15 auditeur/mois</p>

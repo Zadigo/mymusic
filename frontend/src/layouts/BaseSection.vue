@@ -1,8 +1,14 @@
 <template>
   <base-template-card v-slot="{darkMode}">
     <div class="card-header d-flex justify-content-between align-items-center">
-      <h4 :class="darkMode ? 'text-light' : 'text-dark'">{{ $t(name) }}</h4>
-      <router-link v-if="to" :to="to" :class="darkMode ? 'text-light' : 'text-dark'">{{ $t('See all') }}</router-link>
+      <h1 :class="darkMode ? 'text-light' : 'text-dark'" class="mb-0 h3">
+        {{ $t(name) }}
+      </h1>
+
+      <!-- <router-link v-if="to" :to="to" :class="darkMode ? 'text-light' : 'text-dark'">
+        {{ $t('See all') }}
+      </router-link> -->
+      <v-btn :to="to" variant="plain" color="light">{{ $t('See all') }}</v-btn>
     </div>
 
     <div class="card-body">

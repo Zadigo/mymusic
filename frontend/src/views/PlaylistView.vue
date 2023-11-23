@@ -9,24 +9,49 @@
         <h1 class="display-2 fw-bold">{{ currentPlaylist.name }}</h1>
         <p>{{ $t('k subscribers', { count: 34.4 }) }}</p>
 
-        <div class="actions p-3 mt-1 bg-white text-center rounded shadow-sm w-25">
-          <button v-if="store._isPlaying" type="button" class="btn btn-light shadow-none" @click="store.stopPlaylist">
+        <!-- Actions -->
+        <div class="actions p-3 ps-0 mt-1 text-center rounded shadow-sm w-50 d-flex justify-content-start">
+          <v-btn v-if="store._isPlaying" class="text-dark" color="light" rounded @click="store.stopPlaylist">
             <font-awesome-icon icon="fa-solid fa-pause" />
-          </button>
+          </v-btn>
 
-          <button v-else type="button" class="btn btn-light shadow-none" @click="store.playAll">
+          <v-btn v-else class="text-dark" color="light" rounded @click="store.playAll">
             <font-awesome-icon icon="fa-solid fa-play" />
-          </button>
+          </v-btn>
 
 
-          <button type="button" class="btn btn-light mx-2 shadow-none">
+          <v-btn class="ms-2 text-dark" color="light" rounded>
             <font-awesome-icon icon="fa-solid fa-heart-circle-check"></font-awesome-icon>
             <!-- <font-awesome-icon icon="fa-solid fa-heart-circle-minus"></font-awesome-icon> -->
-          </button>
+          </v-btn>
 
-          <button type="button" class="btn btn-light mx-2 shadow-none">
-            <font-awesome-icon icon="fa-solid fa-circle-info"></font-awesome-icon>
-          </button>
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn class="ms-2 text-dark" color="light" rounded v-bind="props">
+                <font-awesome-icon icon="fa-solid fa-circle-info"></font-awesome-icon>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item v-for="(item, i) in menuItems" :key="i" :value="index" @click="handlePlaylistActions(item, i)">
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+
+          <v-menu>
+            <template v-slot:activator="{ props }">
+              <v-btn class="ms-2 text-dark" color="light" rounded v-bind="props">
+                <font-awesome-icon :icon="['fas', 'sort']"></font-awesome-icon>
+              </v-btn>
+            </template>
+
+            <v-list>
+              <v-list-item v-for="(item, i) in sortingItems" :key="i" :value="index" @click="handleSortingActions(item, i)">
+                <v-list-item-title>{{ item }}</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
         </div>
       </div>
     </template>
@@ -36,23 +61,37 @@
         <div class="col-12 mb-2">
           <base-card>
             <template #body>
-              <input v-model="song.attributes" :placeholder="$t('Search x songs...', { count: currentPlaylist.songs.length })" type="text" class="form-control p-2">
-    
-              <div class="form-check form-switch mt-4">
-                <input id="by-genre" v-model="displayByGenre" class="form-check-input" type="checkbox" role="switch">
-                <label class="form-check-label" for="by-genre">
-                  {{ $t('Display by genre') }}
-                </label>
+              <v-text-field v-model="song.attributes" :placeholder="$t('Search x songs...', { count: currentPlaylist.songs.length })" variant="solo" elevation="0" hide-details clearable></v-text-field>
+              
+              <div class="d-flex justify-content-start mt-3">
+                <v-switch v-model="displayByGenre" :label="$t('Display by genre')" inset hide-details></v-switch>
+                <v-switch :label="$t('Display by year')" inset hide-details></v-switch>
+                <v-switch :label="$t('Display by area')" inset hide-details></v-switch>
+                <v-switch :label="$t('Display by country')" inset hide-details></v-switch>
               </div>
             </template>
           </base-card>
         </div>
 
         <div class="col-12">
-          <!-- <base-songs-list-group-vue :songs="currentPlaylist.songs" /> -->
-          <base-categorized-songs-list-group-vue v-if="displayByGenre" :songs="searchSongs" />
-          <base-songs-list-group-vue v-else :songs="searchSongs" />
+          <base-categorized-songs-list-group v-if="displayByGenre" :songs="searchSongs" />
+          <base-songs-list-group v-else :songs="searchSongs" />
         </div>
+        
+        <!-- Modals -->
+        <teleport to="body">
+          <v-dialog v-model="showIntelligentPlaylistModal" width="500">
+            <v-card title="Dialog">
+              <v-card-text>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+              </v-card-text>
+
+              <v-card-actions>
+                <v-btn @click="showIntelligentPlaylistModal = false">{{ $t('Close') }}</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </teleport>
       </div>
     </template>
   </base-detail-page-vue>
@@ -60,28 +99,52 @@
 
 <script>
 import _ from 'lodash'
+import { ref } from 'vue'
 import { usePlaylists } from '@/store/playlists'
 import { storeToRefs } from 'pinia'
 
 import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseDetailPageVue from '@/layouts/BaseDetailPage.vue'
-import BaseSongsListGroupVue from '@/layouts/BaseSongsListGroup.vue'
-import BaseCategorizedSongsListGroupVue from '@/layouts/BaseCategorizedSongsListGroup.vue'
+import BaseSongsListGroup from '@/layouts/BaseSongsListGroup.vue'
+import BaseCategorizedSongsListGroup from '@/layouts/BaseCategorizedSongsListGroup.vue'
 
 export default {
   name: 'PlaylistView',
   components: {
     BaseCard,
     BaseDetailPageVue,
-    BaseCategorizedSongsListGroupVue,
-    BaseSongsListGroupVue
+    BaseCategorizedSongsListGroup,
+    BaseSongsListGroup
   },
   setup () {
     const store = usePlaylists()
     const { currentPlaylist } = storeToRefs(store)
+    const menuItems = [
+      'Follow playlist',
+      'Intelligent playlist',
+      'Rename',
+      'Random',
+      'Recommend',
+      'Mash',
+      'Share',
+      'Delete',
+      'Collaborate'
+    ]
+    const sortingItems = [
+      'Artist name',
+      'Song name',
+      'Release year',
+      'Genre'
+    ]
+
+    const showIntelligentPlaylistModal = ref(false)
+
     return {
       store,
-      currentPlaylist
+      menuItems,
+      sortingItems,
+      currentPlaylist,
+      showIntelligentPlaylistModal
     }
   },
   data () {
@@ -94,6 +157,8 @@ export default {
   },
   computed: {
     searchSongs () {
+      // Computed method that allows us to search the
+      // songs of the current playlist
       if (this.song.attributes === null || this.song.attributes === '') {
         return this.currentPlaylist.songs
       }
@@ -112,6 +177,24 @@ export default {
   },
   created () {
     this.store.setPlaylist(this.$route.params.id)
+  },
+  methods: {
+    handlePlaylistActions (name, index) {
+      // Actions to execute on the playlist
+      switch (name) {
+        case 'Intelligent playlist':
+          this.showIntelligentPlaylistModal = true
+          break;
+      
+        default:
+          break;
+      }
+      index
+    },
+    async handleSortingActions (name, index) {
+      name
+      index
+    }
   }
 }
 </script>

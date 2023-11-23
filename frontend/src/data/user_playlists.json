@@ -1,0 +1,152 @@
+[
+    {
+        "id": 1,
+        "name": "Dancehall1",
+        "author": {
+            "id": 1,
+            "username": "zadigo"
+        },
+        "songs": [
+            {
+                "id": 1,
+                "album": {
+                    "id": 1,
+                    "artist": {
+                        "id": 1,
+                        "name": "Jaylis",
+                        "fullname": "Lucie Dawa",
+                        "presentation": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic harum suscipit vitae odio recusandae quia, provident quaerat illum a, voluptates sed corporis minus sint voluptatem eaque quos exercitationem modi culpa.",
+                        "area": "Guadeloupe",
+                        "date_of_birth": "1992-05-14",
+                        "genre": "Dancehall",
+                        "cover_image": "/media/artists/jaylis/489420d9fa1dd33fb41f.jpg",
+                        "cover_image_thumbnail": "/media/CACHE/images/artists/jaylis/489420d9fa1dd33fb41f/bc728c51cf8a31b5a7d4c755b4de81e1.jpg",
+                        "number_of_followers": 1,
+                        "created_on": "2023-05-14"
+                    },
+                    "song_set": [
+                        {
+                            "id": 1,
+                            "name": "Petite princesse",
+                            "song_file": "/media/albums/mwaka_moon/hRcNWHzeEGNdqZKiyxydfi9BSQ2bkR.mp3",
+                            "genre": "Dancehall",
+                            "duration": 144,
+                            "bitrate": 256000,
+                            "is_explicit": false,
+                            "featuring_artists": []
+                        },
+                        {
+                            "id": 8,
+                            "name": "Rapide et furieux",
+                            "song_file": "/media/albums/mwaka_moon/hRcNWHzeEGNdqZKiyxydfi9BSQ2bkR.mp3",
+                            "genre": "Dancehall",
+                            "duration": 144,
+                            "bitrate": 256000,
+                            "is_explicit": false,
+                            "featuring_artists": [
+                                {
+                                    "id": 3,
+                                    "name": "Badgyal Lanae",
+                                    "fullname": "Lanae",
+                                    "presentation": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic harum suscipit vitae odio recusandae quia, provident quaerat illum a, voluptates sed corporis minus sint voluptatem eaque quos exercitationem modi culpa.",
+                                    "area": "Jamaica",
+                                    "date_of_birth": "1992-05-14",
+                                    "genre": "Dancehall",
+                                    "cover_image": "/media/artists/jaylis/489420d9fa1dd33fb41f.jpg",
+                                    "cover_image_thumbnail": "/media/CACHE/images/artists/jaylis/489420d9fa1dd33fb41f/bc728c51cf8a31b5a7d4c755b4de81e1.jpg",
+                                    "number_of_followers": 1,
+                                    "created_on": "2023-05-14"
+                                },
+                                {
+                                    "id": 2,
+                                    "name": "Maureen",
+                                    "fullname": "Marine Gontran",
+                                    "presentation": "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Hic harum suscipit vitae odio recusandae quia, provident quaerat illum a, voluptates sed corporis minus sint voluptatem eaque quos exercitationem modi culpa.",
+                                    "area": "Guadeloupe",
+                                    "date_of_birth": "1992-05-14",
+                                    "genre": "Dancehall",
+                                    "cover_image": "/media/artists/jaylis/489420d9fa1dd33fb41f.jpg",
+                                    "cover_image_thumbnail": "/media/CACHE/images/artists/jaylis/489420d9fa1dd33fb41f/bc728c51cf8a31b5a7d4c755b4de81e1.jpg",
+                                    "number_of_followers": 1,
+                                    "created_on": "2023-05-14"
+                                }
+                            ]
+                        }
+                    ],
+                    "name": "Mwaka moon",
+                    "genre": "Dancehall",
+                    "cover_image": "/media/cover/mwaka_moon/90eac02f2261fdd77d03.jpg",
+                    "cover_image_thumbnail": "/media/CACHE/images/cover/mwaka_moon/90eac02f2261fdd77d03/6ffec895c5af28caf42d87ff96fc975f.jpg",
+                    "producer": "Lil Durk",
+                    "number_of_songs": 2,
+                    "release_year": 2023,
+                    "listening_total_time": 2,
+                    "is_single": false,
+                    "is_active": true,
+                    "release_date": "2023-05-14"
+                },
+                "name": "Petite princesse",
+                "song_file": "/media/albums/mwaka_moon/hRcNWHzeEGNdqZKiyxydfi9BSQ2bkR.mp3",
+                "genre": "Dancehall",
+                "duration": 144.87509,
+                "bitrate": 256000
+            }
+        ],
+        "cover_image": "/media/playlists/cover_nKhJb5Hglb.jpg",
+        "background_color": "5e4b38",
+        "number_of_followers": 0,
+        "created_on": "2023-05-14"
+    },
+    {
+        "id": 3,
+        "name": "Playlist n°2",
+        "author": {
+            "id": 1,
+            "username": "zadigo"
+        },
+        "songs": [],
+        "cover_image": "/media/playlists/cover_j8TTt7HhhO.jpg",
+        "background_color": null,
+        "number_of_followers": 0,
+        "created_on": "2023-05-14"
+    },
+    {
+        "id": 4,
+        "name": "Playlist n°4",
+        "author": {
+            "id": 1,
+            "username": "zadigo"
+        },
+        "songs": [],
+        "cover_image": "/media/playlists/cover_i6IFs5bjlP.jpg",
+        "background_color": "c6d3d9",
+        "number_of_followers": 0,
+        "created_on": "2023-05-14"
+    },
+    {
+        "id": 5,
+        "name": "Playlist n°5",
+        "author": {
+            "id": 1,
+            "username": "zadigo"
+        },
+        "songs": [],
+        "cover_image": "/media/playlists/cover_fAEpvKB7Ck.jpg",
+        "background_color": "c6d3d9",
+        "number_of_followers": 0,
+        "created_on": "2023-05-14"
+    },
+    {
+        "id": 6,
+        "name": "Liked songs",
+        "author": {
+            "id": 1,
+            "username": "zadigo"
+        },
+        "songs": [],
+        "cover_image": "/media/playlists/cover_JFECagvCLi.jpg",
+        "background_color": "f5f6f7",
+        "number_of_followers": 0,
+        "created_on": "2023-05-14"
+    }
+]

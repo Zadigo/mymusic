@@ -12,10 +12,10 @@
       </div>
 
       <div v-if="activeComponent === 'list-playlists-vue'" class="col-12 mt-4">
-        <button type="button" class="btn btn-primary" @click="create">
+        <v-btn color="primary" rounded @click="handleCreatePlaylist">
           <font-awesome-icon icon="fa-solid fa-plus" class="me-2" />
           {{ $t('Create playlist') }}
-        </button>
+        </v-btn>
       </div>
 
       <component :is="activeComponent" :user-playlists="true" />
@@ -57,7 +57,9 @@ export default {
     }
   },
   methods: {
-    async create () {
+    async handleCreatePlaylist () {
+      // Handles the creation of a 
+      // new playlist
       try {
         const response = await this.$http.post('playlists/create')
         this.$session.updateArray('playlists', response.data)

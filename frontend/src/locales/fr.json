@@ -27,5 +27,8 @@
     "Charts": "Top 100",
     "songs": "morceaux",
     "singles": "singles",
-    "k listeners": "{count} écoute | {count} écoutes"
+    "k listeners": "{count} écoute | {count} écoutes",
+    "Display by year": "Grouper par année",
+    "Display by area": "Grouper par zone géographique",
+    "Display by country": "Grouper par pays"
 }
