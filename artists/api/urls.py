@@ -1,6 +1,6 @@
 from django.urls import re_path
 
-from artists import api_views
+from artists.api import views as api_views
 
 app_name = 'api_artists'
 

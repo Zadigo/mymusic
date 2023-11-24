@@ -1,3 +1,7 @@
+<doc>
+  Lists the songs for a given playlist
+</doc>
+
 <template>
   <div class="col-12 my-3">
     <!-- TODO: Make this independent from the store so that
@@ -69,7 +73,7 @@ export default {
     const store = usePlaylists()
     const { mediaUrl } = useUrls()
     const menuItems = [
-      'Save',
+      'Save to playlist',
       'Share',
       'Play all',
       'Recommend',

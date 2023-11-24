@@ -69,6 +69,7 @@ class AbstractPlaylist(models.Model):
 
 class UserPlaylist(AbstractPlaylist):
     """Playlist created by the user"""
+    
     user_sort = models.CharField(
         max_length=50,
         help_text='The sorting mechanism chosen by the user',

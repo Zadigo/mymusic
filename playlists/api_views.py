@@ -1,17 +1,17 @@
-from django.db import transaction
-from mymusic.utils import get_image_template
 import datetime
 
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
+from django.db import transaction
 from django.db.models import Avg, Count, StdDev
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from rest_framework.decorators import api_view
 from rest_framework.permissions import IsAuthenticated
+
+from artists.api.serializers import SongSerializer
 from artists.models import Song
-from artists.serializers import SongSerializer2
-from mymusic.utils import create_response
+from mymusic.utils import create_response, get_image_template
 from playlists.models import OfficialPlaylist, UserPlaylist
 from playlists.serializers import (OfficialPlaylistSerializer,
                                    PlaylistSerializer, SortPlaylistValidator)
@@ -30,6 +30,14 @@ def user_playslists_view(request, **kwargs):
     return create_response(serializer=serializer)
 
 
+@api_view(['get'])
+def playlist_details_view(request, pk, **kwargs):
+    """Returns the details for a specific playlist"""
+    playlist = get_object_or_404(UserPlaylist, id=pk)
+    serializer = PlaylistSerializer(instance=playlist)
+    return create_response(data=serializer.data)
+
+
 @api_view(['post'])
 def update_sorting_view(request, pk, **kwargs):
     """Get a playlist and sort the songs in
@@ -39,7 +47,7 @@ def update_sorting_view(request, pk, **kwargs):
     serializer = SortPlaylistValidator(data=request.data)
     serializer.is_valid(raise_exception=False)
     songs = serializer.sort_items(playlist)
-    serialized_songs = SongSerializer2(instance=songs, many=True)
+    serialized_songs = SongSerializer(instance=songs, many=True)
     return create_response(serializer=serialized_songs)
 
 
@@ -105,16 +113,6 @@ def explore_view(request, **kwargs):
         'new_releases': new_releases.data
     }
     return create_response(data=return_reponse)
-
-
-@api_view(['get'])
-def playlist_details_view(request, pk, **kwargs):
-    playlist = get_object_or_404(UserPlaylist, id=pk)
-    serializer = PlaylistSerializer(instance=playlist)
-    # return_response = {
-    #     **playlist.followers.aggregate(count=Count('id'))
-    # }
-    return create_response(data=serializer.data)
 
 
 @api_view(['get'])

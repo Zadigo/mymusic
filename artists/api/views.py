@@ -1,12 +1,13 @@
-from artists import models
-from rest_framework.exceptions import NotAcceptable
+import pandas
+import json
 from django.core.cache import cache
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import NotAcceptable
 
-from artists import serializers as artists_serializers
+from artists import models
+from artists.api import serializers as artists_serializers
 from artists.models import Album, Artist, Song
-from artists.serializers import ArtistSerializer2, SearchValidator
 from mymusic.utils import create_response, map_list
 
 
@@ -18,14 +19,14 @@ def artist_details_view(request, reference):
     # follows_artist = artist.followers.contains(request.user)
     # print(follows_artist)
 
-    serializer = ArtistSerializer2(instance=artist)
+    serializer = artists_serializers.ArtistSerializer(instance=artist)
     return create_response(serializer=serializer)
 
 
 @api_view(['post'])
 def search_albums_view(request, **kwargs):
     """Search all albums on the website"""
-    serializer = SearchValidator(data=request.data)
+    serializer = artists_serializers.SearchFormSerializer(data=request.data)
     serializer.is_valid(raise_exception=True)
     results_serializer = serializer.search()
     return create_response(serializer=results_serializer)
@@ -46,19 +47,23 @@ def genres_view(request, **kwargs):
     """Return all available genre on
     the plateform"""
     genres = cache.get('genres', [])
-    if not genres:
+    df1 = pandas.DataFrame(genres)
+    if df1.empty:
         genres = Album.objects.genres()
-        genres = list(map_list(genres))
-        cache.set('genres', genres, 0)
-    return create_response(data=genres)
+        df2 = pandas.DataFrame(genres)
+        df1 = pandas.concat([df1, df2])
+        df1.reset_index()
+        cache.set('genres', genres, timeout=600)
+    df1 = df1.sort_values('name')
+    data = json.loads(df1.to_json(orient='records'))
+    return create_response(data=data)
 
 
 @api_view(['get'])
 def followed_artists_view(request, **kwargs):
     """Returns the artists that the user follows"""
-    artists = Artist.objects.filter(
-        followers__id=1
-    ).order_by('name')
+    artists = Artist.objects.filter(followers__id=1)
+    artists = artists.order_by('name')
     serializer = artists_serializers.SimpleArtistSerializer(
         instance=artists,
         many=True

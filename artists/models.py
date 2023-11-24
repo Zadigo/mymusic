@@ -85,17 +85,22 @@ class Artist(models.Model):
     
     @cached_property
     def age(self):
+        """Returns the current age of
+        the music artist"""
         current_year = now().year
         return current_year - self.date_of_birth.year
 
     @property
     def is_birthday(self):
+        """Checks the current day is the
+        artist's birthday"""
         current_date = now()
         return current_date.day == self.date_of_birth.day
 
 
 class Album(models.Model):
     """Represents an album"""
+
     artist = models.ForeignKey(
         Artist,
         on_delete=models.CASCADE
@@ -146,20 +151,28 @@ class Album(models.Model):
 
     @property
     def number_of_songs(self):
-        return self.song_set.all().aggregate(Count('id'))['id__count']
+        """Returns the number of songs in
+        the album"""
+        songs = self.song_set.all()
+        return songs.aggregate(Count('id'))['id__count']
 
     @property
     def release_year(self):
+        """Returns the release year
+        of the album"""
         return self.release_date.year
 
     @cached_property
     def listening_total_time(self):
+        """Returns the total listening time
+        of the the album"""
         return self.song_set.aggregate(Count('duration'))['duration__count']
 
 
 class Song(models.Model):
     """Represents a song in an
     album"""
+    
     album = models.ForeignKey(
         Album,
         on_delete=models.CASCADE

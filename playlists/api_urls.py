@@ -18,6 +18,8 @@ urlpatterns = [
     
     # TODO: This is a "catch all" url that prevents the "merge, create urls"
     # from working correctly
-    re_path(r'^(?P<genre>\w+)$', api_views.official_playlist_details_view),
+    re_path(r'^(?P<genre>\w+)$', api_views.official_playlist_details_view)
+
+    
     # re_path(r'^explore$', api_views.explore_view),
 ]

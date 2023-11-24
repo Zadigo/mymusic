@@ -43,23 +43,6 @@
             </v-list-item>
           </v-list>
         </v-menu>
-
-        <!-- <button v-if="isPlaying && store.isCurrentSong(song)" type="button" class="btn btn-primary btn-sm" @click="store.pause">
-          <font-awesome-icon icon="fa-solid fa-pause" />
-        </button>
-
-        <button v-else type="button" class="btn btn-primary btn-sm" @click="store.play(song)">
-          <font-awesome-icon icon="fa-solid fa-play" />
-        </button>
-
-        <button type="button" class="btn btn-primary btn-sm">
-          <font-awesome-icon icon="fa-solid fa-heart" />
-        </button> -->
-
-        <!-- <button type="button" class="btn btn-primary btn-sm">
-          <font-awesome-icon icon="fa-solid fa-ellipsis-vertical"></font-awesome-icon>
-        </button> -->
-        <!-- <base-dropdown-button id="options" :items="[{ name: 'Google' }]" size="sm" /> -->
       </div>
     </div>
   </div>
@@ -86,11 +69,10 @@ export default {
     const store = usePlayer()
     const { isPlaying } = storeToRefs(store)
     const menuItems = [
-      'Save',
-      'Remove',
+      'Save to playlist',
       'Share',
-      'Like',
-      'Recommend'
+      'Recommend',
+      'Remove'
     ]
 
     return {

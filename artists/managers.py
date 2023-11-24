@@ -39,7 +39,7 @@ class AlbumManager(Manager):
     def genres(self):
         """Return all available genres on the website"""
         queryset = self.values_list('genre', flat=True)
-        return list(set(queryset))
+        return [{'id': i, 'name': genre} for i, genre in enumerate(list(set(queryset)))]
 
 
 class SongManager(Manager):
@@ -104,7 +104,8 @@ class ListenerManager(Manager):
         pass
 
     def song_listeners_per_month(self, song):
-        listeners = song.listener_set.annotate(month=ExtractMonth('created_on')).values('song__name', 'month')
+        listeners = song.listener_set.annotate(
+            month=ExtractMonth('created_on')).values('song__name', 'month')
         df = pandas.DataFrame(listeners)
         total_count = df.groupby('month')['song__name'].count()
         return total_count.to_json()

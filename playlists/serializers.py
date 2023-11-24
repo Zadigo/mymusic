@@ -1,9 +1,10 @@
-from artists.serializers import AlbumSerializer
+from django.shortcuts import get_list_or_404, get_object_or_404
 from rest_framework import fields
 from rest_framework.serializers import Serializer
-from django.shortcuts import get_list_or_404, get_object_or_404
-from playlists.choices import UserCustomSort
+
+from artists.api.serializers import AlbumSerializer
 from artists.models import Song
+from playlists.choices import UserCustomSort
 from playlists.models import UserPlaylist
 
 # TODO:
@@ -32,6 +33,7 @@ class PlaylistSerializer(Serializer):
     cover_image = fields.ImageField()
     background_color = fields.CharField()
     number_of_followers = fields.IntegerField()
+    user_sort = fields.ChoiceField(UserCustomSort.choices)
     created_on = fields.DateField()
 
 
@@ -40,8 +42,11 @@ class OfficialPlaylistSerializer(PlaylistSerializer):
 
 
 class SortPlaylistValidator(Serializer):
+    """Apply a sorting method on the
+    given playlist"""
+
     user_sort = fields.ChoiceField(
-        choices=UserCustomSort.choices,
+        UserCustomSort.choices,
         default=UserCustomSort.ALBUM_NAME
     )
 

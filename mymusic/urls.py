@@ -8,7 +8,7 @@ from django.urls import include, path, re_path
 from mymusic import views
 
 urlpatterns = [
-    path('api/v1/artists/', include('artists.api_urls')),
+    path('api/v1/artists/', include('artists.api.urls')),
     path('api/v1/playlists/', include('playlists.api_urls')),
     path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
