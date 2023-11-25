@@ -108,7 +108,9 @@ export default {
       // current user
       // TODO: Reactivate
       try {
-        if (!this.sessionStorage.hasPlaylists) {
+        if (this.$session.exists('playlists')) {
+          this.store.playlists = this.sessionStorage.playlists
+        } else {
           const response = await this.$http.get('playlists')
           this.store.$patch((state) => {
             state.playlists = response.data
@@ -116,9 +118,18 @@ export default {
             this.$session.create('hasPlaylists', true)
             this.$session.create('playlists', response.data)
           })
-        } else {
-          this.store.playlists = this.sessionStorage.playlists
         }
+        // if (!this.sessionStorage.hasPlaylists) {
+        //   const response = await this.$http.get('playlists')
+        //   this.store.$patch((state) => {
+        //     state.playlists = response.data
+
+        //     this.$session.create('hasPlaylists', true)
+        //     this.$session.create('playlists', response.data)
+        //   })
+        // } else {
+        //   this.store.playlists = this.sessionStorage.playlists
+        // }
       } catch (error) {
         // this.$refs.alert.showAlert('error', error.message, 'PLA-RE')
         console.error(error)

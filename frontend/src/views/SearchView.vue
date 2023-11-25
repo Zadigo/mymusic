@@ -7,29 +7,32 @@
     <!-- Search -->
     <div class="row">
       <div class="col-12">
-        <input v-model="searchedItem.name" :placeholder="$t('Search')" type="search" class="form-control p-2 mb-3 bg-dark text-light" @keyup="search">
-        <!-- NOTE: For testing -->
-        <!-- <button type="button" @click="search">{{ $t('Search') }}</button> -->
+        <div class="search">
+          <v-text-field v-model="searchedItem.name" :placeholder="$t('Search')" variant="outlined" class="text-light" @keyup="handleSearch"></v-text-field>
 
-        <a href @click.prevent="showAdvancedSearch = !showAdvancedSearch">
-          {{ $t('Advanced search') }}
-        </a>
+          <div class="d-flex justify-content-end">
+            <v-btn variant="tonal" color="light" rounded @click="showAdvancedSearch = !showAdvancedSearch">
+              {{ $t('Advanced search') }}
+            </v-btn>
+          </div>
+        </div>
         
         <!-- Advanced search -->
-        <base-card-vue v-if="showAdvancedSearch" class="my-4">
+        <base-card v-if="showAdvancedSearch" class="my-4">
           <template #body>
-            <input v-model="searchedItem.genre" :placeholder="$t('Search an area')" type="search" class="form-control p-2" @keyup="search">
-            <div>
-              <label for="year-selection" class="form-label text-light my-3">{{ $t('Choose a year') }}</label>
-              <input id="year-selection" v-model.number="searchedItem.year" :max="currentYear" min="2000" step="1" type="range" class="form-range">
+            <v-text-field v-model="searchedItem.area" :placeholder="$t('Search a genre')" variant="outlined" class="text-light" @keyup="handleSearch"></v-text-field>
+
+            <div class="mt-3">
+              <label for="search-year">Select a year</label>
+              <v-range-slider id="search-year" v-model="searchedItem.year" :min="1980" :max="currentYear" :step="1" thumb-label="always" hide-details></v-range-slider>
             </div>
           </template>
-        </base-card-vue>
+        </base-card>
       </div>
     </div>
     
     <div class="row mt-4">
-      <!-- Explore genres -->
+      <!-- Explore Genres -->
       <div v-if="searchedItem.name === null || searchedItem.name === ''" class="col-12">
         <h2 class="text-light display-5 mb-5">
           {{ $t('Explore all genres') }}
@@ -38,10 +41,7 @@
         <div class="row">
           <article v-for="genre in genres" :key="genre.id" :aria-label="genre.name" class="col-sm-12 col-md-4">
             <base-template-card-vue class="text-bg-primary">
-              <router-link :key="genre.id" :to="{ name: 'genre_view', params: { genre: genre.viewname } }" class="text-light">
-                <!-- <img :src="require('@/assets/cover.jpg')" alt="" class="card-img"> -->
-
-                <!-- <div class="card-img-overlay"> -->
+              <router-link :key="genre.id" :to="{ name: 'genre_view', params: { genre: genre.name.toLowerCase() } }" class="text-light">
                 <div class="card-body">
                   <h4 class="card-title">
                     {{ genre.name }}
@@ -94,14 +94,14 @@ import { computed } from '@vue/reactivity'
 import { asyncTimeout } from '@/composables/utils'
 
 import BaseTemplateCardVue from '@/layouts/bootstrap/cards/BaseTemplateCard.vue'
-import BaseCardVue from '@/layouts/bootstrap/cards/BaseCard.vue'
+import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseSongsListGroup from '@/layouts/BaseSongsListGroup.vue'
 import SearchSectionVue from '@/components/search/SearchSection.vue'
 
 export default {
   name: 'SearchView',
   components: { 
-    BaseCardVue,
+    BaseCard,
     BaseSongsListGroup,
     BaseTemplateCardVue,
     SearchSectionVue
@@ -126,7 +126,7 @@ export default {
       searchedItem: {
         name: null,
         genre: null,
-        year: null,
+        year: [0, 2023],
         area: []
       },
       showAll: false
@@ -162,6 +162,7 @@ export default {
   },
   created () {
     this.getGenres()
+    this.searchedItem.year[0] = this.currentYear - 10
   },
   methods: {
     async getGenres () {
@@ -174,7 +175,7 @@ export default {
         console.log(error)
       }
     },
-    async search () {
+    async handleSearch () {
       // Search an artist or an album
       // in the database
       try {

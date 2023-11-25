@@ -5,7 +5,7 @@ declare type DictionnaryKey = {
 }
 
 /** Creates a VueLocalStorage instance that can be used by a Vue app */
-export declare function createLocalStorage(options?: BaseOptions): VueLocalStorage
+export declare function createVueLocalStorage(options?: BaseOptions): VueLocalStorage
 
 /** Creates a VueSession instance that can be used by a Vue app */
 export declare function createVueSession(options?: VueSessionOptions): VueSession
@@ -89,7 +89,7 @@ export declare interface VueLocalStorage {
      * @param k - value to increment by
      * @returns null
      */
-    incrementBy (key: DictionnaryKey, k: number = 1): void
+    incrementBy (key: DictionnaryKey, k?: number = 1): void
     /**
      * Decrement a value by a certain quantity
      * 
@@ -97,7 +97,7 @@ export declare interface VueLocalStorage {
      * @param k - value to decrement by
      * @returns null
      */
-    decrementBy (key: DictionnaryKey, k: number = 1): void
+    decrementBy (key: DictionnaryKey, k?: number = 1): void
     /**
      * Gets or creates a new value if it does not exist
      *
@@ -115,8 +115,16 @@ export declare interface VueLocalStorage {
      */
     listPush (key: DictionnaryKey, value: any): void
     /**
+     * Pushes a value in a list only if it does not already exist
+     *
+     * @param key - key under which to save the element
+     * @param value - number, array or dictionnary
+     * @returns null
+     */
+    listPushUnique (key: DictionnaryKey, value: any): void
+    /**
      * Like listPush but will create a new list if it
-     * does not exist
+     * does not already exist
      *
      * @param key - key under which to save the element
      * @param value - number, array or dictionnary
@@ -141,7 +149,7 @@ export declare interface VueLocalStorage {
     /**
      * Toggles a value under a given key
      *
-     * @param key - key under which to save the element
+     * @param key - key under which to toggle the boolean value
      * @returns null
      */
     toggle(key: DictionnaryKey): void
@@ -177,7 +185,46 @@ export declare interface VueSession {
      * @param value - number, array or dictionnary
      * @returns null
      */
+    b64Create(key: DictionnaryKey, value: string): void
+    /**
+     * Creates a new record and encodes it to a base 64 string
+     *
+     * @param key - key under which to save the element
+     * @param value - string
+     * @returns null
+     */
+    b64Retrieve(key: DictionnaryKey, value: any): void
+    /**
+     * Gets a new record and decodes the base 64 value
+     *
+     * @param key - key under which to get the element
+     * @returns null
+     */
+    b64GetDelete(key: DictionnaryKey): void
+    /**
+     * Gets a new record and immediately deletes it
+     *
+     * @param key - key under which to get the element
+     * @returns string
+     */
     create(key: DictionnaryKey, value: unknown): void
+    /**
+     * Saves a key in the local storage with an
+     * expiration date
+     *
+     * @param key key to use
+     * @param value value to store
+     * @returns null
+     */
+    expire (key: string, value: string|number|object|number[]|string[], timeout?: number = 60): void
+    /**
+     * Transforms an expiration key to
+     * a persistent one
+     *
+     * @param key key to transform
+     * @returns null
+     */
+    persist (key: string): void
     /**
      * Returns the value store under a given key
      *
@@ -227,13 +274,87 @@ export declare interface VueSession {
      * @param key - key of the element to remove
      * @param value - value to add
      */
-    updateArray(key: DictionnaryKey, value: unknown): void
+    listPush(key: DictionnaryKey, value: unknown): void
+    /**
+     * Tries to push the incoming element to an 
+     * array stored under the given key ensuring
+     * that it is unique
+     *
+     * @param key - key of the element to remove
+     * @param value - value to add
+     */
+    listPushUnique(key: DictionnaryKey, value: unknown): void
+    /**
+     * Like listPush but will create a new list if it
+     * does not already exist
+     *
+     * @param key - key under which to save the element
+     * @param value - number, array or dictionnary
+     * @returns null
+     */
+    defaultList (key: DictionnaryKey, value: any): void
+    /**
+     * Merges two lists under a given key
+     *
+     * @param key - key under which to merge the elements
+     * @param values - array to merge
+     * @returns null
+     */
+    listMerge (key: DictionnaryKey, values: object): void
+    /**
+     * Counts the number of items under a given list
+     *
+     * @param key - key under which to merge the elements
+     * @returns number
+     */
+    listCount (key: DictionnaryKey): number
     /**
      * Toggle a boolean stored under a given key
      * 
      * @param key - key of the element to toggle
      */
     toggle(key: DictionnaryKey): void
+    /**
+     * Increment a value by a certain quantity
+     * 
+     * @param key - key under which to increment the element
+     * @param k - value to increment by
+     * @returns null
+     */
+    incrementBy (key: DictionnaryKey, k?: number = 1): void
+    /**
+     * Decrement a value by a certain quantity
+     * 
+     * @param key - key under which to increment the element
+     * @param k - value to decrement by
+     * @returns null
+     */
+    decrementBy (key: DictionnaryKey, k?: number = 1): void
+    /**
+     * Increment a value by a certain quantity
+     * 
+     * @param key - key that contains the dictionnary to update
+     * @param keyToUpdate - key in the dictionnary to increment
+     * @param k - value to increment by
+     * @returns null
+     */
+    incrementDictKeyBy (key: DictionnaryKey, keyToUpdate: string, k?: number = 1): void
+    /**
+     * Decrement a value by a certain quantity
+     * 
+     * @param key - key that contains the dictionnary to update
+     * @param keyToUpdate - key in the dictionnary to decrement
+     * @param k - value to decrement by
+     * @returns null
+     */
+    decrementDictKeyBy (key: DictionnaryKey, keyToUpdate: string, k?: number = 1): void
+    /**
+     * Gets the type of the value
+     * 
+     * @param key - key that contains the value to check
+     * @returns null
+     */
+    getType (key: DictionnaryKey): string
 
     install(app: App): void
 }

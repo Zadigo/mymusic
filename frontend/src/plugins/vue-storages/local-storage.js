@@ -29,6 +29,17 @@ function setupDevtools (app, storage) {
       icon: 'storage'
     })
 
+    api.on.getInspectorState((payload) => {
+      if (payload.inspectorId === 'vue-local-storage') {
+        payload.state = {
+          state: {
+            key: 'vue-local-storage',
+            value: storage.data
+          }
+        }
+      }
+    })
+
     api.on.getInspectorTree((payload) => {
       if (payload.inspectorId === 'vue-local-storage') {
         payload.rootNodes = [
@@ -38,25 +49,6 @@ function setupDevtools (app, storage) {
           }
         ]
       }
-    })
-
-    api.on.getInspectorState((payload) => {
-      if (payload.inspectorId === 'vue-local-storage') {
-        payload.state = {
-          state: [
-            {
-              key: 'vue-local-storage',
-              value: storage.data
-            }
-          ]
-        }
-      }
-    })
-
-    api.addTimelineLayer({
-      id: 'vue-session-storage',
-      label: 'VueSession',
-      color: 0x92A2BF
     })
 
     // api.notifyComponentUpdate('vue-local-storage')
@@ -234,7 +226,6 @@ class VueLocalStorage {
 
   install (app) {
     setupDevtools(app, this)
-    // app.provide(storageSymbol, this)
     app.config.globalProperties.$localstorage = this
     app.mixin({
       data: () => ({
@@ -242,17 +233,16 @@ class VueLocalStorage {
       })
     })
     window.VueLocalStorage = this
-
     // if (DEBUG) {
     // }
   }
 }
 
-function createLocalStorage (options) {
-  return new VueLocalStorage(options)
+function createVueLocalStorage () {
+  return new VueLocalStorage()
 }
 
 export {
-  createLocalStorage,
+  createVueLocalStorage,
   VueLocalStorage
 }

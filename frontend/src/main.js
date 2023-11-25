@@ -3,7 +3,7 @@ import { createApp, markRaw } from 'vue'
 import { createPinia } from 'pinia'
 // import { createVueSession } from './plugins/vue-storages/session-storage'
 // import { createLocalStorage } from './plugins/vue-storages'
-import { createVueSession, createLocalStorage } from './plugins/vue-storages'
+import { createVueSession, createVueLocalStorage } from './plugins/vue-storages'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createVuetify } from 'vuetify'
 import createAxios from './plugins/axios'
@@ -26,7 +26,7 @@ import './plugins/fontawesome'
 
 const pinia = createPinia()
 const session = createVueSession()
-const localstorage = createLocalStorage()
+const localstorage = createVueLocalStorage()
 const app = createApp(App)
 
 const vuetify = createVuetify({

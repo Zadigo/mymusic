@@ -123,7 +123,11 @@ export default {
       this.$localstorage.create(settings)
     },
     displayAlert (type, title, content) {
-      this.$refs.alert.showAlert(type, content, title)
+      // Shows an alert if a component requires it
+      type
+      title
+      content
+      // this.$refs.alert.showAlert(type, content, title)
     },
     async handleCountView () {
       // Sends a view when the user has listened

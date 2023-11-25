@@ -61,7 +61,7 @@
         <div class="col-12 mb-2">
           <base-card>
             <template #body>
-              <v-text-field v-model="song.attributes" :placeholder="$t('Search x songs...', { count: currentPlaylist.songs.length })" variant="solo" elevation="0" hide-details clearable></v-text-field>
+              <v-text-field v-model="song.attributes" :placeholder="$t('Search x songs...', { count: currentPlaylist.songs.length })" class="text-light" variant="outlined" hide-details clearable></v-text-field>
               
               <div class="d-flex justify-content-start mt-3">
                 <v-switch v-model="displayByGenre" :label="$t('Display by genre')" inset hide-details></v-switch>

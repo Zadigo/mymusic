@@ -62,11 +62,12 @@ export default {
       // new playlist
       try {
         const response = await this.$http.post('playlists/create')
-        this.$session.updateArray('playlists', response.data)
+        this.$session.listPush('playlists', response.data)
         this.store.loadFromCache(true)
-        this.$emit('display-alert', 'success', 'Playlist created', response)
+        // this.$emit('display-alert', 'success', 'Playlist created', response)
       } catch (error) {
-        this.$emit('display-alert', 'error', 'PLA-CRE', error.message)
+        // this.$emit('display-alert', 'error', 'PLA-CRE', error.message)
+        // pass
       }
     }
   }

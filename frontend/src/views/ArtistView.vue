@@ -1,5 +1,5 @@
 <template>
-  <base-detail-page-vue :image="currentArtist.cover_image" class="text-light position-relative">
+  <base-detail-page-vue :image="currentArtist?.cover_image" class="text-light position-relative">
     <template #default>
       <div class="d-flex flex-column w-50 justify-content-start">
         <h1 class="display-2 fw-bold">{{ currentArtist.name }}</h1>
