@@ -20,10 +20,15 @@ client.interceptors.request.use(
   }
 )
 
-export default function createAxios () {
+function createAxios () {
   return {
     install: (app) => {
       app.config.globalProperties.$http = client
     }
   }
+}
+
+export {
+  client,
+  createAxios
 }

@@ -8,6 +8,7 @@
     any component can require an iteration of playlists from
     any source -->
     <div v-if="playlists.length > 0" class="row">
+      <!-- Playlist -->
       <article v-for="playlist in playlists" :key="playlist.id" class="col-sm-12 col-md-4">
         <div class="card my-2">
           <router-link :to="handlePlaylistLink(playlist)" :aria-label="playlist.name" class="text-decoration-none text-white">
@@ -28,8 +29,8 @@
                 </template>
   
                 <v-list>
-                  <v-list-item v-for="(item, i) in menuItems" :key="i" :value="index" @click="handleMenuSelection(item, i)">
-                    <v-list-item-title>{{ item }}</v-list-item-title>
+                  <v-list-item v-for="(menuItem, i) in menuItems" :key="i" :value="index" @click="handleMenuSelection(playlist, menuItem, i)">
+                    <v-list-item-title>{{ menuItem }}</v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
@@ -49,6 +50,7 @@
 <script>
 import { useUrls } from '@/composables/utils'
 import { usePlaylists } from '../../store/playlists'
+import usePlaylistComposable from '@/composables/playlists'
 
 import EmptyIteration from '../EmptyIteration.vue'
 
@@ -73,18 +75,20 @@ export default {
     const store = usePlaylists()
     const { mediaUrl } = useUrls()
     const menuItems = [
-      'Save to playlist',
-      'Share',
       'Play all',
-      'Recommend',
-      'Mash',
+      // 'Share',
+      // 'Recommend',
+      // 'Mash',
       'Delete'
     ]
+    const { getUserPlaylists, deletePlaylist } = usePlaylistComposable()
 
     return {
       store,
       menuItems,
-      mediaUrl
+      mediaUrl,
+      deletePlaylist,
+      getUserPlaylists
     }
   },
   computed: {
@@ -99,45 +103,36 @@ export default {
   },
   created () {
     if (this.userPlaylists) {
-      this.getUserPlaylists()
+      this.handleGetUserPlaylists()
     }
   },
   methods: {
-    async getUserPlaylists () {
+    handleGetUserPlaylists () {
       // Returns all the playlists of the
       // current user
-      // TODO: Reactivate
-      try {
-        if (this.$session.exists('playlists')) {
-          this.store.playlists = this.sessionStorage.playlists
-        } else {
-          const response = await this.$http.get('playlists')
+      if (this.$session.exists('playlists')) {
+        this.store.playlists = this.sessionStorage.playlists
+      } else {
+        this.getUserPlaylists((data) => {
           this.store.$patch((state) => {
-            state.playlists = response.data
-
+            state.playlists = data
             this.$session.create('hasPlaylists', true)
-            this.$session.create('playlists', response.data)
+            this.$session.create('playlists', data)
           })
-        }
-        // if (!this.sessionStorage.hasPlaylists) {
-        //   const response = await this.$http.get('playlists')
-        //   this.store.$patch((state) => {
-        //     state.playlists = response.data
-
-        //     this.$session.create('hasPlaylists', true)
-        //     this.$session.create('playlists', response.data)
-        //   })
-        // } else {
-        //   this.store.playlists = this.sessionStorage.playlists
-        // }
-      } catch (error) {
-        // this.$refs.alert.showAlert('error', error.message, 'PLA-RE')
-        console.error(error)
+        })
       }
-    },
-    handleMenuSelection (name, index) {
-      name
-      index
+    },  
+    handleMenuSelection (playlist, menuItem) {
+      switch (menuItem) {
+        case 'Delete':
+          this.deletePlaylist(playlist, (data) => {
+            console.log(data)
+          })
+          break
+      
+        default:
+          break
+      }
     },
     handlePlaylistLink (playlist) {
       // Navigate to the given playlist

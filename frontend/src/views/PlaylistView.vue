@@ -33,7 +33,7 @@
             </template>
 
             <v-list>
-              <v-list-item v-for="(item, i) in menuItems" :key="i" :value="index" @click="handlePlaylistActions(item, i)">
+              <v-list-item v-for="(item, i) in menuItems" :key="i" :value="index" @click="handleMenuActions(item, i)">
                 <v-list-item-title>{{ item }}</v-list-item-title>
               </v-list-item>
             </v-list>
@@ -79,19 +79,18 @@
         </div>
         
         <!-- Modals -->
-        <teleport to="body">
-          <v-dialog v-model="showIntelligentPlaylistModal" width="500">
-            <v-card title="Dialog">
-              <v-card-text>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-              </v-card-text>
+        <v-dialog v-model="showRenamingModal" width="300">
+          <v-card title="Dialog">
+            <v-card-text>
+              <v-text-field v-model="requestParams.name" placeholder="Rename playlist"></v-text-field>
+            </v-card-text>
 
-              <v-card-actions>
-                <v-btn @click="showIntelligentPlaylistModal = false">{{ $t('Close') }}</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
-        </teleport>
+            <v-card-actions>
+              <v-btn @click="showRenamingModal = false">{{ $t('Close') }}</v-btn>
+              <v-btn @click="handlePlaylistRenaming">{{ $t('Save') }}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </div>
     </template>
   </base-detail-page-vue>
@@ -102,6 +101,7 @@ import _ from 'lodash'
 import { ref } from 'vue'
 import { usePlaylists } from '@/store/playlists'
 import { storeToRefs } from 'pinia'
+import usePlaylistsCompsable from '@/composables/playlists'
 
 import BaseCard from '@/layouts/bootstrap/cards/BaseCard.vue'
 import BaseDetailPageVue from '@/layouts/BaseDetailPage.vue'
@@ -120,15 +120,15 @@ export default {
     const store = usePlaylists()
     const { currentPlaylist } = storeToRefs(store)
     const menuItems = [
-      'Follow playlist',
-      'Intelligent playlist',
+      'Follow',
+      // 'Intelligent playlist',
       'Rename',
-      'Random',
-      'Recommend',
-      'Mash',
-      'Share',
+      // 'Random',
+      // 'Recommend',
+      // 'Mash',
+      // 'Share',
       'Delete',
-      'Collaborate'
+      // 'Collaborate'
     ]
     const sortingItems = [
       'Artist name',
@@ -138,17 +138,27 @@ export default {
     ]
 
     const showIntelligentPlaylistModal = ref(false)
+    const showRenamingModal = ref(false)
+
+    const { deletePlaylist, renamePlaylist, followPlaylist } = usePlaylistsCompsable()
 
     return {
       store,
       menuItems,
       sortingItems,
       currentPlaylist,
-      showIntelligentPlaylistModal
+      showIntelligentPlaylistModal,
+      showRenamingModal,
+      renamePlaylist,
+      deletePlaylist,
+      followPlaylist
     }
   },
   data () {
     return {
+      requestParams: {
+        name: null
+      },
       displayByGenre: false,
       song: {
         attributes: null
@@ -179,21 +189,47 @@ export default {
     this.store.setPlaylist(this.$route.params.id)
   },
   methods: {
-    handlePlaylistActions (name, index) {
+    handleMenuActions (name, index) {
       // Actions to execute on the playlist
       switch (name) {
-        case 'Intelligent playlist':
-          this.showIntelligentPlaylistModal = true
-          break;
-      
+        case 'Follow':
+          this.followPlaylist(this.store.currentPlaylist, (data) => {
+            console.log(data)
+          })
+          break
+
+        case 'Rename':
+          this.showRenamingModal = true
+          break
+
+        case 'Delete':
+          this.deletePlaylist(this.store.currentPlaylist, (data) => {
+            console.log(data)
+          })
+          break
+
         default:
-          break;
+          break
       }
       index
     },
     async handleSortingActions (name, index) {
+      // Change the sorting method of the playlist
       name
       index
+      try {
+        const response = await this.$http.post('/')
+        console.log(response.data)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    handlePlaylistRenaming () {
+      // Renames the current playlist
+      this.renamePlaylist(this.store.currentPlaylist, this.requestParams, () => {
+        this.store.currentPlaylist.name = this.requestParams.name
+        this.showRenamingModal = false
+      })
     }
   }
 }

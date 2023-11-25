@@ -6,7 +6,7 @@ import { createPinia } from 'pinia'
 import { createVueSession, createVueLocalStorage } from './plugins/vue-storages'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { createVuetify } from 'vuetify'
-import createAxios from './plugins/axios'
+import { createAxios } from './plugins/axios'
 
 import App from './App.vue'
 

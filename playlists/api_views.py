@@ -92,8 +92,7 @@ def create_playlist_view(request, **kwargs):
 
 @api_view(['post'])
 def delete_playlist_view(request, pk, **kwargs):
-    user = None
-    # playlist = get_object_or_404(UserPlaylist, id=request.data.get('playlist_id'), user=user)
+    # playlist = get_object_or_404(UserPlaylist, id=request.data.get('playlist_id'), user=request.user)
     playlist = get_object_or_404(UserPlaylist, id=pk)
     playlist.delete()
     return create_response(data={'id': playlist.id})
