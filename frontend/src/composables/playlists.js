@@ -57,9 +57,22 @@ export default function usePlaylistComposable () {
     }
   }
 
+  async function addSongToPlaylist (playlistId, songId, callback) {
+    // Allows adding a song to a playlist
+    try {
+      const response = await client.post(`playlists/${playlistId}/add`, { song_id: songId })
+      if (isFunction(callback)) {
+        callback(response.data)
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return {
     followPlaylist,
     getUserPlaylists,
+    addSongToPlaylist,
     renamePlaylist,
     deletePlaylist
   }

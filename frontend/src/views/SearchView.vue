@@ -90,6 +90,7 @@
 <script>
 import _ from 'lodash'
 import dayjs from '@/plugins/dayjs'
+import { usePlaylists } from '@/store/playlists'
 import { computed } from '@vue/reactivity'
 import { asyncTimeout } from '@/composables/utils'
 
@@ -114,7 +115,9 @@ export default {
     }
   },
   setup () {
+    const playlistsStore = usePlaylists()
     return {
+      playlistsStore,
       asyncTimeout
     }
   },
@@ -163,6 +166,7 @@ export default {
   created () {
     this.getGenres()
     this.searchedItem.year[0] = this.currentYear - 10
+    this.playlistsStore.loadFromCache()
   },
   methods: {
     async getGenres () {

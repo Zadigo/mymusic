@@ -17,7 +17,9 @@
           <img src="" alt="">
           <div class="d-flex flex-column">
             <span>{{ song.name }}</span>
-            <router-link :to="{ name: 'artist_view', params: { id: 'nnoin' } }" class="text-muted">{{ song.album.artist.name }}</router-link>
+            <router-link :to="{ name: 'artist_view', params: { id: 'nnoin' } }" class="text-muted">
+              {{ song.album.artist.name }}
+            </router-link>
           </div>
         </div>
       </div>

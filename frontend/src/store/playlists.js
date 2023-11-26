@@ -84,6 +84,15 @@ const usePlaylists = defineStore('playlists', {
       const store = usePlayer()
       const { isPlaying } = storeToRefs(store)
       return isPlaying.value
+    },
+    playlistNames () {
+      // Return only the names of the playlist
+      return _.map(this.playlists, (playlist) => {
+        return {
+          id: playlist && playlist.id,
+          name: playlist && playlist.name
+        }
+      })
     }
   }
 })

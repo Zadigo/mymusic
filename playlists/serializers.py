@@ -84,3 +84,14 @@ class PlaylistFromSongs(Serializer):
         for song in songs:
             playlist.songs.add(song)
         return PlaylistSerializer(instance=playlist)
+
+
+class RenamePlaylistValidator(Serializer):
+    name = fields.CharField()
+
+    def validate(self, attrs):
+        name = attrs['name']
+        if len(name) > 50:
+            raise fields.ValidationError({'name': 'Length should not be above 50'})
+        attrs['name'] = name.lower().title()
+        return attrs

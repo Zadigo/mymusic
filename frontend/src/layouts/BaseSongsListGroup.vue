@@ -38,19 +38,37 @@
           </template>
 
           <v-list>
-            <v-list-item v-for="(item, i) in menuItems" :key="i" :value="item" @click="handlePlaylistMenu(item, i)">
-              <v-list-item-title>{{ item }}</v-list-item-title>
+            <v-list-item v-for="(menuItem, i) in menuItems" :key="i" :value="item" @click="handleSongMenu(song, menuItem, i)">
+              <v-list-item-title>{{ menuItem }}</v-list-item-title>
             </v-list-item>
           </v-list>
         </v-menu>
       </div>
     </div>
+
+    <Teleport to="body">
+      <v-dialog id="add-to-playlist" v-model="showAddToPlaylistModal" width="300">
+        <v-card title="Dialog">
+          <v-card-text>
+            <v-select v-model="requestParams.playlist" label="Select a playlist" :items="playlistsStore.playlistNames" item-title="name" item-value="id" variant="outlined" return-object clearable multiple></v-select>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn @click="handleCloseSongToPlaylistModal">{{ $t('Close') }}</v-btn>
+            <v-btn @click="addSongToPlaylist">{{ $t('Save') }}</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </Teleport>
   </div>
 </template>
 
 <script>
 import { usePlayer } from '@/store/player'
+import { usePlaylists } from '@/store/playlists'
+import usePlaylistComposable from '@/composables/playlists'
 import { storeToRefs } from 'pinia'
+import { ref } from 'vue'
 
 // import BaseDropdownButton from '@/layouts/bootstrap/BaseDropdownButton.vue'
 
@@ -66,19 +84,57 @@ export default {
     }
   },
   setup () {
-    const store = usePlayer()
-    const { isPlaying } = storeToRefs(store)
+    const playerStore = usePlayer()
+    const { isPlaying } = storeToRefs(playerStore)
+    const playlistsStore = usePlaylists()
+    const { addSongToPlaylist } = usePlaylistComposable()
     const menuItems = [
       'Save to playlist',
-      'Share',
-      'Recommend',
-      'Remove'
+      // 'Share',
+      // 'Recommend',
+      // 'Remove'
     ]
+    const showAddToPlaylistModal = ref(false)
 
     return {
-      store,
+      playerStore,
+      playlistsStore,
       menuItems,
-      isPlaying
+      showAddToPlaylistModal,
+      isPlaying,
+      addSongToPlaylist
+    }
+  },
+  data () {
+    return {
+      requestParams: {
+        playlists: []
+      }
+    }
+  },
+  methods: {
+    handleCloseSongToPlaylistModal () {
+      this.showAddToPlaylistModal = false
+      this.requestParams.playlists = []
+    },
+    handleAddSongToPlaylist (song) {
+      // Allows the user to add a song to a playlist
+      this.addSongToPlaylist(this.requestParams.playlistId, song.id, (data) => {
+        console.log(data)
+      })
+    },
+    handleSongMenu (song, menuItem) {
+      // Allows the user to run multiple actions
+      // on a song using the song menu
+      song
+      switch (menuItem) {
+        case 'Save to playlist':
+          this.showAddToPlaylistModal = true
+          break
+
+        default:
+          break
+      }
     }
   }
 }

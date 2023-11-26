@@ -14,7 +14,8 @@ from artists.models import Song
 from mymusic.utils import create_response, get_image_template
 from playlists.models import OfficialPlaylist, UserPlaylist
 from playlists.serializers import (OfficialPlaylistSerializer,
-                                   PlaylistSerializer, SortPlaylistValidator)
+                                   PlaylistSerializer, RenamePlaylistValidator,
+                                   SortPlaylistValidator)
 
 USER_MODEL = get_user_model()
 
@@ -29,6 +30,15 @@ def user_playslists_view(request, **kwargs):
     serializer = PlaylistSerializer(instance=queryset, many=True)
     return create_response(serializer=serializer)
 
+
+@api_view(['post'])
+def rename_playlist(request, pk, **kwargs):
+    playlist = get_object_or_404(UserPlaylist, pk=pk)
+    serializer = RenamePlaylistValidator(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    playlist.name = serializer.validated_data['name']
+    playlist.save()
+    return create_response(data={'state': True})
 
 @api_view(['get'])
 def playlist_details_view(request, pk, **kwargs):
@@ -76,8 +86,7 @@ def remove_song_from_playlist(request, pk, **kwargs):
 def create_playlist_view(request, **kwargs):
     """Creates a new playlist"""
     user = get_object_or_404(USER_MODEL, id=1)
-
-    last_playlist = UserPlaylist.objects.last()
+    last_playlist = UserPlaylist.objects.latest('created_on')
 
     name = f'Playlist n°{last_playlist.id + 1}'
     playlist = UserPlaylist.objects.create(

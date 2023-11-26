@@ -229,6 +229,8 @@ export default {
       this.renamePlaylist(this.store.currentPlaylist, this.requestParams, () => {
         this.store.currentPlaylist.name = this.requestParams.name
         this.showRenamingModal = false
+        this.$session.create('playlists', this.store.playlists)
+        this.store.loadFromCache(true)
       })
     }
   }
