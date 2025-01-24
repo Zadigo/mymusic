@@ -128,8 +128,6 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-node_modules
-
 media/albums/
 media/cover/
 media/artists/
@@ -145,7 +143,6 @@ init.ipynb
 
 # Vue
 .DS_Store
-node_modules
 /dist
 
 
@@ -197,7 +194,7 @@ npm-debug.log*
 !/.vscode/extensions.json
 /coverage
 /dist
-/node_modules
 /platforms
 /plugins
 /www
+node_modules
