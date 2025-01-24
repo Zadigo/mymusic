@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkfrontend"]=self["webpackChunkfrontend"]||[]).push([[310],{6310:function(n,r,e){e.r(r),e.d(r,{default:function(){return f}});var t=e(3396);const s={class:"row"},a={class:"wrapper"};function d(n,r){return(0,t.wg)(),(0,t.iD)("div",s,[(0,t._)("div",a,[(0,t.WI)(n.$slots,"default",{},void 0,!0)])])}var c=e(89);const o={},u=(0,c.Z)(o,[["render",d],["__scopeId","data-v-1424d073"]]);var f=u}}]);
-//# sourceMappingURL=310.383509ff.js.map

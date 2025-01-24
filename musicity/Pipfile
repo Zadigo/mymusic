@@ -1,0 +1,24 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "*"
+psycopg2 = "*"
+mutagen = "*"
+django-extensions = "*"
+django-imagekit = "*"
+django-cors-headers = "*"
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
+pillow = "*"
+numpy = "*"
+scipy = "*"
+autopep8 = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

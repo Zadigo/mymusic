@@ -1,2 +1,0 @@
-"use strict";(self["webpackChunkfrontend"]=self["webpackChunkfrontend"]||[]).push([[8498],{8498:function(n,r,e){e.r(r),e.d(r,{default:function(){return d}});var t=e(3396);const u={class:"card-group"};function a(n,r,e,a,s,c){return(0,t.wg)(),(0,t.iD)("div",u,[(0,t.WI)(n.$slots,"default")])}var s={name:"BaseCardGroup"},c=e(89);const o=(0,c.Z)(s,[["render",a]]);var d=o}}]);
-//# sourceMappingURL=8498.e265d05e.js.map
