@@ -1,24 +1,39 @@
 <template>
-  <ion-page>
+  <ion-menu type="push" content-id="main-content">
     <ion-header>
       <ion-toolbar>
-        <ion-buttons slot="primary">
-          <ion-button fill="clear">
-            <ion-icon slot="end" :icon="search" />
-          </ion-button>
-        </ion-buttons>
+        <ion-title>Menu Content</ion-title>
       </ion-toolbar>
     </ion-header>
-    
-    <ion-nav :root="songExplorer" />
+    <ion-content class="ion-padding">This is the menu content.</ion-content>
+  </ion-menu>
+  <ion-page id="main-content">
+    <ion-header>
+      <ion-toolbar>
+        <ion-buttons slot="start">
+          <ion-menu-button />
+        </ion-buttons>
+        <ion-title>
+          Explorer
+        </ion-title>
+      </ion-toolbar>
+    </ion-header>
+    <ion-content>
+      <base-player />
+      <song-explorer />
+      <!-- Sub Pages -->
+      <song-details-modal />
+      <!-- Modals -->
+      <playlist-details />
+    </ion-content>
   </ion-page>
 </template>
 
 <script setup lang="ts">
-import SongExplorer from '@/components/explorer/SongExplorer.vue';
-import { IonButton, IonButtons, IonHeader, IonIcon, IonNav, IonPage, IonToolbar } from '@ionic/vue';
-import { search } from 'ionicons/icons';
-import { markRaw } from 'vue';
+import { IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 
-const songExplorer = markRaw(SongExplorer)
+import SongDetailsModal from '@/components/explorer/SongDetailsModal.vue';
+import SongExplorer from '@/components/explorer/SongExplorer.vue';
+import BasePlayer from '@/components/BasePlayer.vue';
+import PlaylistDetails from '@/components/modals/PlaylistDetails.vue';
 </script>

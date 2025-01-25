@@ -6,13 +6,7 @@
       </ion-toolbar>
     </ion-header>
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Tab 3</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
-      <p>User's playlist and subscribed playlists page</p>
+      <p>Playlist tab</p>
     </ion-content>
   </ion-page>
 </template>

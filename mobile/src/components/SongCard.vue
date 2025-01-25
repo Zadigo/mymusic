@@ -1,8 +1,7 @@
 <template>
   <ion-card>
     <slot name="albumImage">
-      <!-- <img :src="song.album_image" alt="Silhouette of mountains" /> -->
-      <ion-img :src="song.album_image" alt="" />
+      <ion-img :src="song.album.album_image" :alt="song.name" />
     </slot>
     
     <ion-card-header>
@@ -13,7 +12,7 @@
     <ion-card-content>
       <ion-range v-model="percentageComplete" />
 
-      <ion-button size="small" color="secondary" shape="round">
+      <ion-button size="small" color="secondary" shape="round" @click="handlePlay(song)">
         <ion-icon :icon="play" />
       </ion-button>
 
@@ -29,6 +28,7 @@
 </template>
 
 <script setup lang="ts">
+import { useMediaPlayer } from '@/composables/songs';
 import { Song } from '@/types';
 import { IonButton, IonCard, IonCardContent, IonRange, IonCardHeader, IonImg, IonCardSubtitle, IonCardTitle, IonIcon } from '@ionic/vue';
 import { addCircleOutline, heartOutline, play } from 'ionicons/icons';
@@ -48,4 +48,6 @@ defineProps({
 })
 
 const percentageComplete = ref(20)
+
+const { handlePlay } = useMediaPlayer()
 </script>

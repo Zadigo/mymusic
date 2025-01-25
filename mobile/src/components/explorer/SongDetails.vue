@@ -1,105 +1,153 @@
 <template>
   <ion-header>
     <ion-toolbar>
-      <ion-nav-link :component="songExplorer" router-direction="back">
-        <ion-button>
+      <ion-buttons slot="start">
+        <ion-button shape="round" size="small" @click="showSongDetails=false">
           <ion-icon :icon="arrowBack" />
         </ion-button>
-      </ion-nav-link>
-
-      <ion-buttons slot="start">
-        <ion-back-button />
       </ion-buttons>
-      <ion-title>Song details</ion-title>
+      
+      <ion-title>
+        <span v-if="currentlySelected">{{ currentlySelected.name }}</span>
+        <span v-else>...</span>
+      </ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-content :fullscreen="true" class="ion-padding">
-    <ion-grid>
+  <ion-content>
+    <ion-grid class="ion-no-padding">
       <ion-row>
         <ion-col size="12">
-          <div class="artist-header">
-            <ion-img src="/music1.jpg" alt="" />
+          <div v-if="currentlySelected" class="artist-header">
+            <ion-img :src="currentlySelected.album.album_image" :alt="currentlySelected.artist.name" />
+            <div class="dark-screen" />
+            <div class="artist-infos">
+              <h1>Britney Spears</h1>
+            </div>
           </div>
         </ion-col>
-        <ion-col size="12">
-          <ion-button color="dark" size="small">
-            Follow
-          </ion-button>
-          <ion-button color="dark" shape="round">
-            <ion-icon :icon="shuffle" />
-          </ion-button>
-          <ion-button color="dark" shape="round">
-            <ion-icon :icon="play" />
-          </ion-button>
+        <ion-col class="ion-padding" size="12">
+          <ion-row class="ion-justify-content-between ion-align-items-center">
+            <ion-col>
+              <ion-button color="secondary" shape="round">
+                Follow
+              </ion-button>
+            </ion-col>
+
+            <ion-col class="ion-text-end">
+              <ion-button color="dark" shape="round">
+                <ion-icon :icon="shuffle" />
+              </ion-button>
+              
+              <ion-button color="dark" shape="round">
+                <ion-icon :icon="play" />
+              </ion-button>
+            </ion-col>
+          </ion-row>
         </ion-col>
-        <ion-col size="12">
-          <h1 class="ion-margin-bottom">Songs</h1>
+        <!-- Albums -->
+        <ion-col class="ion-padding-start ion-padding-end" size="12">
+          <h4 class="ion-margin-bottom">Albums</h4>
           <ion-list>
-            <ion-item v-for="i in 5" :key="i">
-              <ion-label>
-                Song {{ i }}
-              </ion-label>
+            <ion-item lines="full">
+              Album n°2
             </ion-item>
           </ion-list>
         </ion-col>
-        <ion-col size="12">
-          <h1 class="ion-margin-bottom">Songs</h1>
-          <ion-card>
-            <ion-img src="/music1.jpg" alt="" @click="modalState=true" />
+        <!-- Popular Songs -->
+        <ion-col class="ion-padding-start ion-padding-end ion-margin-top ion-margin-bottom" size="12">
+          <h4 class="ion-margin-bottom">Other songs</h4>
+          <song-list-iterator @song-actions="showSongActions=true" />
+          <song-actions :show="showSongActions" @close="showSongActions=false" />
+        </ion-col>
+        <!-- Artist -->
+        <ion-col v-if="currentlySelected" class="ion-padding-start ion-padding-end" size="12">
+          <h4 class="ion-margin-bottom">
+            A propos
+          </h4>
 
-            <p class="artist-details">
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laudantium fuga incidunt enim distinctio...
+          <ion-card class="artist-details ion-no-margin ion-margin-top ion-margin-bottom">
+            <ion-nav-link v-if="currentlySelected" :component="artistDetails" router-direction="forward">
+              <ion-img :src="currentlySelected.album.album_image" :alt="currentlySelected.artist.name" />
+            </ion-nav-link>
+            <!-- <div class="dark-screen" /> -->
+            <p class="description">
+              {{ currentlySelected.artist.description }}
             </p>
-
-            <ion-card-content>
-            </ion-card-content>
           </ion-card>
         </ion-col>
       </ion-row>
     </ion-grid>
-
-    <!-- Modals -->
-    <ion-modal :is-open="modalState">
-      <ion-header>
-        <ion-toolbar>
-          <ion-buttons slot="start">
-            <ion-button @click="modalState=false">
-              Close
-            </ion-button>
-          </ion-buttons>
-        </ion-toolbar>
-      </ion-header>
-      <ion-content class="ion-padding">
-        <ion-img src="/music1.jpg" alt="" />
-
-        <h1>7 198 989</h1>
-        <p>Nombres de fans par mois</p>
-        <p>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio illo veritatis 
-          voluptates explicabo, reiciendis totam temporibus molestias iure quis porro sequi deserunt 
-          quod ea. Soluta ad sint ex omnis rem.
-
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur, 
-          laboriosam! Aliquid error commodi nesciunt ipsa sunt quia doloremque temporibus 
-          consequatur corporis? Corrupti, dignissimos officiis quis quaerat iste vero at placeat?
-        </p>
-      </ion-content>
-    </ion-modal>
   </ion-content>
 </template>
 
 <script setup lang="ts">
-import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonLabel, IonList, IonModal, IonNavLink, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
-import { play, shuffle } from 'ionicons/icons';
+import { useSongs } from '@/stores/songs';
+import { IonButton, IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonList, IonNavLink, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
+import { arrowBack, play, shuffle } from 'ionicons/icons';
+import { storeToRefs } from 'pinia';
 import { markRaw, ref } from 'vue';
-import { arrowBack } from 'ionicons/icons'
 
-import SongExplorer from '@/components/explorer/SongExplorer.vue';
+import ArtistDetails from '@/components/explorer/ArtistDetails.vue';
+import SongActions from '../modals/SongActions.vue';
+import SongListIterator from '../SongListIterator.vue';
 
-const modalState = ref(false)
-const songExplorer = markRaw(SongExplorer)
+const songStore = useSongs()
+const { showSongDetails, currentlySelected } = storeToRefs(songStore)
+
+const artistDetails = markRaw(ArtistDetails)
+
+const showSongActions = ref(false)
 </script>
 
 <style lang="scss">
+%relative_object {
+  position: relative;
+}
 
+.dark-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, .2);
+}
+
+.artist-header {
+  @extend %relative_object;
+
+  .artist-infos {
+    position: absolute;
+    color: white;
+    padding: 1rem;
+    bottom: 0;
+    left: 0;
+
+    h1 {
+      text-align: center;
+      text-transform: uppercase;
+      font-size: 2.5rem;
+      font-weight: 900;
+    }
+  }
+}
+
+h4 {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.artist-details {
+  @extend %relative_object;
+
+  .description {
+    position: absolute;
+    padding: 1rem;
+    left: 0;
+    text-align: left;
+    bottom: 1%;
+    color: white;
+    font-size: 1.2rem;
+  }
+}
 </style>

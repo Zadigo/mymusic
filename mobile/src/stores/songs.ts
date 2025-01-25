@@ -4,10 +4,29 @@ import { ref } from "vue";
 
 export const useSongs = defineStore('songs', () => {
     const songs = ref<Song[]>([])
-    const currentSong = ref<Song>()
+    // The song that is currently being played
+    // by the user or by the automatic feed
+    const currentlyPlayed = ref<Song>()
+    // The details of the song that is currently
+    // being viewed by the user
+    const currentlySelected = ref<Song>()
+    
+    const showSongDetails = ref(false)
+
+    // Modals
+    const showPlaylistsModal = ref(false)
+
+    function handleShowSongDetails(song: Song) {
+        currentlySelected.value = song
+        showSongDetails.value = true
+    }
 
     return {
         songs,
-        currentSong
+        showSongDetails,
+        showPlaylistsModal,
+        currentlySelected,
+        currentlyPlayed,
+        handleShowSongDetails,
     }
 })

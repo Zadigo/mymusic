@@ -34,12 +34,8 @@
             </ion-card>
           </ion-col>
         </ion-row>
-
       </ion-grid>
       
-      <!-- Player -->
-      <base-player />
-
       <!-- Modals -->
       <ion-modal :is-open="openSearchModal">
         <ion-header>
@@ -62,7 +58,6 @@ import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHea
 import { arrowBack } from 'ionicons/icons';
 import { markRaw, ref } from 'vue';
 
-import BasePlayer from '@/components/BasePlayer.vue';
 import SearchDetails from '@/components/search/SearchDetails.vue';
 
 const openSearchModal = ref(false)
