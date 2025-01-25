@@ -1,3 +1,4 @@
+from artists.models import Song
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Count
@@ -6,8 +7,6 @@ from django.dispatch import receiver
 from django.utils.functional import cached_property
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
-
-from artists.models import Song
 from mymusic.utils import dominant_image_color
 from playlists.choices import UserCustomSort
 from playlists.utils import playlists_cover_image_path
