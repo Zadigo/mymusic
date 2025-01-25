@@ -1,3 +1,7 @@
+from artists.choices import Genres, GeographicAreas, Nationalities
+from artists.managers import AlbumManager, ListenerManager, SongManager
+from artists.utils import artist_cover_image_path, cover_image_path, song_path
+from artists.validators import song_file_validator, validate_date_of_birth
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Count, Index
@@ -5,14 +9,10 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
 from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill
 from mutagen.mp3 import MP3
-
-from artists.choices import Genres, GeographicAreas, Nationalities
-from artists.managers import AlbumManager, ListenerManager, SongManager
-from artists.utils import artist_cover_image_path, cover_image_path, song_path
-from artists.validators import song_file_validator, validate_date_of_birth
 
 USER_MODEL = get_user_model()
 
@@ -199,9 +199,23 @@ class Song(models.Model):
         default=0,
         help_text='Duration in seconds'
     )
-    bitrate = models.PositiveIntegerField(default=0)
-    is_explicit = models.BooleanField(default=False)
-    added_on = models.DateField(auto_now_add=True)
+    bitrate = models.PositiveIntegerField(
+        default=0
+    )
+    is_explicit = models.BooleanField(
+        default=False
+    )
+    # video_file = models.FileField(
+    #     blank=True,
+    #     null=True,
+    #     help_text=_(
+    #         "A video object that can illustrate "
+    #         "the artist's song"
+    #     )
+    # )
+    added_on = models.DateField(
+        auto_now_add=True
+    )
 
     objects = SongManager()
 

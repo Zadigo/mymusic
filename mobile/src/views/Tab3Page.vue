@@ -22,5 +22,5 @@
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
 
 import SongExplorer from '@/components/explorer/SongExplorer.vue';
-import SongDetailsModal from '@/components/explorer/SongDetailsModal.vue';
+import SongDetailsModal from '@/components/modals/SongDetailsModal.vue';
 </script>

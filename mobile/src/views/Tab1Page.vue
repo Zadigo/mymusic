@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { IonButtons, IonContent, IonHeader, IonMenu, IonMenuButton, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
 
-import SongDetailsModal from '@/components/explorer/SongDetailsModal.vue';
+import SongDetailsModal from '@/components/modals/SongDetailsModal.vue';
 import SongExplorer from '@/components/explorer/SongExplorer.vue';
 import BasePlayer from '@/components/BasePlayer.vue';
 import PlaylistDetails from '@/components/modals/PlaylistDetails.vue';

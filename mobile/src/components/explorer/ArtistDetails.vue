@@ -7,14 +7,14 @@
         </ion-nav-link>
       </ion-buttons>
       <ion-title>
-        <span v-if="currentlySelected">{{ currentlySelected.artist.name }}</span>
+        <span v-if="currentlySelected">{{ currentlySelected.album.artist.name }}</span>
         <span v-else>...</span>
       </ion-title>
     </ion-toolbar>
   </ion-header>
   <ion-content class="ion-padding">
     <div class="art">
-      <ion-img v-if="currentlySelected" :src="currentlySelected.album.album_image" :alt="currentlySelected.artist.name" />
+      <ion-img v-if="currentlySelected" :src="currentlySelected.album.artist.cover_image" :alt="currentlySelected.album.artist.name" />
 
       <div class="rank">
         <span class="metric">1</span>

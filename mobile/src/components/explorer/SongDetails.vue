@@ -18,10 +18,10 @@
       <ion-row>
         <ion-col size="12">
           <div v-if="currentlySelected" class="artist-header">
-            <ion-img :src="currentlySelected.album.album_image" :alt="currentlySelected.artist.name" />
+            <ion-img :src="currentlySelected.album.cover_image" :alt="currentlySelected.album.artist.name" />
             <div class="dark-screen" />
             <div class="artist-infos">
-              <h1>Britney Spears</h1>
+              <h1>{{ currentlySelected.album.artist.name }}</h1>
             </div>
           </div>
         </ion-col>
@@ -56,7 +56,7 @@
         <!-- Popular Songs -->
         <ion-col class="ion-padding-start ion-padding-end ion-margin-top ion-margin-bottom" size="12">
           <h4 class="ion-margin-bottom">Other songs</h4>
-          <song-list-iterator @song-actions="showSongActions=true" />
+          <song-list-iterator :songs="albumSongs" @song-actions="showSongActions=true" />
           <song-actions :show="showSongActions" @close="showSongActions=false" />
         </ion-col>
         <!-- Artist -->
@@ -67,11 +67,11 @@
 
           <ion-card class="artist-details ion-no-margin ion-margin-top ion-margin-bottom">
             <ion-nav-link v-if="currentlySelected" :component="artistDetails" router-direction="forward">
-              <ion-img :src="currentlySelected.album.album_image" :alt="currentlySelected.artist.name" />
+              <ion-img :src="currentlySelected.album.artist.cover_image" :alt="currentlySelected.album.artist.name" />
             </ion-nav-link>
             <!-- <div class="dark-screen" /> -->
             <p class="description">
-              {{ currentlySelected.artist.description }}
+              {{ currentlySelected.album.artist.presentation }}
             </p>
           </ion-card>
         </ion-col>
@@ -81,11 +81,13 @@
 </template>
 
 <script setup lang="ts">
+import { createAlbumSongs } from '@/data';
 import { useSongs } from '@/stores/songs';
+import { AlbumSong } from '@/types';
 import { IonButton, IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonList, IonNavLink, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
 import { arrowBack, play, shuffle } from 'ionicons/icons';
 import { storeToRefs } from 'pinia';
-import { markRaw, ref } from 'vue';
+import { markRaw, onBeforeMount, ref } from 'vue';
 
 import ArtistDetails from '@/components/explorer/ArtistDetails.vue';
 import SongActions from '../modals/SongActions.vue';
@@ -96,7 +98,18 @@ const { showSongDetails, currentlySelected } = storeToRefs(songStore)
 
 const artistDetails = markRaw(ArtistDetails)
 
+const albumSongs = ref<AlbumSong[]>([])
 const showSongActions = ref(false)
+
+async function requestAlbumSongs() {
+  try {
+    albumSongs.value = createAlbumSongs()
+  } catch (e) {
+    console.error(e)
+  }
+}
+
+onBeforeMount(requestAlbumSongs)
 </script>
 
 <style lang="scss">

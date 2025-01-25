@@ -5,7 +5,7 @@
         <ion-grid>
           <ion-row class="ion-justify-content-start">
             <ion-col size="2">
-              <img v-if="currentlySelected" :src="currentlySelected.album.album_image" :alt="currentlySelected.name" width="30">
+              <img v-if="currentlySelected" :src="currentlySelected.album.cover_image" :alt="currentlySelected.name" width="100">
             </ion-col>
 
             <ion-col size="9">
@@ -14,7 +14,7 @@
                   {{ currentlySelected.name }}
                 </p>
                 <p class="ion-no-margin">
-                  {{ currentlySelected.artist.name }}, {{ currentlySelected.album.name }}
+                  {{ currentlySelected.album.artist.name }}, {{ currentlySelected.album.name }}
                 </p>
               </div>
             </ion-col>
@@ -24,7 +24,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
-        <ion-item :button="true" lines="none" @click="emit('playlist-modal')">
+        <ion-item :button="true" lines="none" @click="showPlaylistsModal=true">
           <ion-icon slot="start" :icon="addCircle" aria-hidden="true" />
           <ion-label>Ajouter à une playlist</ion-label>
         </ion-item>
@@ -51,7 +51,7 @@ import { storeToRefs } from 'pinia';
 import { computed } from 'vue';
 
 const songStore = useSongs()
-const { currentlySelected } = storeToRefs(songStore)
+const { currentlySelected, showPlaylistsModal } = storeToRefs(songStore)
 
 const props = defineProps({
   show: {
@@ -67,9 +67,9 @@ const emit = defineEmits({
   'close'() {
     return true
   },
-  'playlist-modal'() {
-    return true
-  }
+  // 'playlist-modal'() {
+  //   return true
+  // }
 })
 
 const showOptionsModal = computed({

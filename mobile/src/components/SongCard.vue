@@ -6,7 +6,7 @@
     
     <ion-card-header>
       <ion-card-title>Song {{ song.id }}</ion-card-title>
-      <ion-card-subtitle>{{ song.artist.name }}</ion-card-subtitle>
+      <ion-card-subtitle>{{ song.album.artist.name }}</ion-card-subtitle>
     </ion-card-header>
 
     <ion-card-content>
@@ -16,7 +16,7 @@
         <ion-icon :icon="play" />
       </ion-button>
 
-      <ion-button size="small" color="secondary" shape="round">
+      <ion-button size="small" color="secondary" shape="round" @click="handleLikeSong">
         <ion-icon :icon="heartOutline" />
       </ion-button>
 
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { useMediaPlayer } from '@/composables/songs';
 import { Song } from '@/types';
-import { IonButton, IonCard, IonCardContent, IonRange, IonCardHeader, IonImg, IonCardSubtitle, IonCardTitle, IonIcon } from '@ionic/vue';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonImg, IonRange } from '@ionic/vue';
 import { addCircleOutline, heartOutline, play } from 'ionicons/icons';
 import { PropType, ref } from 'vue';
 
@@ -50,4 +50,8 @@ defineProps({
 const percentageComplete = ref(20)
 
 const { handlePlay } = useMediaPlayer()
+
+// Add this song to the user's playlist
+// of music that he liked
+async function handleLikeSong() {}
 </script>

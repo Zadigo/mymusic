@@ -12,7 +12,7 @@ import { IonContent, IonModal, IonNav } from '@ionic/vue';
 import { storeToRefs } from 'pinia';
 import { markRaw } from 'vue';
 
-import SongDetails from './SongDetails.vue';
+import SongDetails from '@/components/explorer/SongDetails.vue';
 
 const songDetails = markRaw(SongDetails)
 
