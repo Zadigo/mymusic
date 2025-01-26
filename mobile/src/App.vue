@@ -9,8 +9,25 @@
 
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
+import { SplashScreen } from '@capacitor/splash-screen';
+import { Device } from '@capacitor/device';
 
 import ProfileBaseModal from '@/components/modals/profile/BaseModal.vue';
+import { onMounted } from 'vue';
+
+async function logDeviceInfo() {
+  const info = await Device.getInfo();
+
+  console.log(info);
+}
+
+logDeviceInfo()
+
+onMounted(async () => {
+  await SplashScreen.show({
+    autoHide: true,
+  });
+})
 </script>
 
 <style lang="scss">

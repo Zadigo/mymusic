@@ -18,7 +18,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list :inset="false">
-        <ion-item button lines="none" @click="authStore.showProfileModal=true">
+        <ion-item button lines="none" @click="authStore.showQrCodeModal=true">
           <ion-icon slot="start" :icon="qrCode" aria-hidden="true" />
           <ion-label>QR Code</ion-label>
         </ion-item>
@@ -57,8 +57,9 @@
       <!-- Sub Pages -->
       <song-details-modal />
       
-      <!-- Playlist -->
+      <!-- Modals -->
       <playlist-details />
+      <qr-code-details :show="authStore.showQrCodeModal" />
     </ion-content>
   </ion-page>
 </template>
@@ -67,12 +68,11 @@
 import { useAuthentictation } from '@/stores/authentication';
 import { IonAvatar, IonButtons, IonCol, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonMenu, IonMenuButton, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
 import { settings, qrCode } from 'ionicons/icons';
+import { defineAsyncComponent } from 'vue';
 
-// import BasePlayer from '@/components/BasePlayer.vue';
-// import BaseFeed from '@/components/explorer/BaseFeed.vue';
 import PlaylistDetails from '@/components/modals/PlaylistDetails.vue';
 import SongDetailsModal from '@/components/modals/SongDetailsModal.vue';
-import { defineAsyncComponent } from 'vue';
+import QrCodeDetails from '@/components/modals/QrCodeDetails.vue'
 
 const authStore = useAuthentictation()
 
