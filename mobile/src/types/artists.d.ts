@@ -14,5 +14,6 @@ export interface Artist {
     cover_image: string
     cover_image_thumbnail: string
     followers: Follower[]
+    is_following: boolean  //TODO: Add to the backend
     created_on: string
 }

@@ -2,7 +2,7 @@ import { Artist } from "./artists"
 
 export interface Album {
     id: number
-    artist: Pick<Artist,  'id' | 'name' | 'fullname' | 'presentation' | 'cover_image' | 'cover_image_thumbnail'>
+    artist: Pick<Artist,  'id' | 'name' | 'fullname' | 'presentation' | 'cover_image' | 'cover_image_thumbnail', 'is_following'>
     name: string
     genre: string
     cover_image: string
@@ -25,8 +25,8 @@ export interface Song {
     featuring_artists: Artist[]
     duration: number
     bitrate: number
-    is_explicit: boolean
     added_on: string
+    is_explicit: boolean
 
     // TODO: Add to database
     prefers_video: boolean

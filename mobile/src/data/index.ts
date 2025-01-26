@@ -78,6 +78,7 @@ export function createSongMockup (): Song[] {
                     date_of_birth: '1-1-1992',
                     nationality: 'Française',
                     genre: 'Rap',
+                    is_following: false,
                     created_on: '1-1-2017',
                     followers: [
                         {
@@ -149,7 +150,8 @@ export function createMockupPlaylists (): UserPlaylist[] {
                             fullname: 'Ciara Gallecia',
                             presentation: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pulvinar adipiscing varius sagittis ultrices massa adipiscing semper quam ac dapibus nec lacus. Elementum pretium nam integer nisl et ridiculus erat odio cras iaculis cum egestas. Nascetur massa congue dignissim consectetur pellentesque sociosqu mauris enim pharetra semper volutpat morbi.',
                             cover_image: generateRandomAlbumImage(),
-                            cover_image_thumbnail: generateRandomAlbumImage()
+                            cover_image_thumbnail: generateRandomAlbumImage(),
+                            is_following: true,
                         },
                         created_on: '1-1-2025'
                     },
@@ -165,6 +167,7 @@ export function createMockupPlaylists (): UserPlaylist[] {
                             date_of_birth: '1-1-1992',
                             nationality: 'Française',
                             genre: 'Rap',
+                            is_following: false,
                             created_on: '1-1-2017',
                             followers: [
                                 {

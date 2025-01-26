@@ -25,25 +25,39 @@
             </div>
           </div>
         </ion-col>
+
+        <!-- Actions -->
         <ion-col class="ion-padding" size="12">
           <ion-row class="ion-justify-content-between ion-align-items-center">
-            <ion-col>
-              <ion-button color="secondary" shape="round">
+            <ion-col v-if="currentlySelected">
+              <ion-button v-if="currentlySelected.album.artist.is_following" color="secondary" shape="round">
+                Unfollow
+              </ion-button>
+              <ion-button v-else color="secondary" shape="round">
                 Follow
               </ion-button>
             </ion-col>
 
             <ion-col class="ion-text-end">
-              <ion-button color="dark" shape="round">
+              <ion-button color="dark" shape="round" @click="handleShuffleAlbumSongs">
                 <ion-icon :icon="shuffle" />
               </ion-button>
               
-              <ion-button color="dark" shape="round">
+              <ion-button v-if="isPlaying" color="dark" shape="round" @click="handlePause">
+                <ion-icon :icon="pause" />
+              </ion-button>
+
+              <ion-button v-else color="dark" shape="round" @click="handlePlayAlbumSongs">
                 <ion-icon :icon="play" />
               </ion-button>
+
+              <audio ref="audioPlayerEl" @loadedmetadata="handleMetadata">
+                <source src="/music1.mp3" type="audio/mpeg">
+              </audio>
             </ion-col>
           </ion-row>
         </ion-col>
+        
         <!-- Albums -->
         <ion-col class="ion-padding-start ion-padding-end" size="12">
           <h4 class="ion-margin-bottom">Albums</h4>
@@ -53,12 +67,14 @@
             </ion-item>
           </ion-list>
         </ion-col>
+
         <!-- Popular Songs -->
         <ion-col class="ion-padding-start ion-padding-end ion-margin-top ion-margin-bottom" size="12">
           <h4 class="ion-margin-bottom">Other songs</h4>
-          <song-list-iterator :songs="albumSongs" @song-actions="showSongActions=true" />
+          <song-list-iterator :songs="albumSongs" @song-actions="showSongActions=true" @play-song="handlePlayAlbumSong" />
           <song-actions :show="showSongActions" @close="showSongActions=false" />
         </ion-col>
+        
         <!-- Artist -->
         <ion-col v-if="currentlySelected" class="ion-padding-start ion-padding-end" size="12">
           <h4 class="ion-margin-bottom">
@@ -85,9 +101,10 @@ import { createAlbumSongs } from '@/data';
 import { useSongs } from '@/stores/songs';
 import { AlbumSong } from '@/types';
 import { IonButton, IonButtons, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonItem, IonList, IonNavLink, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
-import { arrowBack, play, shuffle } from 'ionicons/icons';
+import { arrowBack, pause, play, shuffle } from 'ionicons/icons';
 import { storeToRefs } from 'pinia';
 import { markRaw, onBeforeMount, ref } from 'vue';
+import { useMediaPlayer } from '@/composables/songs';
 
 import ArtistDetails from '@/components/modals/explorer/ArtistDetails.vue';
 import SongActions from '@/components/modals/SongActions.vue';
@@ -96,17 +113,55 @@ import SongListIterator from '@/components/SongListIterator.vue';
 const songStore = useSongs()
 const { showSongDetails, currentlySelected } = storeToRefs(songStore)
 
-const artistDetails = markRaw(ArtistDetails)
+const { handlePlay, handlePause, audioPlayerEl, queue, isPlaying, handleMetadata } = useMediaPlayer()
 
+const artistDetails = markRaw(ArtistDetails)
 const albumSongs = ref<AlbumSong[]>([])
 const showSongActions = ref(false)
 
+// Returns all the songs within the
+// the current given album
 async function requestAlbumSongs() {
   try {
     albumSongs.value = createAlbumSongs()
   } catch (e) {
     console.error(e)
   }
+}
+
+function setNewSong(song: AlbumSong) {
+  if (audioPlayerEl.value) {
+    audioPlayerEl.value.src = song.song_file
+    audioPlayerEl.value.currentTime = 0
+  }
+}
+
+// Action when then user selects a song from the lists
+// to be played (most popular, album songs...)
+function handlePlayAlbumSong(song: AlbumSong) {
+  setNewSong(song)
+  handlePlay()
+}
+
+// Adds the songs of the current
+// album into the queue
+function handlePlayAlbumSongs() {
+  queue.value = []
+  queue.value = albumSongs.value
+
+  if (isPlaying.value) {
+    // Do Something
+  } else {
+    // Do something
+  }
+  
+  isPlaying.value = !isPlaying.value
+}
+
+// Shuffles through the album songs
+function handleShuffleAlbumSongs() {
+  // TODO: Shuffle logic
+  isPlaying.value = true
 }
 
 onBeforeMount(requestAlbumSongs)

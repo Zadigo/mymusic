@@ -1,9 +1,12 @@
-import { Song, UserPlaylist } from "@/types";
+import { AlbumSong, Song, UserPlaylist } from "@/types";
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
 export const useSongs = defineStore('songs', () => {
+    // A list of songs to be played either
+    // in order or randomly
     const songs = ref<Song[]>([])
+    const queue = ref<Song[] | AlbumSong[]>([])
     
     // The song that is currently being played
     // by the user or by the automatic feed
@@ -35,6 +38,7 @@ export const useSongs = defineStore('songs', () => {
 
     return {
         songs,
+        queue,
         showSongDetails,
         showPlaylistsModal,
         currentPlaylistSong,
