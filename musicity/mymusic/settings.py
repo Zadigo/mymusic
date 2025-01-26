@@ -1,10 +1,13 @@
 import os
 from pathlib import Path
 
+import dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-FRONT_DIR = Path.joinpath(BASE_DIR, 'frontend')
+if (BASE_DIR / '.env').exists():
+    dotenv.load_dotenv(BASE_DIR / '.env')
 
 
 # Quick-start development settings - unsuitable for production
@@ -13,10 +16,16 @@ FRONT_DIR = Path.joinpath(BASE_DIR, 'frontend')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure--r+1ls2vpy6oq$-ja&5_z__dfp%o2@w9wn17bo*h7w&@s1fh9d'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+def debug():
+    result = os.getenv('DEBUG', '0')
+    return True if result == '1' else False
+
+
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = debug()
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -54,8 +63,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / 'templates',
-            BASE_DIR / 'dist'
+            BASE_DIR / 'templates'
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -131,10 +139,8 @@ STATIC_URL = 'static/'
 
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'static',
-    FRONT_DIR / 'dist/static'
-]
+STATICFILES_DIRS = []
+
 
 MEDIA_URL = 'media/'
 
@@ -158,9 +164,7 @@ CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r'^https?\:\/\/localhost\:8080$',
-]
+CORS_ALLOWED_ORIGIN_REGEXES = []
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
@@ -175,7 +179,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ]
 }
