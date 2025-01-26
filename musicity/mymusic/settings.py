@@ -168,10 +168,12 @@ CORS_ALLOWED_ORIGIN_REGEXES = []
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:8080',
+    'http://localhost:8100/',
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8080'
+    'http://localhost:8080',
+    'http://localhost:8100/',
 ]
 
 

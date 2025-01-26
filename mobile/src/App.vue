@@ -1,11 +1,16 @@
 <template>
   <ion-app>
     <ion-router-outlet />
+
+    <!-- Modals -->
+    <profile-base-modal />
   </ion-app>
 </template>
 
 <script setup lang="ts">
 import { IonApp, IonRouterOutlet } from '@ionic/vue';
+
+import ProfileBaseModal from '@/components/modals/profile/BaseModal.vue';
 </script>
 
 <style lang="scss">

@@ -12,7 +12,16 @@
         </ion-toolbar>
       </ion-header>
 
-      <song-explorer />
+      <!-- Feed -->
+      <suspense>
+        <async-base-feed />
+
+        <template #fallback>
+          Loading...
+        </template>
+      </suspense>
+
+      <!-- Song Details -->
       <song-details-modal />
     </ion-content>
   </ion-page>
@@ -20,7 +29,12 @@
 
 <script setup lang="ts">
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import { defineAsyncComponent } from 'vue';
 
-import SongExplorer from '@/components/explorer/SongExplorer.vue';
 import SongDetailsModal from '@/components/modals/SongDetailsModal.vue';
+
+const AsyncBaseFeed = defineAsyncComponent({
+  loader: () => import('@/components/explorer/BaseFeed.vue'),
+  timeout: 10000
+})
 </script>

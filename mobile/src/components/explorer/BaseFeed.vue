@@ -18,7 +18,8 @@
       </ion-infinite-scroll>
     </ion-row>
   </ion-grid>
-  <!-- Modals -->
+
+  <!-- Actions -->
   <song-actions :show="showOptionsModal" @close="showOptionsModal=false" />
 </template>
 
@@ -28,7 +29,7 @@ import { useSongs } from '@/stores/songs';
 import { Song } from '@/types';
 import { IonCol, IonGrid, IonImg, IonInfiniteScroll, IonInfiniteScrollContent, IonRow, type InfiniteScrollCustomEvent } from '@ionic/vue';
 import { storeToRefs } from 'pinia';
-import { onBeforeMount, ref } from 'vue';
+import { ref } from 'vue';
 
 import SongCard from '@/components/SongCard.vue';
 import SongActions from '../modals/SongActions.vue';
@@ -58,5 +59,6 @@ function handleSongSelection(song: Song) {
   showOptionsModal.value = true
 }
 
-onBeforeMount(requestContent)
+requestContent()
+// onBeforeMount(requestContent)
 </script>

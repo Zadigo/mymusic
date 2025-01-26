@@ -89,9 +89,9 @@ import { arrowBack, play, shuffle } from 'ionicons/icons';
 import { storeToRefs } from 'pinia';
 import { markRaw, onBeforeMount, ref } from 'vue';
 
-import ArtistDetails from '@/components/explorer/ArtistDetails.vue';
-import SongActions from '../modals/SongActions.vue';
-import SongListIterator from '../SongListIterator.vue';
+import ArtistDetails from '@/components/modals/explorer/ArtistDetails.vue';
+import SongActions from '@/components/modals/SongActions.vue';
+import SongListIterator from '@/components/SongListIterator.vue';
 
 const songStore = useSongs()
 const { showSongDetails, currentlySelected } = storeToRefs(songStore)

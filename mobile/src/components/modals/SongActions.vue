@@ -13,6 +13,7 @@
                 <p class="ion-no-margin ion-margin-bottom">
                   {{ currentlySelected.name }}
                 </p>
+                
                 <p class="ion-no-margin">
                   {{ currentlySelected.album.artist.name }}, {{ currentlySelected.album.name }}
                 </p>
