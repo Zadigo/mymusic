@@ -1,5 +1,5 @@
 <template>
-  <ion-modal :is-open="showOptionsModal" :initial-breakpoint="0.25" :breakpoints="[0, 0.25, 0.5, 0.75]" @did-dismiss="emit('close')">
+  <ion-modal :is-open="showOptionsModal" :initial-breakpoint="0.5" :breakpoints="[0, 0.5, 0.75]" @did-dismiss="emit('close')">
     <ion-header>
       <ion-toolbar>
         <ion-grid>
@@ -8,9 +8,9 @@
               <img v-if="currentlySelected" :src="currentlySelected.album.cover_image" :alt="currentlySelected.name" width="100">
             </ion-col>
 
-            <ion-col size="9">
-              <div v-if="currentlySelected" class="song-details">
-                <p class="ion-no-margin ion-margin-bottom">
+            <ion-col size="9" class="song-details">
+              <div v-if="currentlySelected">
+                <p class="ion-no-margin">
                   {{ currentlySelected.name }}
                 </p>
                 
@@ -25,7 +25,7 @@
     </ion-header>
     <ion-content class="ion-padding">
       <ion-list>
-        <ion-item :button="true" lines="none" @click="showPlaylistsModal=true">
+        <ion-item :button="true" lines="none" @click="handleAddToPlaylist">
           <ion-icon slot="start" :icon="addCircle" aria-hidden="true" />
           <ion-label>Ajouter à une playlist</ion-label>
         </ion-item>
@@ -79,4 +79,15 @@ const showOptionsModal = computed({
     emit('modelValue', value)
   }
 })
+
+function handleAddToPlaylist() {
+  showOptionsModal.value = false
+  showPlaylistsModal.value = true
+}
 </script>
+
+<style lang="scss" scoped>
+.song-details {
+  margin-top: 2rem;
+}
+</style>

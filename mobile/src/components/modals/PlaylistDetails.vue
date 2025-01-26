@@ -49,8 +49,8 @@
 import { createMockupPlaylists } from '@/data';
 import { useSongs } from '@/stores/songs';
 import { UserPlaylist } from '@/types';
-import { IonButton, IonButtons, IonCheckbox, IonContent, IonGrid, IonCol, IonRow, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonToolbar } from '@ionic/vue';
-import { useRefHistory } from '@vueuse/core';
+import { IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonGrid, IonHeader, IonInput, IonItem, IonLabel, IonList, IonModal, IonRow, IonToolbar } from '@ionic/vue';
+// import { useRefHistory } from '@vueuse/core';
 import { storeToRefs } from 'pinia';
 import { computed, onMounted, ref } from 'vue';
 
@@ -60,9 +60,9 @@ const { showPlaylistsModal } = storeToRefs(songStore)
 const search = ref<string>('')
 const playlists = ref<UserPlaylist[]>([])
 
-const { history } = useRefHistory(search)
+// const { history } = useRefHistory(search)
 
-console.log(history)
+// console.log(history)
 
 const searchedPlaylists = computed(() => {
   if (search.value) {

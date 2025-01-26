@@ -15,7 +15,8 @@
       <ion-grid>
         <ion-row>
           <ion-col size="12">
-            <ion-button @click="openSearchModal=true">
+            <ion-button color="secondary" @click="openSearchModal=true">
+              <ion-icon slot="start" :icon="search" />
               What do you want to search?
             </ion-button>
           </ion-col>
@@ -27,10 +28,12 @@
           </ion-col>
 
           <ion-col v-for="i in 30" :key="i" size="6">
-            <ion-card>
-              <ion-card-content>
-                Genre 1
-              </ion-card-content>
+            <ion-card class="ion-no-margin">
+              <ion-nav-link :component="genreDetails" router-direction="forward">
+                <ion-img src="/album4.jpg" alt="" />
+              </ion-nav-link>
+              
+              <h3 class="title-genre">Rhythm and blues</h3>
             </ion-card>
           </ion-col>
         </ion-row>
@@ -38,15 +41,8 @@
       
       <!-- Modals -->
       <ion-modal :is-open="openSearchModal">
-        <ion-header>
-          <ion-toolbar>
-            <ion-button @click="openSearchModal=false">
-              <ion-icon :icon="arrowBack" />
-            </ion-button>
-          </ion-toolbar>
-        </ion-header>
         <ion-content>
-          <ion-nav :root="searchDetails" />
+          <ion-nav :root="searchDetails" @close="openSearchModal=false" />
         </ion-content>
       </ion-modal>
     </ion-content>
@@ -54,12 +50,25 @@
 </template>
 
 <script setup lang="ts">
-import { IonButton, IonCard, IonCardContent, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonModal, IonNav, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
-import { arrowBack } from 'ionicons/icons';
+import { IonButton, IonCard, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonImg, IonModal, IonNav, IonNavLink, IonPage, IonRow, IonTitle, IonToolbar } from '@ionic/vue';
+import { search } from 'ionicons/icons';
 import { markRaw, ref } from 'vue';
 
+import GenreDetails from '@/components/search/GenreDetails.vue';
 import SearchDetails from '@/components/search/SearchDetails.vue';
 
 const openSearchModal = ref(false)
+
+const genreDetails = markRaw(GenreDetails)
 const searchDetails = markRaw(SearchDetails)
 </script>
+
+<style lang="scss" scoped>
+.title-genre {
+  position: absolute;
+  bottom: 1%;
+  left: 1%;
+  padding: .25rem;
+  color: white;
+}
+</style>
